@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\MedicineSeeder;
 use Database\Seeders\UserSeeder;
-use Database\Seeders\PatientSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,8 +17,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(UserSeeder::class);
-        $this->call(DoctorSeeder::class);
-        $this->call(PatientSeeder::class);
-        $this->call(AdmissionSeeder::class);
+        $this->call(MedicineSeeder::class);
     }
 }

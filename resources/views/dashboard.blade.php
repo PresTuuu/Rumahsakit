@@ -755,9 +755,21 @@
                 <div class="nav-dot"></div>
             </div>
 
-            <div class="sidebar-item">
+            <div class="sidebar-item" data-section="doctors">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2a5 5 0 1 0 0 10A5 5 0 0 0 12 2zm0 12c-6 0-9 3-9 4v1h18v-1c0-1-3-4-9-4z"/><path d="M18 8h4m-2-2v4"/></svg>
                 <span>Dokter</span>
+                <div class="nav-dot"></div>
+            </div>
+
+            <div class="sidebar-item" data-section="polikliniks">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                <span>Poliklinik</span>
+                <div class="nav-dot"></div>
+            </div>
+
+            <div class="sidebar-item" data-section="medicines">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M2 12H4m16 0h2M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41"/><circle cx="12" cy="12" r="3"/></svg>
+                <span>Obat</span>
                 <div class="nav-dot"></div>
             </div>
 
@@ -1308,8 +1320,540 @@
 
             </div><!-- /roomsSection -->
 
+            <!-- ════════════════════ DOCTORS SECTION ════════════════════ -->
+            <div id="doctorsSection" style="display:none;">
+
+                <div class="section-page-header reveal" style="background: linear-gradient(130deg, #047857 0%, #065F46 60%, #064E3B 100%);">
+                    <div class="section-page-header-text">
+                        <div class="tag">✦ Manajemen Dokter</div>
+                        <h2>Data Dokter</h2>
+                        <p>Kelola dokter, SIP, spesialisasi, telepon, dan status praktik langsung dari database.</p>
+                    </div>
+                    <button type="button" class="button-white" id="openDoctorModalBtn">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Tambah Dokter
+                    </button>
+                </div>
+
+                <div class="summary-strip reveal">
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#ECFDF5;">👨‍⚕️</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Total Dokter</div>
+                            <div class="value">{{ $totalDoctors }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#EFF6FF;">✅</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Aktif</div>
+                            <div class="value">{{ $activeDoctors }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#F8FAFC;">⛔</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Nonaktif</div>
+                            <div class="value">{{ $inactiveDoctors }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#EFF6FF;">🏥</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Spesialisasi</div>
+                            <div class="value">{{ $distinctSpecializations }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-bar-wrapper reveal">
+                    <div class="search-bar-inner">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="doctorSearch" placeholder="Cari nama, SIP, spesialisasi..." />
+                    </div>
+                    <select class="search-filter-select" id="doctorStatusFilter">
+                        <option value="">Semua Status</option>
+                        <option value="aktif">Aktif</option>
+                        <option value="nonaktif">Nonaktif</option>
+                    </select>
+                    <button type="button" class="search-btn" id="doctorSearchBtn">Cari</button>
+                </div>
+
+                <div class="premium-table-wrap reveal">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:42px;">#</th>
+                                <th>Nama Dokter</th>
+                                <th>Spesialisasi</th>
+                                <th>No. SIP</th>
+                                <th>Poliklinik</th>
+                                <th>Telepon</th>
+                                <th>Status</th>
+                                <th style="text-align:center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="doctorTableBody">
+                            @forelse($doctors as $index => $doctor)
+                            <tr data-status="{{ $doctor->is_active ? 'aktif' : 'nonaktif' }}">
+                                <td style="color:var(--text-muted);font-size:12px;font-family:'Space Mono',monospace;text-align:center;">{{ $index + 1 }}</td>
+                                <td>
+                                    <div class="patient-cell">
+                                        <div class="patient-avatar {{ $doctor->is_active ? 'male' : 'other' }}">{{ strtoupper(substr($doctor->name, 0, 1)) }}</div>
+                                        <div>
+                                            <div class="patient-name">{{ $doctor->name }}</div>
+                                            <div class="td-rm">{{ $doctor->specialization }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ $doctor->specialization }}</td>
+                                <td>{{ $doctor->license_number }}</td>
+                                <td>{{ $doctor->poliklinik_name ?? '-' }}</td>
+                                <td>{{ $doctor->phone ?? '-' }}</td>
+                                <td>
+                                    <div class="status-cell status-{{ $doctor->is_active ? 'aktif' : 'nonaktif' }}">
+                                        <span class="status-dot"></span>
+                                        {{ $doctor->is_active ? 'Aktif' : 'Nonaktif' }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="act-wrap" style="justify-content:center;">
+                                        <button type="button" class="act-btn edit edit-doctor"
+                                            title="Edit"
+                                            data-id="{{ $doctor->id }}"
+                                            data-name="{{ $doctor->name }}"
+                                            data-license="{{ $doctor->license_number }}"
+                                            data-specialization="{{ $doctor->specialization }}"
+                                            data-poliklinik-id="{{ $doctor->poliklinik_id }}"
+                                            data-email="{{ $doctor->email }}"
+                                            data-phone="{{ $doctor->phone }}"
+                                            data-active="{{ $doctor->is_active ? '1' : '0' }}"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                                        </button>
+                                        <button type="button" class="act-btn delete delete-doctor" title="Hapus" data-id="{{ $doctor->id }}">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="8">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">🩺</div>
+                                        <h4>Belum Ada Data Dokter</h4>
+                                        <p>Tambahkan dokter baru agar data muncul di tabel ini.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- /doctorsSection -->
+
+            <!-- ════════════════════ POLIKLINIK SECTION ════════════════════ -->
+            <div id="polikliniksSection" style="display:none;">
+
+                <div class="section-page-header reveal" style="background: linear-gradient(130deg, #0F172A 0%, #1E293B 60%, #334155 100%);">
+                    <div class="section-page-header-text">
+                        <div class="tag">✦ Manajemen Poliklinik</div>
+                        <h2>Data Poliklinik</h2>
+                        <p>Kelola daftar poliklinik dan sambungkan dokter dengan pilihan poliklinik dari database.</p>
+                    </div>
+                    <button type="button" class="button-white" id="openPoliklinikModalBtn">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Tambah Poliklinik
+                    </button>
+                </div>
+
+                <div class="summary-strip reveal">
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#EFF6FF;">🏥</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Total Poliklinik</div>
+                            <div class="value">{{ $polikliniks->count() }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#ECFDF5;">👩‍⚕️</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Total Dokter</div>
+                            <div class="value">{{ $polikliniks->sum('doctors_count') }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#FDF2F8;">🔁</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Kunjungan</div>
+                            <div class="value">{{ $polikliniks->sum('admissions_count') }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#F8FAFC;">✅</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Aktif</div>
+                            <div class="value">{{ $polikliniks->where('status','Aktif')->count() }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-bar-wrapper reveal">
+                    <div class="search-bar-inner">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="poliklinikSearch" placeholder="Cari poliklinik..." />
+                    </div>
+                    <select class="search-filter-select" id="poliklinikStatusFilter">
+                        <option value="">Semua Status</option>
+                        <option value="aktif">Aktif</option>
+                        <option value="nonaktif">Nonaktif</option>
+                    </select>
+                    <button type="button" class="search-btn" id="poliklinikSearchBtn">Cari</button>
+                </div>
+
+                <div class="premium-table-wrap reveal">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:42px;">#</th>
+                                <th>Nama Poliklinik</th>
+                                <th>Deskripsi</th>
+                                <th>Dokter</th>
+                                <th>Kunjungan</th>
+                                <th>Status</th>
+                                <th style="text-align:center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="poliklinikTableBody">
+                            @forelse($polikliniks as $index => $poliklinik)
+                            <tr data-status="{{ strtolower($poliklinik->status) }}">
+                                <td style="color:var(--text-muted);font-size:12px;font-family:'Space Mono',monospace;text-align:center;">{{ $index + 1 }}</td>
+                                <td>
+                                    <div class="patient-cell">
+                                        <div class="patient-avatar {{ $poliklinik->status === 'Aktif' ? 'male' : 'other' }}">{{ strtoupper(substr($poliklinik->name, 0, 1)) }}</div>
+                                        <div>
+                                            <div class="patient-name">{{ $poliklinik->name }}</div>
+                                            <div class="td-rm">Poliklinik</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ $poliklinik->description ?? '-' }}</td>
+                                <td>{{ $poliklinik->doctors_count }}</td>
+                                <td>{{ $poliklinik->admissions_count }}</td>
+                                <td>
+                                    <div class="status-cell status-{{ strtolower($poliklinik->status) }}">
+                                        <span class="status-dot"></span>
+                                        {{ $poliklinik->status }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="act-wrap" style="justify-content:center;">
+                                        <button type="button" class="act-btn edit edit-poliklinik"
+                                            title="Edit"
+                                            data-id="{{ $poliklinik->id }}"
+                                            data-name="{{ $poliklinik->name }}"
+                                            data-description="{{ $poliklinik->description }}"
+                                            data-status="{{ $poliklinik->status }}"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                                        </button>
+                                        <button type="button" class="act-btn delete delete-poliklinik" title="Hapus" data-id="{{ $poliklinik->id }}">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">🏥</div>
+                                        <h4>Belum Ada Data Poliklinik</h4>
+                                        <p>Tambahkan poliklinik baru agar dokter bisa memilih dari daftar.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- /polikliniksSection -->
+
+            <!-- ════════════════════ MEDICINES SECTION ════════════════════ -->
+            <div id="medicinesSection" style="display:none;">
+
+                <div class="section-page-header reveal" style="background: linear-gradient(130deg, #0369A1 0%, #0EA5E9 60%, #38BDF8 100%);">
+                    <div class="section-page-header-text">
+                        <div class="tag">✦ Manajemen Obat</div>
+                        <h2>Data Obat</h2>
+                        <p>Kelola daftar obat, stok, harga, dan status ketersediaan dengan mudah.</p>
+                    </div>
+                    <button type="button" class="button-white" id="openMedicineModalBtn">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Tambah Obat
+                    </button>
+                </div>
+
+                <div class="summary-strip reveal">
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#EFF6FF;">💊</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Total Obat</div>
+                            <div class="value">{{ $totalMedicines }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#ECFDF5;">✅</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Aktif</div>
+                            <div class="value">{{ $activeMedicines }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#FEF2F2;">⚠️</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Stok Rendah</div>
+                            <div class="value">{{ $lowStockMedicines }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#F0FDF4;">💰</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Nilai Stok</div>
+                            <div class="value" style="font-size:18px; padding-top:2px;">Rp {{ number_format($totalMedicineValue, 0, ',', '.') }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-bar-wrapper reveal">
+                    <div class="search-bar-inner">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="medicineSearch" placeholder="Cari nama obat atau kode..." />
+                    </div>
+                    <select class="search-filter-select" id="medicineStatusFilter">
+                        <option value="">Semua Status</option>
+                        <option value="aktif">Aktif</option>
+                        <option value="nonaktif">Nonaktif</option>
+                    </select>
+                    <button type="button" class="search-btn" id="medicineSearchBtn">Cari</button>
+                </div>
+
+                <div class="premium-table-wrap reveal">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:42px;">#</th>
+                                <th>Nama Obat</th>
+                                <th>Kode</th>
+                                <th>Stok</th>
+                                <th>Minimum Stok</th>
+                                <th>Satuan</th>
+                                <th>Harga</th>
+                                <th>Status</th>
+                                <th style="text-align:center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="medicineTableBody">
+                            @forelse($medicines as $index => $medicine)
+                            @php
+                                $isLowStock = $medicine->stock < $medicine->minimum_stock;
+                                $statusLower = $medicine->is_active ? 'aktif' : 'nonaktif';
+                            @endphp
+                            <tr data-status="{{ $statusLower }}">
+                                <td style="color:var(--text-muted);font-size:12px;font-family:'Space Mono',monospace;text-align:center;">{{ $index + 1 }}</td>
+                                <td>
+                                    <div class="patient-cell">
+                                        <div class="patient-avatar {{ $medicine->is_active ? 'male' : 'other' }}">{{ strtoupper(substr($medicine->name, 0, 1)) }}</div>
+                                        <div>
+                                            <div class="patient-name">{{ $medicine->name }}</div>
+                                            <div class="td-rm">{{ $medicine->code }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="font-family:'Space Mono',monospace; font-size:13px;">{{ $medicine->code }}</td>
+                                <td>
+                                    <div style="font-size:13px; font-weight:700; color: {{ $isLowStock ? 'var(--accent-red)' : 'var(--blue-deep)' }};">{{ $medicine->stock }}</div>
+                                    @if($isLowStock)
+                                        <div style="font-size:11px; color:var(--accent-red);">Stok rendah</div>
+                                    @endif
+                                </td>
+                                <td style="font-size:13px; color:var(--text-muted);">{{ $medicine->minimum_stock }}</td>
+                                <td style="font-size:13px;">{{ $medicine->unit }}</td>
+                                <td class="price-cell">Rp {{ number_format($medicine->price, 0, ',', '.') }}</td>
+                                <td>
+                                    <div class="status-cell status-{{ $statusLower }}">
+                                        <span class="status-dot"></span>
+                                        {{ $medicine->is_active ? 'Aktif' : 'Nonaktif' }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="act-wrap" style="justify-content:center;">
+                                        <button type="button" class="act-btn view view-medicine"
+                                            title="Lihat"
+                                            data-name="{{ $medicine->name }}"
+                                            data-code="{{ $medicine->code }}"
+                                            data-stock="{{ $medicine->stock }}"
+                                            data-minimum-stock="{{ $medicine->minimum_stock }}"
+                                            data-unit="{{ $medicine->unit }}"
+                                            data-price="{{ number_format($medicine->price, 2, '.', '') }}"
+                                            data-description="{{ $medicine->description }}"
+                                            data-active="{{ $medicine->is_active ? '1' : '0' }}"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        </button>
+                                        <button type="button" class="act-btn edit edit-medicine"
+                                            title="Edit"
+                                            data-id="{{ $medicine->id }}"
+                                            data-name="{{ $medicine->name }}"
+                                            data-code="{{ $medicine->code }}"
+                                            data-stock="{{ $medicine->stock }}"
+                                            data-minimum-stock="{{ $medicine->minimum_stock }}"
+                                            data-unit="{{ $medicine->unit }}"
+                                            data-price="{{ number_format($medicine->price, 2, '.', '') }}"
+                                            data-description="{{ $medicine->description }}"
+                                            data-active="{{ $medicine->is_active ? '1' : '0' }}"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                                        </button>
+                                        <button type="button" class="act-btn delete delete-medicine" title="Hapus" data-id="{{ $medicine->id }}">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="9">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">💊</div>
+                                        <h4>Belum Ada Data Obat</h4>
+                                        <p>Tambahkan obat baru untuk mengisi tabel ini.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- /medicinesSection -->
 
             <!-- ════════════════════ MODALS ════════════════════ -->
+
+            <!-- Doctor Add/Edit Modal -->
+            <div class="modal-overlay" id="doctorModal">
+                <div class="modal-window">
+                    <button type="button" class="modal-close" id="closeDoctorModalBtn">✕</button>
+                    <h3>Tambah Dokter Baru</h3>
+                    <p style="font-size:13px; color:var(--text-muted);">Masukkan data dokter dan nomor SIP agar dapat ditampilkan di tabel.</p>
+
+                    @if ($errors->any() && old('form_type') === 'doctor')
+                        <div class="modal-error">
+                            <strong>Perbaiki data berikut:</strong>
+                            <ul style="margin-top:8px; padding-left:18px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('doctors.store') }}" id="doctorForm">
+                        @csrf
+                        <input type="hidden" name="_method" id="doctor_method" value="">
+                        <input type="hidden" name="form_type" value="doctor">
+                        <div class="modal-grid">
+                            <div class="modal-field">
+                                <label for="doctor_name">Nama Dokter</label>
+                                <input id="doctor_name" name="name" type="text" value="{{ old('name') }}" required />
+                            </div>
+                            <div class="modal-field">
+                                <label for="license_number">No. SIP</label>
+                                <input id="license_number" name="license_number" type="text" value="{{ old('license_number') }}" placeholder="SIP-2026-001" required />
+                            </div>
+                            <div class="modal-field">
+                                <label for="specialization">Spesialisasi</label>
+                                <input id="specialization" name="specialization" type="text" value="{{ old('specialization') }}" placeholder="Spesialis Penyakit Dalam, Saraf, Anak" required />
+                            </div>
+                            <div class="modal-field">
+                                <label for="poliklinik_id">Poliklinik</label>
+                                <select id="poliklinik_id" name="poliklinik_id" required>
+                                    <option value="">Pilih Poliklinik</option>
+                                    @foreach($polikliniks as $poliklinik)
+                                        <option value="{{ $poliklinik->id }}" {{ old('poliklinik_id') == $poliklinik->id ? 'selected' : '' }}>{{ $poliklinik->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label for="email">Email</label>
+                                <input id="doctor_email" name="email" type="email" value="{{ old('email') }}" placeholder="dokter@rumahsakit.com" />
+                            </div>
+                            <div class="modal-field">
+                                <label for="phone">Telepon</label>
+                                <input id="doctor_phone" name="phone" type="tel" inputmode="numeric" pattern="\d{8,15}" value="{{ old('phone') }}" placeholder="081234567890" />
+                            </div>
+                            <div class="modal-field full-width">
+                                <label for="is_active">Status Praktik</label>
+                                <select id="is_active" name="is_active" required>
+                                    <option value="1" {{ old('is_active') === '1' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="0" {{ old('is_active') === '0' ? 'selected' : '' }}>Nonaktif</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="modal-button-secondary" id="cancelDoctorModalBtn">Batal</button>
+                            <button type="submit" class="button-primary" id="doctorModalSubmitBtn">Simpan Dokter</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Poliklinik Add/Edit Modal -->
+            <div class="modal-overlay" id="poliklinikModal">
+                <div class="modal-window">
+                    <button type="button" class="modal-close" id="closePoliklinikModalBtn">✕</button>
+                    <h3>Tambah Poliklinik Baru</h3>
+                    <p style="font-size:13px; color:var(--text-muted);">Tambahkan poliklinik baru agar dokter dapat memilih dari daftar yang tersedia.</p>
+
+                    @if ($errors->any() && old('form_type') === 'poliklinik')
+                        <div class="modal-error">
+                            <strong>Perbaiki data berikut:</strong>
+                            <ul style="margin-top:8px; padding-left:18px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('polikliniks.store') }}" id="poliklinikForm">
+                        @csrf
+                        <input type="hidden" name="_method" id="poliklinik_method" value="">
+                        <input type="hidden" name="form_type" value="poliklinik">
+                        <div class="modal-grid">
+                            <div class="modal-field">
+                                <label for="poliklinik_name">Nama Poliklinik</label>
+                                <input id="poliklinik_name" name="name" type="text" value="{{ old('name') }}" required />
+                            </div>
+                            <div class="modal-field full-width">
+                                <label for="poliklinik_description">Deskripsi</label>
+                                <textarea id="poliklinik_description" name="description" placeholder="Penjelasan singkat tentang layanan poliklinik.">{{ old('description') }}</textarea>
+                            </div>
+                            <div class="modal-field full-width">
+                                <label for="poliklinik_status">Status</label>
+                                <select id="poliklinik_status" name="status" required>
+                                    <option value="Aktif" {{ old('status') === 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="Nonaktif" {{ old('status') === 'Nonaktif' ? 'selected' : '' }}>Nonaktif</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="modal-button-secondary" id="cancelPoliklinikModalBtn">Batal</button>
+                            <button type="submit" class="button-primary" id="poliklinikModalSubmitBtn">Simpan Poliklinik</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
             <!-- Patient Add/Edit Modal -->
             <div class="modal-overlay" id="patientModal">
@@ -1491,6 +2035,91 @@
                 </div>
             </div>
 
+            <!-- Medicine Add/Edit Modal -->
+            <div class="modal-overlay" id="medicineModal">
+                <div class="modal-window">
+                    <button type="button" class="modal-close" id="closeMedicineModalBtn">✕</button>
+                    <h3>Tambah Obat Baru</h3>
+                    <p style="font-size:13px; color:var(--text-muted);">Masukkan data obat untuk menyimpannya ke sistem.</p>
+
+                    @if ($errors->any() && old('form_type') === 'medicine')
+                        <div class="modal-error">
+                            <strong>Perbaiki data berikut:</strong>
+                            <ul style="margin-top:8px; padding-left:18px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('medicines.store') }}" id="medicineForm">
+                        @csrf
+                        <input type="hidden" name="_method" id="medicine_method" value="">
+                        <input type="hidden" name="form_type" value="medicine">
+                        <div class="modal-grid">
+                            <div class="modal-field">
+                                <label for="medicine_name">Nama Obat</label>
+                                <input id="medicine_name" name="name" type="text" value="{{ old('name') }}" placeholder="Paracetamol 500mg" required />
+                            </div>
+                            <div class="modal-field">
+                                <label for="medicine_code">Kode Obat</label>
+                                <input id="medicine_code" name="code" type="text" value="{{ old('code') }}" placeholder="OBT-001" required />
+                            </div>
+                            <div class="modal-field">
+                                <label for="medicine_stock">Stok</label>
+                                <input id="medicine_stock" name="stock" type="number" min="0" value="{{ old('stock', 0) }}" placeholder="0" required />
+                            </div>
+                            <div class="modal-field">
+                                <label for="medicine_minimum_stock">Minimum Stok</label>
+                                <input id="medicine_minimum_stock" name="minimum_stock" type="number" min="0" value="{{ old('minimum_stock', 10) }}" placeholder="10" required />
+                            </div>
+                            <div class="modal-field">
+                                <label for="medicine_unit">Satuan</label>
+                                <input id="medicine_unit" name="unit" type="text" value="{{ old('unit') }}" placeholder="Tablet, Botol, Ampul" required />
+                            </div>
+                            <div class="modal-field">
+                                <label for="medicine_price">Harga (Rp)</label>
+                                <input id="medicine_price" name="price" type="number" min="0" step="0.01" value="{{ old('price', 0) }}" placeholder="15000" required />
+                            </div>
+                            <div class="modal-field full-width">
+                                <label for="medicine_description">Deskripsi</label>
+                                <textarea id="medicine_description" name="description" placeholder="Keterangan tentang obat.">{{ old('description') }}</textarea>
+                            </div>
+                            <div class="modal-field full-width">
+                                <label for="medicine_is_active">Status</label>
+                                <select id="medicine_is_active" name="is_active" required>
+                                    <option value="1" {{ old('is_active') === '1' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="0" {{ old('is_active') === '0' ? 'selected' : '' }}>Nonaktif</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="modal-button-secondary" id="cancelMedicineModalBtn">Batal</button>
+                            <button type="submit" class="button-primary" id="medicineModalSubmitBtn">Simpan Obat</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Medicine View Modal -->
+            <div class="modal-overlay" id="medicineViewModal">
+                <div class="modal-window" style="max-width:480px;">
+                    <button type="button" class="modal-close" id="closeMedicineViewModalBtn">✕</button>
+                    <h3>Detail Obat</h3>
+                    <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                        <div class="modal-field"><label>Nama Obat</label><div id="view_medicine_name" style="font-weight:700;">-</div></div>
+                        <div class="modal-field"><label>Kode</label><div id="view_medicine_code" style="font-family:'Space Mono',monospace;">-</div></div>
+                        <div class="modal-field"><label>Stok</label><div id="view_medicine_stock">-</div></div>
+                        <div class="modal-field"><label>Minimum Stok</label><div id="view_medicine_minimum_stock">-</div></div>
+                        <div class="modal-field"><label>Satuan</label><div id="view_medicine_unit">-</div></div>
+                        <div class="modal-field"><label>Harga</label><div id="view_medicine_price" style="font-family:'Space Mono',monospace; color:var(--blue-deep); font-weight:700;">-</div></div>
+                        <div class="modal-field" style="grid-column:1/-1;"><label>Deskripsi</label><div id="view_medicine_description" style="font-size:13px; color:var(--text-muted);">-</div></div>
+                        <div class="modal-field" style="grid-column:1/-1;"><label>Status</label><div id="view_medicine_status">-</div></div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Room View Modal -->
             <div class="modal-overlay" id="roomViewModal">
                 <div class="modal-window" style="max-width:480px;">
@@ -1555,6 +2184,9 @@
                 document.getElementById('dashboardSection').style.display = t === 'dashboard' ? 'block' : 'none';
                 document.getElementById('patientsSection').style.display  = t === 'patients'  ? 'block' : 'none';
                 document.getElementById('roomsSection').style.display     = t === 'rooms'     ? 'block' : 'none';
+                document.getElementById('doctorsSection').style.display   = t === 'doctors'   ? 'block' : 'none';
+                document.getElementById('polikliniksSection').style.display = t === 'polikliniks' ? 'block' : 'none';
+                document.getElementById('medicinesSection').style.display = t === 'medicines' ? 'block' : 'none';
                 localStorage.setItem('activeSection', t);
             });
         });
@@ -1767,6 +2399,136 @@
             });
         });
 
+        // ── Doctor Modal
+        const doctorModal      = document.getElementById('doctorModal');
+        const doctorForm       = document.getElementById('doctorForm');
+        const doctorMethod     = document.getElementById('doctor_method');
+        const doctorModalTitle = document.querySelector('#doctorModal .modal-window h3');
+        const doctorModalBtn   = document.getElementById('doctorModalSubmitBtn');
+        const doctorBaseUrl    = "{{ url('/doctors') }}";
+
+        const setDoctorFormMode = (mode, doctor = null) => {
+            if (mode === 'edit' && doctor) {
+                doctorModalTitle.textContent = 'Edit Dokter';
+                doctorModalBtn.textContent = 'Perbarui Dokter';
+                doctorForm.action = `${doctorBaseUrl}/${doctor.id}`;
+                doctorMethod.value = 'PUT';
+                document.getElementById('doctor_name').value = doctor.name || '';
+                document.getElementById('license_number').value = doctor.license_number || '';
+                document.getElementById('specialization').value = doctor.specialization || '';
+                document.getElementById('poliklinik_id').value = doctor.poliklinikId || '';
+                document.getElementById('doctor_email').value = doctor.email || '';
+                document.getElementById('doctor_phone').value = doctor.phone || '';
+                document.getElementById('is_active').value = doctor.active || '1';
+            } else {
+                doctorModalTitle.textContent = 'Tambah Dokter Baru';
+                doctorModalBtn.textContent = 'Simpan Dokter';
+                doctorForm.action = "{{ route('doctors.store') }}";
+                doctorMethod.value = '';
+                document.getElementById('doctor_name').value = '';
+                document.getElementById('license_number').value = '';
+                document.getElementById('specialization').value = '';
+                document.getElementById('poliklinik_id').value = '';
+                document.getElementById('doctor_email').value = '';
+                document.getElementById('doctor_phone').value = '';
+                document.getElementById('is_active').value = '1';
+                doctorForm.reset();
+            }
+        };
+
+        const openDoctorModal  = () => { doctorModal.style.display = 'flex'; document.body.style.overflow = 'hidden'; };
+        const closeDoctorModal = () => { doctorModal.style.display = 'none'; document.body.style.overflow = ''; };
+
+        document.getElementById('openDoctorModalBtn')?.addEventListener('click', () => { setDoctorFormMode('create'); openDoctorModal(); });
+        document.getElementById('closeDoctorModalBtn')?.addEventListener('click', closeDoctorModal);
+        document.getElementById('cancelDoctorModalBtn')?.addEventListener('click', closeDoctorModal);
+        doctorModal?.addEventListener('click', e => { if (e.target === doctorModal) closeDoctorModal(); });
+
+        document.querySelectorAll('.edit-doctor').forEach(btn => {
+            btn.addEventListener('click', function () {
+                setDoctorFormMode('edit', {
+                    id: this.dataset.id,
+                    name: this.dataset.name,
+                    license_number: this.dataset.license,
+                    specialization: this.dataset.specialization,
+                    poliklinikId: this.dataset.poliklinikId,
+                    email: this.dataset.email,
+                    phone: this.dataset.phone,
+                    active: this.dataset.active,
+                });
+                openDoctorModal();
+            });
+        });
+
+        document.querySelectorAll('.delete-doctor').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (!confirm('Hapus data dokter ini?')) return;
+                const f = document.createElement('form');
+                f.method = 'POST'; f.action = `${doctorBaseUrl}/${this.dataset.id}`;
+                f.innerHTML = `<input type="hidden" name="_token" value="{{ csrf_token() }}"><input type="hidden" name="_method" value="DELETE">`;
+                document.body.appendChild(f); f.submit();
+            });
+        });
+
+        // ── Poliklinik Modal
+        const poliklinikModal      = document.getElementById('poliklinikModal');
+        const poliklinikForm       = document.getElementById('poliklinikForm');
+        const poliklinikMethod     = document.getElementById('poliklinik_method');
+        const poliklinikModalTitle = document.querySelector('#poliklinikModal .modal-window h3');
+        const poliklinikModalBtn   = document.getElementById('poliklinikModalSubmitBtn');
+        const poliklinikBaseUrl    = "{{ url('/polikliniks') }}";
+
+        const setPoliklinikFormMode = (mode, poliklinik = null) => {
+            if (mode === 'edit' && poliklinik) {
+                poliklinikModalTitle.textContent = 'Edit Poliklinik';
+                poliklinikModalBtn.textContent = 'Perbarui Poliklinik';
+                poliklinikForm.action = `${poliklinikBaseUrl}/${poliklinik.id}`;
+                poliklinikMethod.value = 'PUT';
+                document.getElementById('poliklinik_name').value = poliklinik.name || '';
+                document.getElementById('poliklinik_description').value = poliklinik.description || '';
+                document.getElementById('poliklinik_status').value = poliklinik.status || 'Aktif';
+            } else {
+                poliklinikModalTitle.textContent = 'Tambah Poliklinik Baru';
+                poliklinikModalBtn.textContent = 'Simpan Poliklinik';
+                poliklinikForm.action = "{{ route('polikliniks.store') }}";
+                poliklinikMethod.value = '';
+                document.getElementById('poliklinik_name').value = '';
+                document.getElementById('poliklinik_description').value = '';
+                document.getElementById('poliklinik_status').value = 'Aktif';
+                poliklinikForm.reset();
+            }
+        };
+
+        const openPoliklinikModal  = () => { poliklinikModal.style.display = 'flex'; document.body.style.overflow = 'hidden'; };
+        const closePoliklinikModal = () => { poliklinikModal.style.display = 'none'; document.body.style.overflow = ''; };
+
+        document.getElementById('openPoliklinikModalBtn')?.addEventListener('click', () => { setPoliklinikFormMode('create'); openPoliklinikModal(); });
+        document.getElementById('closePoliklinikModalBtn')?.addEventListener('click', closePoliklinikModal);
+        document.getElementById('cancelPoliklinikModalBtn')?.addEventListener('click', closePoliklinikModal);
+        poliklinikModal?.addEventListener('click', e => { if (e.target === poliklinikModal) closePoliklinikModal(); });
+
+        document.querySelectorAll('.edit-poliklinik').forEach(btn => {
+            btn.addEventListener('click', function () {
+                setPoliklinikFormMode('edit', {
+                    id: this.dataset.id,
+                    name: this.dataset.name,
+                    description: this.dataset.description,
+                    status: this.dataset.status,
+                });
+                openPoliklinikModal();
+            });
+        });
+
+        document.querySelectorAll('.delete-poliklinik').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (!confirm('Hapus data poliklinik ini?')) return;
+                const f = document.createElement('form');
+                f.method = 'POST'; f.action = `${poliklinikBaseUrl}/${this.dataset.id}`;
+                f.innerHTML = `<input type="hidden" name="_token" value="{{ csrf_token() }}"><input type="hidden" name="_method" value="DELETE">`;
+                document.body.appendChild(f); f.submit();
+            });
+        });
+
         // ── Patient search & filter
         const filterPatients = () => {
             const q   = document.getElementById('patientSearch')?.value.trim().toLowerCase() || '';
@@ -1802,6 +2564,36 @@
         document.getElementById('roomSearch')?.addEventListener('keyup', e => { if(e.key==='Enter') filterRooms(); });
         document.getElementById('roomStatusFilter')?.addEventListener('change', filterRooms);
 
+        const filterDoctors = () => {
+            const q      = document.getElementById('doctorSearch')?.value.trim().toLowerCase() || '';
+            const status = document.getElementById('doctorStatusFilter')?.value.toLowerCase() || '';
+            document.querySelectorAll('#doctorTableBody tr').forEach(row => {
+                const text = Array.from(row.cells).map(c => c.textContent.toLowerCase()).join(' ');
+                const rowStatus = row.dataset.status || '';
+                const matchQ = !q || text.includes(q);
+                const matchS = !status || rowStatus.includes(status);
+                row.style.display = (matchQ && matchS) ? '' : 'none';
+            });
+        };
+        document.getElementById('doctorSearchBtn')?.addEventListener('click', filterDoctors);
+        document.getElementById('doctorSearch')?.addEventListener('keyup', e => { if(e.key==='Enter') filterDoctors(); });
+        document.getElementById('doctorStatusFilter')?.addEventListener('change', filterDoctors);
+
+        const filterPolikliniks = () => {
+            const q      = document.getElementById('poliklinikSearch')?.value.trim().toLowerCase() || '';
+            const status = document.getElementById('poliklinikStatusFilter')?.value.toLowerCase() || '';
+            document.querySelectorAll('#poliklinikTableBody tr').forEach(row => {
+                const text = Array.from(row.cells).map(c => c.textContent.toLowerCase()).join(' ');
+                const rowStatus = row.dataset.status || '';
+                const matchQ = !q || text.includes(q);
+                const matchS = !status || rowStatus.includes(status);
+                row.style.display = (matchQ && matchS) ? '' : 'none';
+            });
+        };
+        document.getElementById('poliklinikSearchBtn')?.addEventListener('click', filterPolikliniks);
+        document.getElementById('poliklinikSearch')?.addEventListener('keyup', e => { if(e.key==='Enter') filterPolikliniks(); });
+        document.getElementById('poliklinikStatusFilter')?.addEventListener('change', filterPolikliniks);
+
         // ── Restore active section from localStorage on first load
         const savedSection = localStorage.getItem('activeSection') || 'dashboard';
         const sectionItem = document.querySelector(`[data-section="${savedSection}"]`);
@@ -1811,6 +2603,9 @@
             document.getElementById('dashboardSection').style.display = savedSection === 'dashboard' ? 'block' : 'none';
             document.getElementById('patientsSection').style.display  = savedSection === 'patients'  ? 'block' : 'none';
             document.getElementById('roomsSection').style.display     = savedSection === 'rooms'     ? 'block' : 'none';
+            document.getElementById('doctorsSection').style.display   = savedSection === 'doctors'   ? 'block' : 'none';
+            document.getElementById('polikliniksSection').style.display = savedSection === 'polikliniks' ? 'block' : 'none';
+            document.getElementById('medicinesSection').style.display = savedSection === 'medicines' ? 'block' : 'none';
         }
 
         // ── Old data restore & error handling for patients
@@ -1838,6 +2633,115 @@
             document.querySelector('[data-section="patients"]').click();
             openPatientModal();
         @endif
+
+        // ── Medicine Modal
+        const medicineModal      = document.getElementById('medicineModal');
+        const medicineForm       = document.getElementById('medicineForm');
+        const medicineMethod     = document.getElementById('medicine_method');
+        const medicineModalTitle = document.querySelector('#medicineModal .modal-window h3');
+        const medicineModalBtn   = document.getElementById('medicineModalSubmitBtn');
+        const medicineBaseUrl    = "{{ url('/medicines') }}";
+
+        const setMedicineFormMode = (mode, medicine = null) => {
+            if (mode === 'edit' && medicine) {
+                medicineModalTitle.textContent = 'Edit Obat';
+                medicineModalBtn.textContent = 'Perbarui Obat';
+                medicineForm.action = `${medicineBaseUrl}/${medicine.id}`;
+                medicineMethod.value = 'PUT';
+                document.getElementById('medicine_name').value = medicine.name || '';
+                document.getElementById('medicine_code').value = medicine.code || '';
+                document.getElementById('medicine_stock').value = medicine.stock || 0;
+                document.getElementById('medicine_minimum_stock').value = medicine.minimumStock || 10;
+                document.getElementById('medicine_unit').value = medicine.unit || '';
+                document.getElementById('medicine_price').value = medicine.price || 0;
+                document.getElementById('medicine_description').value = medicine.description || '';
+                document.getElementById('medicine_is_active').value = medicine.active || '1';
+            } else {
+                medicineModalTitle.textContent = 'Tambah Obat Baru';
+                medicineModalBtn.textContent = 'Simpan Obat';
+                medicineForm.action = "{{ route('medicines.store') }}";
+                medicineMethod.value = '';
+                document.getElementById('medicine_name').value = '';
+                document.getElementById('medicine_code').value = '';
+                document.getElementById('medicine_stock').value = 0;
+                document.getElementById('medicine_minimum_stock').value = 10;
+                document.getElementById('medicine_unit').value = '';
+                document.getElementById('medicine_price').value = 0;
+                document.getElementById('medicine_description').value = '';
+                document.getElementById('medicine_is_active').value = '1';
+                medicineForm.reset();
+            }
+        };
+
+        const openMedicineModal  = () => { medicineModal.style.display = 'flex'; document.body.style.overflow = 'hidden'; };
+        const closeMedicineModal = () => { medicineModal.style.display = 'none'; document.body.style.overflow = ''; };
+
+        document.getElementById('openMedicineModalBtn')?.addEventListener('click', () => { setMedicineFormMode('create'); openMedicineModal(); });
+        document.getElementById('closeMedicineModalBtn')?.addEventListener('click', closeMedicineModal);
+        document.getElementById('cancelMedicineModalBtn')?.addEventListener('click', closeMedicineModal);
+        medicineModal?.addEventListener('click', e => { if (e.target === medicineModal) closeMedicineModal(); });
+
+        // ── Medicine View Modal
+        const medicineViewModal = document.getElementById('medicineViewModal');
+        document.getElementById('closeMedicineViewModalBtn')?.addEventListener('click', () => { medicineViewModal.style.display='none'; document.body.style.overflow=''; });
+        medicineViewModal?.addEventListener('click', e => { if (e.target === medicineViewModal) { medicineViewModal.style.display='none'; document.body.style.overflow=''; } });
+
+        document.querySelectorAll('.view-medicine').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.getElementById('view_medicine_name').textContent = this.dataset.name || '-';
+                document.getElementById('view_medicine_code').textContent = this.dataset.code || '-';
+                document.getElementById('view_medicine_stock').textContent = this.dataset.stock || '-';
+                document.getElementById('view_medicine_minimum_stock').textContent = this.dataset.minimumStock || '-';
+                document.getElementById('view_medicine_unit').textContent = this.dataset.unit || '-';
+                document.getElementById('view_medicine_price').textContent = this.dataset.price ? `Rp ${Number(this.dataset.price).toLocaleString('id-ID')}` : '-';
+                document.getElementById('view_medicine_description').textContent = this.dataset.description || '-';
+                document.getElementById('view_medicine_status').textContent = this.dataset.active === '1' ? 'Aktif' : 'Nonaktif';
+                medicineViewModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        document.querySelectorAll('.edit-medicine').forEach(btn => {
+            btn.addEventListener('click', function () {
+                setMedicineFormMode('edit', {
+                    id: this.dataset.id,
+                    name: this.dataset.name,
+                    code: this.dataset.code,
+                    stock: this.dataset.stock,
+                    minimumStock: this.dataset.minimumStock,
+                    unit: this.dataset.unit,
+                    price: this.dataset.price,
+                    description: this.dataset.description,
+                    active: this.dataset.active,
+                });
+                openMedicineModal();
+            });
+        });
+
+        document.querySelectorAll('.delete-medicine').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (!confirm('Hapus data obat ini?')) return;
+                const f = document.createElement('form');
+                f.method = 'POST'; f.action = `${medicineBaseUrl}/${this.dataset.id}`;
+                f.innerHTML = `<input type="hidden" name="_token" value="{{ csrf_token() }}"><input type="hidden" name="_method" value="DELETE">`;
+                document.body.appendChild(f); f.submit();
+            });
+        });
+
+        const filterMedicines = () => {
+            const q      = document.getElementById('medicineSearch')?.value.trim().toLowerCase() || '';
+            const status = document.getElementById('medicineStatusFilter')?.value.toLowerCase() || '';
+            document.querySelectorAll('#medicineTableBody tr').forEach(row => {
+                const text = Array.from(row.cells).map(c => c.textContent.toLowerCase()).join(' ');
+                const rowStatus = row.dataset.status || '';
+                const matchQ = !q || text.includes(q);
+                const matchS = !status || rowStatus.includes(status);
+                row.style.display = (matchQ && matchS) ? '' : 'none';
+            });
+        };
+        document.getElementById('medicineSearchBtn')?.addEventListener('click', filterMedicines);
+        document.getElementById('medicineSearch')?.addEventListener('keyup', e => { if(e.key==='Enter') filterMedicines(); });
+        document.getElementById('medicineStatusFilter')?.addEventListener('change', filterMedicines);
 
         // ── Logout
         document.getElementById('logoutBtn').addEventListener('click', () => {

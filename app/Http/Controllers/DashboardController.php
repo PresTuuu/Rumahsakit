@@ -9,6 +9,7 @@ use App\Models\Doctor;
 use App\Models\Invoice;
 use App\Models\Medicine;
 use App\Models\Patient;
+use App\Models\Poliklinik;
 use App\Models\Room;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\View\View;
@@ -30,8 +31,19 @@ final class DashboardController extends BaseController
         $inpatientTotal = Admission::where('admission_type', 'Rawat Inap')
             ->where('status', 'active')
             ->count();
-        $lowStockMedicines = Medicine::where('stock', '<', 10)->count();
+        $lowStockMedicines = Medicine::whereColumn('stock', '<', 'minimum_stock')->count();
         $pendingInvoices = Invoice::where('status', 'pending')->count();
+
+        // Medicines data
+        $medicines = Medicine::orderBy('created_at', 'desc')
+            ->take(20)
+            ->get();
+
+        $totalMedicines = Medicine::count();
+        $activeMedicines = Medicine::where('is_active', true)->count();
+        $totalMedicineValue = Medicine::where('is_active', true)
+            ->selectRaw('SUM(stock * price) as total_value')
+            ->value('total_value') ?? 0;
 
         // Bed statistics
         $totalBeds = Room::sum('capacity') ?? 0;
@@ -72,9 +84,25 @@ final class DashboardController extends BaseController
             ->take(20)
             ->get();
 
+        $totalDoctors = Doctor::count();
+        $inactiveDoctors = Doctor::where('is_active', false)->count();
+        $distinctSpecializations = Doctor::distinct('specialization')->count();
+        $polikliniks = Poliklinik::withCount(['doctors', 'admissions'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $doctors = Doctor::with('poliklinikRelation')
+            ->orderBy('created_at', 'desc')
+            ->take(20)
+            ->get();
+
         return view('dashboard', [
             'totalPatients' => $totalPatients,
             'activeDoctors' => $activeDoctors,
+            'totalDoctors' => $totalDoctors,
+            'inactiveDoctors' => $inactiveDoctors,
+            'distinctSpecializations' => $distinctSpecializations,
+            'polikliniks' => $polikliniks,
             'outpatientToday' => $outpatientToday,
             'inpatientTotal' => $inpatientTotal,
             'lowStockMedicines' => $lowStockMedicines,
@@ -89,6 +117,11 @@ final class DashboardController extends BaseController
             'patients' => $patients,
             'totalRooms' => $totalRooms,
             'rooms' => $rooms,
+            'doctors' => $doctors,
+            'medicines' => $medicines,
+            'totalMedicines' => $totalMedicines,
+            'activeMedicines' => $activeMedicines,
+            'totalMedicineValue' => $totalMedicineValue,
         ]);
     }
 }

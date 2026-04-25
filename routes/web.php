@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\PoliklinikController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
@@ -77,6 +80,33 @@ Route::middleware(['auth'])->group(function (): void {
 
     Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])
         ->name('rooms.destroy');
+
+    Route::post('/doctors', [DoctorController::class, 'store'])
+        ->name('doctors.store');
+
+    Route::put('/doctors/{doctor}', [DoctorController::class, 'update'])
+        ->name('doctors.update');
+
+    Route::delete('/doctors/{doctor}', [DoctorController::class, 'destroy'])
+        ->name('doctors.destroy');
+
+    Route::post('/polikliniks', [PoliklinikController::class, 'store'])
+        ->name('polikliniks.store');
+
+    Route::put('/polikliniks/{poliklinik}', [PoliklinikController::class, 'update'])
+        ->name('polikliniks.update');
+
+    Route::delete('/polikliniks/{poliklinik}', [PoliklinikController::class, 'destroy'])
+        ->name('polikliniks.destroy');
+
+    Route::post('/medicines', [MedicineController::class, 'store'])
+        ->name('medicines.store');
+
+    Route::put('/medicines/{medicine}', [MedicineController::class, 'update'])
+        ->name('medicines.update');
+
+    Route::delete('/medicines/{medicine}', [MedicineController::class, 'destroy'])
+        ->name('medicines.destroy');
 
     /*
     |------------------------------------------------------------------
