@@ -58,6 +58,27 @@ final class DashboardController extends BaseController
             ->whereYear('paid_date', now()->year)
             ->sum('paid_amount');
 
+        // Chart Data (Last 7 Days)
+        $chartLabels = [];
+        $revenueData = [];
+        $patientData = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            $date = \Carbon\Carbon::today()->subDays($i);
+            $chartLabels[] = $date->translatedFormat('d M');
+
+            // Revenue
+            $rev = Invoice::whereIn('status', ['lunas', 'sebagian'])
+                ->whereDate('paid_date', $date)
+                ->sum('paid_amount');
+            $revenueData[] = (float) $rev;
+
+            // Patients
+            $pat = Admission::whereDate('admission_date', $date)
+                ->count();
+            $patientData[] = $pat;
+        }
+
         // Tables Data
         $outpatientAdmissions = Admission::with(['patient', 'doctor'])
             ->where('admission_type', 'Rawat Jalan')
@@ -243,6 +264,9 @@ final class DashboardController extends BaseController
             'unpaidInvoicesCount' => $unpaidInvoicesCount,
             'partialInvoicesCount' => $partialInvoicesCount,
             'admissionsWithoutInvoice' => $admissionsWithoutInvoice,
+            'chartLabels' => $chartLabels,
+            'revenueData' => $revenueData,
+            'patientData' => $patientData,
         ]);
     }
 }

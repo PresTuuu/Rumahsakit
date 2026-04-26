@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root {
@@ -536,11 +537,11 @@
         /* ─── STAT CARDS ──────────────────────────── */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px; margin-bottom: 16px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px; margin-bottom: 24px;
         }
 
-        .stat-card {
+        .stat-card { cursor: pointer;
             background: var(--card); border-radius: 16px; padding: 20px;
             border: 1px solid var(--border);
             position: relative; overflow: hidden;
@@ -1192,13 +1193,7 @@
             </div>
 
             <div class="nav-section-label" style="margin-top:8px;">Admin</div>
-
-            <div class="sidebar-item">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M2 12H4m16 0h2M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41"/></svg>
-                <span>Pengaturan</span>
-                <div class="nav-dot"></div>
-            </div>
-
+            
             <div class="sidebar-item" id="logoutBtn">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 <span>Keluar</span>
@@ -1247,8 +1242,8 @@
                     </div>
                 @endif
 
-                <div class="stats-grid" id="statsRow1">
-                    <div class="stat-card">
+                <div class="stats-grid">
+                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'patients\']')?.click()">
                         <div class="stat-icon" style="background:#EFF6FF;">👥</div>
                         <div class="stat-label">Total Pasien</div>
                         <div class="stat-value" data-count="{{ $totalPatients }}">0</div>
@@ -1256,7 +1251,7 @@
                         <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--blue-bright);width:78%"></div></div>
                         <div class="pulse-line"></div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'rooms\']')?.click()">
                         <div class="stat-icon" style="background:#FEF3C7;">🏥</div>
                         <div class="stat-label">Total Ruangan</div>
                         <div class="stat-value" data-count="{{ $totalRooms ?? 0 }}">0</div>
@@ -1264,7 +1259,7 @@
                         <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--accent-amber);width:72%"></div></div>
                         <div class="pulse-line"></div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'doctors\']')?.click()">
                         <div class="stat-icon" style="background:#ECFDF5;">⚕️</div>
                         <div class="stat-label">Dokter Aktif</div>
                         <div class="stat-value" data-count="{{ $activeDoctors }}">0</div>
@@ -1272,7 +1267,7 @@
                         <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--accent-green);width:92%"></div></div>
                         <div class="pulse-line"></div>
                     </div>
-                    <div class="stat-card" id="outpatientCard" style="cursor:pointer;">
+                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'outpatient\']')?.click()">
                         <div class="stat-icon" style="background:#FFFBEB;">📋</div>
                         <div class="stat-label">Rawat Jalan Hari Ini</div>
                         <div class="stat-value" data-count="{{ $outpatientToday }}">0</div>
@@ -1280,7 +1275,7 @@
                         <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--accent-amber);width:55%"></div></div>
                         <div class="pulse-line"></div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'inpatient\']')?.click()">
                         <div class="stat-icon" style="background:#F5F3FF;">🏥</div>
                         <div class="stat-label">Rawat Inap</div>
                         <div class="stat-value" data-count="{{ $inpatientTotal }}">0</div>
@@ -1288,10 +1283,7 @@
                         <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--accent-purple);width:{{ $totalBeds > 0 ? round(($usedBeds / $totalBeds) * 100) : 0 }}%"></div></div>
                         <div class="pulse-line"></div>
                     </div>
-                </div>
-
-                <div class="stats-grid" id="statsRow2">
-                    <div class="stat-card">
+                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'farmasi\']')?.click()">
                         <div class="stat-icon" style="background:#FEF2F2;">⚠️</div>
                         <div class="stat-label">Stok Obat Rendah</div>
                         <div class="stat-value" style="color:var(--accent-red);" data-count="{{ $lowStockMedicines }}">0</div>
@@ -1299,7 +1291,7 @@
                         <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--accent-red);width:30%"></div></div>
                         <div class="pulse-line"></div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'keuangan\']')?.click()">
                         <div class="stat-icon" style="background:#FFF7ED;">📄</div>
                         <div class="stat-label">Tagihan Pending</div>
                         <div class="stat-value" style="color:#EA580C;" data-count="{{ $pendingInvoices }}">0</div>
@@ -1307,7 +1299,7 @@
                         <div class="stat-bar"><div class="stat-bar-fill" style="background:#F97316;width:45%"></div></div>
                         <div class="pulse-line"></div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'keuangan\']')?.click()">
                         <div class="stat-icon" style="background:#F0FDF4;">💰</div>
                         <div class="stat-label">Pendapatan Hari Ini</div>
                         <div class="stat-value" style="font-size:20px;padding-top:2px;">Rp {{ number_format($todayRevenue, 0, ',', '.') }}</div>
@@ -1315,7 +1307,7 @@
                         <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--accent-green);width:60%"></div></div>
                         <div class="pulse-line"></div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'keuangan\']')?.click()">
                         <div class="stat-icon" style="background:#EEF2FF;">📊</div>
                         <div class="stat-label">Pendapatan Bulan Ini</div>
                         <div class="stat-value" style="font-size:20px;padding-top:2px;">Rp {{ number_format($monthRevenue, 0, ',', '.') }}</div>
@@ -1326,6 +1318,22 @@
                 </div>
 
                 <div class="section-divider reveal"></div>
+
+                <!-- ════════════════════ CHARTS ════════════════════ -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px;" class="reveal">
+                    <div class="table-card" style="padding:20px;">
+                        <div class="section-title" style="margin-bottom:16px;">Tren Pendapatan (7 Hari)</div>
+                        <div style="position:relative; height:240px; width:100%;">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="table-card" style="padding:20px;">
+                        <div class="section-title" style="margin-bottom:16px;">Tren Pasien (7 Hari)</div>
+                        <div style="position:relative; height:240px; width:100%;">
+                            <canvas id="patientChart"></canvas>
+                        </div>
+                    </div>
+                </div>
 
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" class="reveal">
                     <div class="table-card">
@@ -5431,6 +5439,80 @@
             form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
             document.body.appendChild(form); form.submit();
         });
+
+        // ─── CHARTS INITIALIZATION ─────────────────────
+        const chartLabels = {!! json_encode($chartLabels ?? []) !!};
+        const revenueData = {!! json_encode($revenueData ?? []) !!};
+        const patientData = {!! json_encode($patientData ?? []) !!};
+
+        const revCtx = document.getElementById('revenueChart');
+        if(revCtx) {
+            new Chart(revCtx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Pendapatan (Rp)',
+                        data: revenueData,
+                        borderColor: '#2563EB',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#2563EB',
+                        pointBorderColor: '#fff',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            ticks: { 
+                                callback: function(value) { return 'Rp ' + (value/1000).toLocaleString('id-ID') + 'k'; },
+                                font: { family: "'Space Mono', monospace", size: 10 }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: { grid: { display: false }, ticks: { font: { family: "'Space Mono', monospace", size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        const patCtx = document.getElementById('patientChart');
+        if(patCtx) {
+            new Chart(patCtx, {
+                type: 'bar',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Kunjungan Pasien',
+                        data: patientData,
+                        backgroundColor: '#10B981',
+                        borderRadius: 6,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            ticks: { font: { family: "'Space Mono', monospace", size: 10 }, stepSize: 1 },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: { grid: { display: false }, ticks: { font: { family: "'Space Mono', monospace", size: 10 } } }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
