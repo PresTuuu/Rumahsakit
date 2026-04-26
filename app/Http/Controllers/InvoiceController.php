@@ -29,13 +29,14 @@ final class InvoiceController extends BaseController
             $paidDate = now();
         } elseif ($newPaidAmount > 0) {
             $status = 'sebagian';
+            $paidDate = now();
         }
 
         $invoice->update([
             'paid_amount' => $newPaidAmount,
             'status' => $status,
             'notes' => $validated['notes'] ?? $invoice->notes,
-            'paid_date' => $paidDate,
+            'paid_date' => $paidDate ?? $invoice->paid_date,
         ]);
 
         return redirect()->route('dashboard')->with('activeSection', 'keuangan')->with('status', 'Pembayaran invoice berhasil diperbarui!');

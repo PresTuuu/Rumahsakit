@@ -49,14 +49,14 @@ final class DashboardController extends BaseController
         $availableBeds = Room::sum('available') ?? 0;
         $usedBeds = $totalBeds - $availableBeds;
 
-        $todayRevenue = Invoice::where('status', 'paid')
+        $todayRevenue = Invoice::whereIn('status', ['lunas', 'sebagian'])
             ->whereDate('paid_date', today())
-            ->sum('amount');
+            ->sum('paid_amount');
 
-        $monthRevenue = Invoice::where('status', 'paid')
+        $monthRevenue = Invoice::whereIn('status', ['lunas', 'sebagian'])
             ->whereMonth('paid_date', now()->month)
             ->whereYear('paid_date', now()->year)
-            ->sum('amount');
+            ->sum('paid_amount');
 
         // Tables Data
         $outpatientAdmissions = Admission::with(['patient', 'doctor'])
