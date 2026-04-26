@@ -1155,6 +1155,12 @@
                 <div class="nav-dot"></div>
             </div>
 
+            <div class="sidebar-item" data-section="farmasi">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8.5 21H4a1 1 0 0 1-1-1v-6.5a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1Z"/><path d="M14.5 21H10a1 1 0 0 1-1-1v-6.5a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1Z"/><path d="M20.5 21H16a1 1 0 0 1-1-1v-6.5a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1Z"/><path d="M12 6.5v-4"/><path d="M12 6.5a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v0a3 3 0 0 1-3 3h-2a3 3 0 0 1-3-3Z"/><path d="M7 9.5a3 3 0 0 0-3-3H2a3 3 0 0 0-3 3v0a3 3 0 0 0 3 3h2a3 3 0 0 0 3-3Z" transform="translate(7, -3)"/></svg>
+                <span>Farmasi</span>
+                <div class="nav-dot"></div>
+            </div>
+
             <div class="sidebar-item" data-section="outpatient">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                 <span>Rawat Jalan</span>
@@ -2154,6 +2160,164 @@
                     </table>
                 </div>
             </div><!-- /medicinesSection -->
+
+            <!-- ════════════════════ FARMASI SECTION ════════════════════ -->
+            <div id="farmasiSection" style="display:none;">
+
+                <div class="section-page-header reveal" style="background: linear-gradient(130deg, #059669 0%, #10B981 60%, #34D399 100%);">
+                    <div class="section-page-header-text">
+                        <div class="tag">✦ Manajemen Farmasi</div>
+                        <h2>Resep Obat</h2>
+                        <p>Kelola resep obat pasien dengan nomor resep otomatis, dokter dari database, dan status pelayanan.</p>
+                    </div>
+                    <button type="button" class="button-white" id="openPrescriptionModalBtn">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Buat Resep
+                    </button>
+                </div>
+
+                <div class="summary-strip reveal">
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#ECFDF5;">📋</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Total Resep</div>
+                            <div class="value">{{ $totalPrescriptions }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#FEF3C7;">⏳</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Menunggu</div>
+                            <div class="value">{{ $waitingPrescriptions }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#DBEAFE;">✅</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Diberikan</div>
+                            <div class="value">{{ $givenPrescriptions }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#F0FDF4;">📅</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Hari Ini</div>
+                            <div class="value">{{ $todayPrescriptions }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-bar-wrapper reveal">
+                    <div class="search-bar-inner">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="prescriptionSearch" placeholder="Cari nomor resep, nama pasien, nama dokter..." />
+                    </div>
+                    <select class="search-filter-select" id="prescriptionStatusFilter">
+                        <option value="">Semua Status</option>
+                        <option value="menunggu">Menunggu</option>
+                        <option value="diberikan">Diberikan</option>
+                    </select>
+                    <input type="date" class="search-filter-select" id="prescriptionDateFilter" />
+                    <button type="button" class="search-btn" id="prescriptionSearchBtn">Cari</button>
+                </div>
+
+                <div class="premium-table-wrap reveal">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:42px;">#</th>
+                                <th>No. Resep</th>
+                                <th>Tanggal</th>
+                                <th>Pasien</th>
+                                <th>Dokter</th>
+                                <th>Obat</th>
+                                <th>Status</th>
+                                <th style="text-align:center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prescriptionTableBody">
+                            @forelse($prescriptions as $index => $prescription)
+                            <tr data-status="{{ $prescription->status }}" data-date="{{ $prescription->created_at->format('Y-m-d') }}">
+                                <td style="color:var(--text-muted);font-size:12px;font-family:'Space Mono',monospace;text-align:center;">{{ $index + 1 }}</td>
+                                <td>
+                                    <div style="font-family:'Space Mono',monospace; font-size:12px; font-weight:700; color:var(--blue-deep); background:#ECFDF5; padding:4px 8px; border-radius:6px; display:inline-block;">{{ $prescription->prescription_number }}</div>
+                                </td>
+                                <td>
+                                    <div style="font-size:13px; font-weight:500;">{{ $prescription->created_at->format('d M Y') }}</div>
+                                    <div style="font-size:11px; color:var(--text-muted);">{{ $prescription->created_at->format('H:i') }}</div>
+                                </td>
+                                <td>
+                                    <div class="patient-cell">
+                                        <div class="patient-avatar {{ optional($prescription->patient)->gender === 'M' ? 'male' : (optional($prescription->patient)->gender === 'F' ? 'female' : 'other') }}">{{ strtoupper(substr(optional($prescription->patient)->name ?? '?', 0, 1)) }}</div>
+                                        <div>
+                                            <div class="patient-name">{{ optional($prescription->patient)->name ?? 'Pasien tidak ditemukan' }}</div>
+                                            <div class="td-rm">{{ optional($prescription->patient)->medical_record_number ?? '-' }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="font-size:13px;">{{ optional($prescription->doctor)->name ?? '-' }}</td>
+                                <td>
+                                    @foreach($prescription->items as $item)
+                                        <div style="font-size:12px; margin-bottom:2px;">
+                                            <span style="font-weight:600;">{{ optional($item->medicine)->name ?? '?' }}</span>
+                                            <span style="color:var(--text-muted);">({{ $item->quantity }} {{ optional($item->medicine)->unit ?? '' }})</span>
+                                        </div>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @if($prescription->status === 'menunggu')
+                                        <div class="status-cell" style="color:#B45309;"><span class="status-dot" style="background:#F59E0B;"></span>Menunggu</div>
+                                    @else
+                                        <div class="status-cell" style="color:#047857;"><span class="status-dot" style="background:#10B981;"></span>Diberikan</div>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="act-wrap" style="justify-content:center;">
+                                        <button type="button" class="act-btn view view-prescription"
+                                            title="Lihat"
+                                            data-number="{{ $prescription->prescription_number }}"
+                                            data-patient="{{ optional($prescription->patient)->name ?? '-' }}"
+                                            data-patient-rm="{{ optional($prescription->patient)->medical_record_number ?? '-' }}"
+                                            data-doctor="{{ optional($prescription->doctor)->name ?? '-' }}"
+                                            data-date="{{ $prescription->created_at }}"
+                                            data-status="{{ $prescription->status }}"
+                                            data-notes="{{ $prescription->notes }}"
+                                            data-items='{{ json_encode($prescription->items->map(function($i) { return ["name" => optional($i->medicine)->name ?? "?", "quantity" => $i->quantity, "unit" => optional($i->medicine)->unit ?? "", "instructions" => $i->instructions]; })->values()) }}'
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        </button>
+                                        <button type="button" class="act-btn edit edit-prescription"
+                                            title="Edit"
+                                            data-id="{{ $prescription->id }}"
+                                            data-patient-id="{{ $prescription->patient_id }}"
+                                            data-doctor-id="{{ $prescription->doctor_id }}"
+                                            data-status="{{ $prescription->status }}"
+                                            data-notes="{{ $prescription->notes }}"
+                                            data-items='{{ json_encode($prescription->items->map(function($i) { return ["medicine_id" => $i->medicine_id, "quantity" => $i->quantity, "instructions" => $i->instructions]; })->values()) }}'
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                                        </button>
+                                        <button type="button" class="act-btn delete delete-prescription" title="Hapus" data-id="{{ $prescription->id }}">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="8">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">💊</div>
+                                        <h4>Belum Ada Resep</h4>
+                                        <p>Buat resep baru untuk mengisi tabel ini.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- /farmasiSection -->
 
             <!-- ════════════════════ OUTPATIENT SECTION ════════════════════ -->
             <div id="outpatientSection" style="display:none;">
@@ -3346,6 +3510,119 @@
                 </div>
             </div>
 
+            <!-- Prescription Add/Edit Modal -->
+            <div class="modal-overlay" id="prescriptionModal">
+                <div class="modal-window" style="max-width:700px;">
+                    <button type="button" class="modal-close" id="closePrescriptionModalBtn">✕</button>
+                    <h3>Buat Resep Baru</h3>
+                    <p style="font-size:13px; color:var(--text-muted);">Tambahkan resep obat dengan memilih dokter dan obat-obatan yang diperlukan.</p>
+
+                    @if ($errors->any() && old('form_type') === 'prescription')
+                        <div class="modal-error">
+                            <strong>Perbaiki data berikut:</strong>
+                            <ul style="margin-top:8px; padding-left:18px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('prescriptions.store') }}" id="prescriptionForm">
+                        @csrf
+                        <input type="hidden" name="_method" id="prescription_method" value="">
+                        <input type="hidden" name="form_type" value="prescription">
+                        <div class="modal-grid">
+                            <div class="modal-field">
+                                <label for="prescription_patient_id">Pasien</label>
+                                <select id="prescription_patient_id" name="patient_id" required>
+                                    <option value="">Pilih Pasien</option>
+                                    @foreach($allPatients as $patient)
+                                        <option value="{{ $patient->id }}" {{ old('patient_id') == $patient->id ? 'selected' : '' }}>{{ $patient->name }} ({{ $patient->medical_record_number }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label for="prescription_doctor_id">Dokter</label>
+                                <select id="prescription_doctor_id" name="doctor_id" required>
+                                    <option value="">Pilih Dokter</option>
+                                    @foreach($allDoctors as $doctor)
+                                        <option value="{{ $doctor->id }}" {{ old('doctor_id') == $doctor->id ? 'selected' : '' }}>{{ $doctor->name }} — {{ $doctor->specialization }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label for="prescription_status">Status</label>
+                                <select id="prescription_status" name="status" required>
+                                    <option value="menunggu" {{ old('status') === 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                                    <option value="diberikan" {{ old('status') === 'diberikan' ? 'selected' : '' }}>Diberikan</option>
+                                </select>
+                            </div>
+                            <div class="modal-field full-width">
+                                <label for="prescription_notes">Catatan</label>
+                                <textarea id="prescription_notes" name="notes" placeholder="Catatan tambahan untuk resep...">{{ old('notes') }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="modal-section-divider"></div>
+
+                        <div style="margin:0 32px 16px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                                <label style="font-size:11.5px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.08em;">Daftar Obat</label>
+                                <button type="button" id="addMedicineRowBtn" style="background:var(--blue-bright); color:#fff; border:none; padding:6px 14px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    Tambah Obat
+                                </button>
+                            </div>
+                            <div id="medicineRowsContainer">
+                                <div class="medicine-row" style="display:grid; grid-template-columns: 1fr 100px 1fr 40px; gap:10px; align-items:end; margin-bottom:10px;">
+                                    <div class="modal-field" style="margin:0;">
+                                        <label style="font-size:10px;">Obat</label>
+                                        <select name="medicines[0][medicine_id]" class="medicine-select" required>
+                                            <option value="">Pilih Obat</option>
+                                            @foreach($medicines as $medicine)
+                                                <option value="{{ $medicine->id }}">{{ $medicine->name }} (Stok: {{ $medicine->stock }})</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="modal-field" style="margin:0;">
+                                        <label style="font-size:10px;">Jumlah</label>
+                                        <input type="number" name="medicines[0][quantity]" class="medicine-quantity" min="1" value="1" required />
+                                    </div>
+                                    <div class="modal-field" style="margin:0;">
+                                        <label style="font-size:10px;">Instruksi</label>
+                                        <input type="text" name="medicines[0][instructions]" class="medicine-instructions" placeholder="3x1 sehari" />
+                                    </div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-actions">
+                            <button type="button" class="modal-button-secondary" id="cancelPrescriptionModalBtn">Batal</button>
+                            <button type="submit" class="button-primary" id="prescriptionModalSubmitBtn">Simpan Resep</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Prescription View Modal -->
+            <div class="modal-overlay" id="prescriptionViewModal">
+                <div class="modal-window" style="max-width:480px;">
+                    <button type="button" class="modal-close" id="closePrescriptionViewModalBtn">✕</button>
+                    <h3>Detail Resep</h3>
+                    <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                        <div class="modal-field"><label>No. Resep</label><div id="view_prescription_number" style="font-family:'Space Mono',monospace; font-weight:700; color:var(--blue-deep);">-</div></div>
+                        <div class="modal-field"><label>Pasien</label><div id="view_prescription_patient" style="font-weight:600;">-</div></div>
+                        <div class="modal-field"><label>Dokter</label><div id="view_prescription_doctor" style="font-weight:600;">-</div></div>
+                        <div class="modal-field"><label>Tanggal</label><div id="view_prescription_date">-</div></div>
+                        <div class="modal-field"><label>Status</label><div id="view_prescription_status">-</div></div>
+                        <div class="modal-field" style="grid-column:1/-1;"><label>Catatan</label><div id="view_prescription_notes" style="font-size:13px; color:var(--text-muted);">-</div></div>
+                        <div class="modal-field" style="grid-column:1/-1;"><label>Daftar Obat</label><div id="view_prescription_items" style="font-size:13px;"></div></div>
+                    </div>
+                </div>
+            </div>
+
         </div><!-- /content-body -->
     </div><!-- /main-content -->
 
@@ -3384,6 +3661,29 @@
         }, { threshold: 0.05 });
         reveals.forEach(r => observer.observe(r));
 
+        // ── Restore active section from localStorage
+        (function restoreActiveSection() {
+            const saved = localStorage.getItem('activeSection');
+            if (saved && saved !== 'dashboard') {
+                const item = document.querySelector('.sidebar-item[data-section="' + saved + '"]');
+                if (item) {
+                    document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+                    item.classList.add('active');
+                    document.getElementById('dashboardSection').style.display = saved === 'dashboard' ? 'block' : 'none';
+                    document.getElementById('patientsSection').style.display  = saved === 'patients'  ? 'block' : 'none';
+                    document.getElementById('roomsSection').style.display     = saved === 'rooms'     ? 'block' : 'none';
+                    document.getElementById('doctorsSection').style.display   = saved === 'doctors'   ? 'block' : 'none';
+                    document.getElementById('polikliniksSection').style.display = saved === 'polikliniks' ? 'block' : 'none';
+                    document.getElementById('medicinesSection').style.display = saved === 'medicines' ? 'block' : 'none';
+                    document.getElementById('farmasiSection').style.display   = saved === 'farmasi'   ? 'block' : 'none';
+                    document.getElementById('outpatientSection').style.display = saved === 'outpatient' ? 'block' : 'none';
+                    document.getElementById('inpatientSection').style.display = saved === 'inpatient' ? 'block' : 'none';
+                    document.getElementById('scheduleSection').style.display = saved === 'schedule' ? 'block' : 'none';
+                    document.getElementById('medicalRecordsSection').style.display = saved === 'medical-records' ? 'block' : 'none';
+                }
+            }
+        })();
+
         // ── Sidebar nav
         document.querySelectorAll('.sidebar-item[data-section]').forEach(item => {
             item.addEventListener('click', function () {
@@ -3396,6 +3696,7 @@
                 document.getElementById('doctorsSection').style.display   = t === 'doctors'   ? 'block' : 'none';
                 document.getElementById('polikliniksSection').style.display = t === 'polikliniks' ? 'block' : 'none';
                 document.getElementById('medicinesSection').style.display = t === 'medicines' ? 'block' : 'none';
+                document.getElementById('farmasiSection').style.display   = t === 'farmasi'   ? 'block' : 'none';
                 document.getElementById('outpatientSection').style.display = t === 'outpatient' ? 'block' : 'none';
                 document.getElementById('inpatientSection').style.display = t === 'inpatient' ? 'block' : 'none';
                 document.getElementById('scheduleSection').style.display = t === 'schedule' ? 'block' : 'none';
@@ -4464,6 +4765,202 @@
         @endif
 
         // ── Logout
+        // Prescription Modal
+        const prescriptionModal = document.getElementById('prescriptionModal');
+        const prescriptionForm = document.getElementById('prescriptionForm');
+        const prescriptionBaseUrl = "{{ url('/prescriptions') }}";
+        let medicineRowIndex = 1;
+
+        document.getElementById('openPrescriptionModalBtn')?.addEventListener('click', () => {
+            prescriptionForm.reset();
+            prescriptionForm.action = "{{ route('prescriptions.store') }}";
+            document.getElementById('prescription_method').value = '';
+            document.querySelector('#prescriptionModal .modal-window h3').textContent = 'Buat Resep Baru';
+            document.getElementById('prescriptionModalSubmitBtn').textContent = 'Simpan Resep';
+            document.getElementById('medicineRowsContainer').innerHTML = `
+                <div class="medicine-row" style="display:grid; grid-template-columns: 1fr 100px 1fr 40px; gap:10px; align-items:end; margin-bottom:10px;">
+                    <div class="modal-field" style="margin:0;">
+                        <label style="font-size:10px;">Obat</label>
+                        <select name="medicines[0][medicine_id]" class="medicine-select" required>
+                            <option value="">Pilih Obat</option>
+                            @foreach($medicines as $medicine)
+                                <option value="{{ $medicine->id }}">{{ $medicine->name }} (Stok: {{ $medicine->stock }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="modal-field" style="margin:0;">
+                        <label style="font-size:10px;">Jumlah</label>
+                        <input type="number" name="medicines[0][quantity]" class="medicine-quantity" min="1" value="1" required />
+                    </div>
+                    <div class="modal-field" style="margin:0;">
+                        <label style="font-size:10px;">Instruksi</label>
+                        <input type="text" name="medicines[0][instructions]" class="medicine-instructions" placeholder="3x1 sehari" />
+                    </div>
+                    <div></div>
+                </div>
+            `;
+            medicineRowIndex = 1;
+            prescriptionModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+
+        document.getElementById('closePrescriptionModalBtn')?.addEventListener('click', () => { prescriptionModal.style.display='none'; document.body.style.overflow=''; });
+        document.getElementById('cancelPrescriptionModalBtn')?.addEventListener('click', () => { prescriptionModal.style.display='none'; document.body.style.overflow=''; });
+        prescriptionModal?.addEventListener('click', e => { if (e.target === prescriptionModal) { prescriptionModal.style.display='none'; document.body.style.overflow=''; } });
+
+        document.getElementById('addMedicineRowBtn')?.addEventListener('click', () => {
+            const container = document.getElementById('medicineRowsContainer');
+            const row = document.createElement('div');
+            row.className = 'medicine-row';
+            row.style.cssText = 'display:grid; grid-template-columns: 1fr 100px 1fr 40px; gap:10px; align-items:end; margin-bottom:10px;';
+            row.innerHTML = `
+                <div class="modal-field" style="margin:0;">
+                    <label style="font-size:10px;">Obat</label>
+                    <select name="medicines[${medicineRowIndex}][medicine_id]" class="medicine-select" required>
+                        <option value="">Pilih Obat</option>
+                        @foreach($medicines as $medicine)
+                            <option value="{{ $medicine->id }}">{{ $medicine->name }} (Stok: {{ $medicine->stock }})</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="modal-field" style="margin:0;">
+                    <label style="font-size:10px;">Jumlah</label>
+                    <input type="number" name="medicines[${medicineRowIndex}][quantity]" class="medicine-quantity" min="1" value="1" required />
+                </div>
+                <div class="modal-field" style="margin:0;">
+                    <label style="font-size:10px;">Instruksi</label>
+                    <input type="text" name="medicines[${medicineRowIndex}][instructions]" class="medicine-instructions" placeholder="3x1 sehari" />
+                </div>
+                <button type="button" class="remove-medicine-row" style="width:34px; height:34px; border:none; border-radius:10px; background:rgba(239,68,68,0.12); color:#b91c1c; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; margin-bottom:1px;">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+            `;
+            container.appendChild(row);
+            medicineRowIndex++;
+            row.querySelector('.remove-medicine-row').addEventListener('click', () => { row.remove(); });
+        });
+
+        const prescriptionViewModal = document.getElementById('prescriptionViewModal');
+        document.getElementById('closePrescriptionViewModalBtn')?.addEventListener('click', () => { prescriptionViewModal.style.display='none'; document.body.style.overflow=''; });
+        prescriptionViewModal?.addEventListener('click', e => { if (e.target === prescriptionViewModal) { prescriptionViewModal.style.display='none'; document.body.style.overflow=''; } });
+
+        document.querySelectorAll('.view-prescription').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.getElementById('view_prescription_number').textContent = this.dataset.number || '-';
+                document.getElementById('view_prescription_patient').textContent = this.dataset.patient ? `${this.dataset.patient} (${this.dataset.patientRm || '-'})` : '-';
+                document.getElementById('view_prescription_doctor').textContent = this.dataset.doctor || '-';
+                document.getElementById('view_prescription_date').textContent = this.dataset.date ? new Date(this.dataset.date).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'}) : '-';
+                document.getElementById('view_prescription_status').innerHTML = this.dataset.status === 'menunggu'
+                    ? '<div class="status-cell" style="color:#B45309;"><span class="status-dot" style="background:#F59E0B;"></span>Menunggu</div>'
+                    : '<div class="status-cell" style="color:#047857;"><span class="status-dot" style="background:#10B981;"></span>Diberikan</div>';
+                document.getElementById('view_prescription_notes').textContent = this.dataset.notes || '-';
+                let items = [];
+                try { items = JSON.parse(this.dataset.items || '[]'); } catch(e) {}
+                const itemsHtml = items.length > 0
+                    ? items.map((item, i) => `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:#F8FBFF; border-radius:8px; margin-bottom:6px;">
+                            <div>
+                                <div style="font-weight:600; color:var(--blue-deep);">${i+1}. ${item.name || '?'}</div>
+                                <div style="font-size:11px; color:var(--text-muted);">${item.instructions || '-'}</div>
+                            </div>
+                            <div style="font-weight:700; font-family:'Space Mono',monospace; color:var(--blue-bright);">${item.quantity} ${item.unit || ''}</div>
+                        </div>
+                    `).join('')
+                    : '<div style="color:var(--text-muted); font-size:13px;">Tidak ada obat</div>';
+                document.getElementById('view_prescription_items').innerHTML = itemsHtml;
+                prescriptionViewModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        document.querySelectorAll('.edit-prescription').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.dataset.id;
+                prescriptionForm.action = `${prescriptionBaseUrl}/${id}`;
+                document.getElementById('prescription_method').value = 'PUT';
+                document.getElementById('prescription_patient_id').value = this.dataset.patientId || '';
+                document.getElementById('prescription_doctor_id').value = this.dataset.doctorId || '';
+                document.getElementById('prescription_status').value = this.dataset.status || 'menunggu';
+                document.getElementById('prescription_notes').value = this.dataset.notes || '';
+                document.querySelector('#prescriptionModal .modal-window h3').textContent = 'Edit Resep';
+                document.getElementById('prescriptionModalSubmitBtn').textContent = 'Simpan Perubahan';
+                let items = [];
+                try { items = JSON.parse(this.dataset.items || '[]'); } catch(e) {}
+                const container = document.getElementById('medicineRowsContainer');
+                container.innerHTML = '';
+                medicineRowIndex = 0;
+                if (items.length === 0) { items = [{medicine_id:'', quantity:1, instructions:''}]; }
+                items.forEach((item, idx) => {
+                    const row = document.createElement('div');
+                    row.className = 'medicine-row';
+                    row.style.cssText = 'display:grid; grid-template-columns: 1fr 100px 1fr 40px; gap:10px; align-items:end; margin-bottom:10px;';
+                    const removeBtn = (idx === 0 && items.length === 1) ? '<div></div>' : `<button type="button" class="remove-medicine-row" style="width:34px; height:34px; border:none; border-radius:10px; background:rgba(239,68,68,0.12); color:#b91c1c; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; margin-bottom:1px;"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>`;
+                    row.innerHTML = `
+                        <div class="modal-field" style="margin:0;">
+                            <label style="font-size:10px;">Obat</label>
+                            <select name="medicines[${medicineRowIndex}][medicine_id]" class="medicine-select" required>
+                                <option value="">Pilih Obat</option>
+                                @foreach($medicines as $medicine)
+                                    <option value="{{ $medicine->id }}" ${item.medicine_id == {{ $medicine->id }} ? 'selected' : ''}>{{ $medicine->name }} (Stok: {{ $medicine->stock }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="modal-field" style="margin:0;">
+                            <label style="font-size:10px;">Jumlah</label>
+                            <input type="number" name="medicines[${medicineRowIndex}][quantity]" class="medicine-quantity" min="1" value="${item.quantity || 1}" required />
+                        </div>
+                        <div class="modal-field" style="margin:0;">
+                            <label style="font-size:10px;">Instruksi</label>
+                            <input type="text" name="medicines[${medicineRowIndex}][instructions]" class="medicine-instructions" placeholder="3x1 sehari" value="${item.instructions || ''}" />
+                        </div>
+                        ${removeBtn}
+                    `;
+                    container.appendChild(row);
+                    if (idx > 0 || items.length > 1) {
+                        row.querySelector('.remove-medicine-row').addEventListener('click', () => row.remove());
+                    }
+                    medicineRowIndex++;
+                });
+                prescriptionModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        document.querySelectorAll('.delete-prescription').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (!confirm('Hapus resep ini?')) return;
+                const f = document.createElement('form');
+                f.method = 'POST'; f.action = `${prescriptionBaseUrl}/${this.dataset.id}`;
+                f.innerHTML = `<input type="hidden" name="_token" value="{{ csrf_token() }}"><input type="hidden" name="_method" value="DELETE">`;
+                document.body.appendChild(f); f.submit();
+            });
+        });
+
+        const filterPrescriptions = () => {
+            const q = document.getElementById('prescriptionSearch')?.value.trim().toLowerCase() || '';
+            const status = document.getElementById('prescriptionStatusFilter')?.value.toLowerCase() || '';
+            const date = document.getElementById('prescriptionDateFilter')?.value || '';
+            document.querySelectorAll('#prescriptionTableBody tr').forEach(row => {
+                const text = Array.from(row.cells).map(c => c.textContent.toLowerCase()).join(' ');
+                const rowStatus = row.dataset.status || '';
+                const rowDate = row.dataset.date || '';
+                const matchQ = !q || text.includes(q);
+                const matchS = !status || rowStatus === status;
+                const matchD = !date || rowDate === date;
+                row.style.display = (matchQ && matchS && matchD) ? '' : 'none';
+            });
+        };
+        document.getElementById('prescriptionSearchBtn')?.addEventListener('click', filterPrescriptions);
+        document.getElementById('prescriptionSearch')?.addEventListener('keyup', e => { if(e.key==='Enter') filterPrescriptions(); });
+        document.getElementById('prescriptionStatusFilter')?.addEventListener('change', filterPrescriptions);
+        document.getElementById('prescriptionDateFilter')?.addEventListener('change', filterPrescriptions);
+
+        @if (old('form_type') === 'prescription')
+            document.querySelector('[data-section="farmasi"]').click();
+            prescriptionModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        @endif
+
         document.getElementById('logoutBtn').addEventListener('click', () => {
             const form = document.createElement('form');
             form.method = 'POST'; form.action = '{{ route("logout") }}';

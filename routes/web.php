@@ -10,6 +10,7 @@ use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PoliklinikController;
+use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
@@ -121,6 +122,15 @@ Route::middleware(['auth'])->group(function (): void {
 
     Route::delete('/medical-records/{medicalRecord}', [MedicalRecordController::class, 'destroy'])
         ->name('medical-records.destroy');
+
+    Route::post('/prescriptions', [PrescriptionController::class, 'store'])
+        ->name('prescriptions.store');
+
+    Route::put('/prescriptions/{prescription}', [PrescriptionController::class, 'update'])
+        ->name('prescriptions.update');
+
+    Route::delete('/prescriptions/{prescription}', [PrescriptionController::class, 'destroy'])
+        ->name('prescriptions.destroy');
 });
 
 

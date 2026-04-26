@@ -11,6 +11,7 @@ use App\Models\MedicalRecord;
 use App\Models\Medicine;
 use App\Models\Patient;
 use App\Models\Poliklinik;
+use App\Models\Prescription;
 use App\Models\Room;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\View\View;
@@ -160,6 +161,17 @@ final class DashboardController extends BaseController
         $allDoctors = Doctor::where('is_active', true)->orderBy('name')->get();
         $allPolikliniks = Poliklinik::where('status', 'Aktif')->orderBy('name')->get();
 
+        // Prescriptions data
+        $prescriptions = Prescription::with(['doctor', 'patient', 'items.medicine'])
+            ->orderBy('created_at', 'desc')
+            ->take(100)
+            ->get();
+
+        $totalPrescriptions = Prescription::count();
+        $waitingPrescriptions = Prescription::where('status', 'menunggu')->count();
+        $givenPrescriptions = Prescription::where('status', 'diberikan')->count();
+        $todayPrescriptions = Prescription::whereDate('created_at', today())->count();
+
         return view('dashboard', [
             'totalPatients' => $totalPatients,
             'activeDoctors' => $activeDoctors,
@@ -206,6 +218,11 @@ final class DashboardController extends BaseController
             'allPatients' => $allPatients,
             'allDoctors' => $allDoctors,
             'allPolikliniks' => $allPolikliniks,
+            'prescriptions' => $prescriptions,
+            'totalPrescriptions' => $totalPrescriptions,
+            'waitingPrescriptions' => $waitingPrescriptions,
+            'givenPrescriptions' => $givenPrescriptions,
+            'todayPrescriptions' => $todayPrescriptions,
         ]);
     }
 }
