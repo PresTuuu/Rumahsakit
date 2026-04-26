@@ -143,6 +143,9 @@ Route::middleware(['auth'])->group(function (): void {
         ->name('invoices.destroy');
 
     Route::get('/api/admissions/{admission}/finance', [InvoiceController::class, 'getFinanceDetails']);
+
+    Route::get('/export/finance', [\App\Http\Controllers\ExportController::class, 'finance'])->name('export.finance');
+    Route::get('/export/patients', [\App\Http\Controllers\ExportController::class, 'patients'])->name('export.patients');
 });
 
 

@@ -36,8 +36,14 @@ final class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->seedSuperAdmin();
-        $this->seedDemoStaff();
+        $this->command->info('Seeding User Accounts...');
+
+        $this->seedDemoAdmin();
+        $this->seedDemoDoctor();
+        $this->seedDemoCashier();
+        $this->seedDemoPharmacist();
+
+        $this->command->info('User Seeding Completed!');
     }
 
     // ──────────────────────────────────────────────────────────────
@@ -46,11 +52,8 @@ final class UserSeeder extends Seeder
 
     /**
      * Create the primary system administrator account.
-     *
-     * updateOrCreate() is idempotent: re-running the seeder will
-     * update existing fields rather than causing a duplicate-key error.
      */
-    private function seedSuperAdmin(): void
+    private function seedDemoAdmin(): void
     {
         $admin = User::updateOrCreate(
             ['email' => 'admin@medicore.hospital'],
@@ -60,52 +63,70 @@ final class UserSeeder extends Seeder
                 'password'          => Hash::make('Admin@MediCore2024!'),
                 'email_verified_at' => now(),
                 'remember_token'    => Str::random(60),
-
-                /*
-                 * If you have additional columns (e.g. role, department):
-                 *
-                 * 'role'       => 'super_admin',
-                 * 'department' => 'Administration',
-                 * 'is_active'  => true,
-                 */
+                'role'              => 'admin',
             ]
         );
 
-        $this->command->info(sprintf(
-            '  ✓ Super Admin seeded  →  %s  (ID: %d)',
-            $admin->email,
-            $admin->id
-        ));
+        $this->command->info(sprintf('  o" Admin seeded   +  %s', $admin->email));
     }
 
     /**
-     * Create a read-only demo staff account for testing.
-     *
-     * Remove or comment this method before deploying to production.
+     * Create a doctor account.
      */
-    private function seedDemoStaff(): void
+    private function seedDemoDoctor(): void
     {
-        $staff = User::updateOrCreate(
-            ['email' => 'staff@medicore.hospital'],
+        $doctor = User::updateOrCreate(
+            ['email' => 'dokter@medicore.hospital'],
             [
-                'name'              => 'Demo Staff',
-                'email'             => 'staff@medicore.hospital',
-                'password'          => Hash::make('Staff@MediCore2024!'),
+                'name'              => 'Dr. Budi Santoso',
+                'email'             => 'dokter@medicore.hospital',
+                'password'          => Hash::make('password'),
                 'email_verified_at' => now(),
                 'remember_token'    => Str::random(60),
-
-                /*
-                 * 'role'       => 'staff',
-                 * 'department' => 'General Ward',
-                 * 'is_active'  => true,
-                 */
+                'role'              => 'dokter',
             ]
         );
 
-        $this->command->info(sprintf(
-            '  ✓ Demo Staff seeded   →  %s  (ID: %d)',
-            $staff->email,
-            $staff->id
-        ));
+        $this->command->info(sprintf('  o" Doctor seeded   +  %s', $doctor->email));
+    }
+
+    /**
+     * Create a cashier account.
+     */
+    private function seedDemoCashier(): void
+    {
+        $cashier = User::updateOrCreate(
+            ['email' => 'kasir@medicore.hospital'],
+            [
+                'name'              => 'Mbak Kasir',
+                'email'             => 'kasir@medicore.hospital',
+                'password'          => Hash::make('password'),
+                'email_verified_at' => now(),
+                'remember_token'    => Str::random(60),
+                'role'              => 'kasir',
+            ]
+        );
+
+        $this->command->info(sprintf('  o" Cashier seeded   +  %s', $cashier->email));
+    }
+
+    /**
+     * Create a pharmacist account.
+     */
+    private function seedDemoPharmacist(): void
+    {
+        $pharmacist = User::updateOrCreate(
+            ['email' => 'apoteker@medicore.hospital'],
+            [
+                'name'              => 'Mas Apoteker',
+                'email'             => 'apoteker@medicore.hospital',
+                'password'          => Hash::make('password'),
+                'email_verified_at' => now(),
+                'remember_token'    => Str::random(60),
+                'role'              => 'apoteker',
+            ]
+        );
+
+        $this->command->info(sprintf('  o" Pharmacist seeded   +  %s', $pharmacist->email));
     }
 }

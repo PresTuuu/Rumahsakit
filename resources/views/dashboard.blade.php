@@ -45,7 +45,7 @@
         .sidebar {
             position: fixed;
             left: 0; top: 0;
-            width: 260px; height: 100vh;
+            width: 230px; height: 100vh;
             background: linear-gradient(160deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
             overflow-y: auto;
             z-index: 40;
@@ -85,17 +85,17 @@
         .logo-text { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
         .logo-sub  { font-size: 11px; color: rgba(255,255,255,0.45); letter-spacing: 0.06em; margin-top: 2px; }
 
-        nav { padding: 20px 12px; }
+        nav { padding: 16px 12px; }
 
         .nav-section-label {
             font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
             color: rgba(255,255,255,0.3); text-transform: uppercase;
-            padding: 16px 10px 6px;
+            padding: 12px 10px 6px;
         }
 
         .sidebar-item {
             display: flex; align-items: center; gap: 12px;
-            padding: 11px 14px;
+            padding: 10px 12px;
             color: rgba(255,255,255,0.6);
             cursor: pointer;
             border-radius: 10px;
@@ -139,7 +139,7 @@
         .sidebar-item span { font-size: 14px; font-weight: 500; }
 
         /* ─── MAIN ────────────────────────────────── */
-        .main-content { margin-left: 260px; min-height: 100vh; }
+        .main-content { margin-left: 230px; min-height: 100vh; }
 
         /* ─── TOPBAR ──────────────────────────────── */
         .topbar {
@@ -1128,12 +1128,15 @@
 
             <div class="nav-section-label" style="margin-top:8px;">Master Data</div>
 
+            @if(in_array(Auth::user()->role, ['admin', 'dokter', 'kasir', 'apoteker']))
             <div class="sidebar-item" data-section="patients">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 <span>Pasien</span>
                 <div class="nav-dot"></div>
             </div>
+            @endif
 
+            @if(in_array(Auth::user()->role, ['admin']))
             <div class="sidebar-item" data-section="doctors">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2a5 5 0 1 0 0 10A5 5 0 0 0 12 2zm0 12c-6 0-9 3-9 4v1h18v-1c0-1-3-4-9-4z"/><path d="M18 8h4m-2-2v4"/></svg>
                 <span>Dokter</span>
@@ -1151,15 +1154,19 @@
                 <span>Ruangan</span>
                 <div class="nav-dot"></div>
             </div>
+            @endif
 
+            @if(in_array(Auth::user()->role, ['admin', 'apoteker']))
             <div class="sidebar-item" data-section="medicines">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M2 12H4m16 0h2M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41"/><circle cx="12" cy="12" r="3"/></svg>
                 <span>Obat</span>
                 <div class="nav-dot"></div>
             </div>
+            @endif
 
             <div class="nav-section-label" style="margin-top:8px;">Pelayanan</div>
 
+            @if(in_array(Auth::user()->role, ['admin', 'dokter']))
             <div class="sidebar-item" data-section="outpatient">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                 <span>Rawat Jalan</span>
@@ -1177,26 +1184,33 @@
                 <span>Rekam Medis</span>
                 <div class="nav-dot"></div>
             </div>
+            @endif
 
+            @if(in_array(Auth::user()->role, ['admin', 'apoteker']))
             <div class="sidebar-item" data-section="farmasi">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8.5 21H4a1 1 0 0 1-1-1v-6.5a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1Z"/><path d="M14.5 21H10a1 1 0 0 1-1-1v-6.5a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1Z"/><path d="M20.5 21H16a1 1 0 0 1-1-1v-6.5a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1Z"/><path d="M12 6.5v-4"/><path d="M12 6.5a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v0a3 3 0 0 1-3 3h-2a3 3 0 0 1-3-3Z"/><path d="M7 9.5a3 3 0 0 0-3-3H2a3 3 0 0 0-3 3v0a3 3 0 0 0 3 3h2a3 3 0 0 0 3-3Z" transform="translate(7, -3)"/></svg>
                 <span>Farmasi</span>
                 <div class="nav-dot"></div>
             </div>
+            @endif
 
             <div class="nav-section-label" style="margin-top:8px;">Penunjang</div>
 
+            @if(in_array(Auth::user()->role, ['admin', 'kasir']))
             <div class="sidebar-item" data-section="keuangan">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h.01M12 12h.01M8 12h.01"/></svg>
                 <span>Keuangan</span>
                 <div class="nav-dot"></div>
             </div>
+            @endif
 
+            @if(in_array(Auth::user()->role, ['admin', 'dokter']))
             <div class="sidebar-item" data-section="schedule">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
                 <span>Jadwal</span>
                 <div class="nav-dot"></div>
             </div>
+            @endif
 
             <div class="nav-section-label" style="margin-top:8px;">Admin</div>
             
@@ -1218,9 +1232,50 @@
                 <p>Berikut ringkasan operasional rumah sakit hari ini.</p>
             </div>
             <div class="topbar-right">
-                <div class="notif-btn">
-                    <svg width="17" height="17" fill="none" stroke="#64748B" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                    <div class="notif-badge"></div>
+                <div class="notif-wrapper" style="position:relative;">
+                    @php
+                        $pendingNotifs = $invoices->whereIn('status', ['belum dibayar', 'sebagian'])->take(5);
+                        $pendingCount = $invoices->whereIn('status', ['belum dibayar', 'sebagian'])->count();
+                    @endphp
+                    <div class="notif-btn" id="notifBtn">
+                        <svg width="17" height="17" fill="none" stroke="#64748B" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        @if($pendingCount > 0)
+                            <div class="notif-badge"></div>
+                        @endif
+                    </div>
+
+                    <div class="notif-dropdown" id="notifDropdown" style="display:none; position:absolute; top:48px; right:0; width:320px; background:#fff; border-radius:16px; box-shadow:0 10px 40px rgba(15,37,87,0.15); border:1px solid var(--border); z-index:100; overflow:hidden; animation:fadeSlideDown 0.2s ease;">
+                        <div style="padding:14px 18px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; background:#FAFCFF;">
+                            <h4 style="font-size:13px; font-weight:700; color:var(--blue-deep);">Notifikasi</h4>
+                            @if($pendingCount > 0)
+                                <span style="background:var(--accent-red); color:#fff; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px;">{{ $pendingCount }} Baru</span>
+                            @endif
+                        </div>
+                        <div style="max-height:300px; overflow-y:auto; padding:8px;">
+                            @forelse($pendingNotifs as $notif)
+                                <div style="padding:12px; border-radius:10px; margin-bottom:4px; display:flex; gap:12px; align-items:flex-start; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='#F0F7FF'" onmouseout="this.style.background='transparent'" onclick="document.querySelector('[data-section=\'keuangan\']').click(); document.getElementById('notifDropdown').style.display='none';">
+                                    <div style="width:32px; height:32px; border-radius:8px; background:#FFF7ED; color:#EA580C; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:12.5px; font-weight:600; color:var(--blue-deep); margin-bottom:2px;">Tagihan #{{ $notif->invoice_number }}</div>
+                                        <div style="font-size:11.5px; color:var(--text-muted);">{{ optional($notif->patient)->name }} - Rp {{ number_format($notif->amount - $notif->paid_amount, 0, ',', '.') }}</div>
+                                        <div style="font-size:10px; font-weight:600; color:#EA580C; margin-top:4px; text-transform:uppercase;">{{ $notif->status }}</div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div style="padding:24px 12px; text-align:center; color:var(--text-muted);">
+                                    <div style="font-size:24px; margin-bottom:8px;">🔔</div>
+                                    <div style="font-size:12px;">Tidak ada notifikasi baru</div>
+                                </div>
+                            @endforelse
+                        </div>
+                        @if($pendingCount > 0)
+                            <div style="padding:10px; text-align:center; border-top:1px solid var(--border); background:#FAFCFF;">
+                                <a href="#" onclick="document.querySelector('[data-section=\'keuangan\']').click(); document.getElementById('notifDropdown').style.display='none';" style="font-size:12px; font-weight:600; color:var(--blue-bright); text-decoration:none;">Lihat Semua Tagihan</a>
+                            </div>
+                        @endif
+                    </div>
                 </div>
                 <div class="user-pill">
                     <div class="avatar">{{ substr(Auth::user()->name, 0, 1) }}</div>
@@ -1413,10 +1468,16 @@
                         <h2>Data Pasien</h2>
                         <p>Kelola semua rekam medis dan informasi pasien rumah sakit dengan mudah.</p>
                     </div>
-                    <button type="button" class="button-white" id="openPatientModalBtn">
-                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        Tambah Pasien
-                    </button>
+                    <div style="display:flex; gap:12px;">
+                        <a href="{{ route('export.patients') }}" class="button-white" style="text-decoration:none; display:flex; align-items:center; gap:8px;">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Export CSV
+                        </a>
+                        <button type="button" class="button-white" id="openPatientModalBtn">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Tambah Pasien
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Summary Chips -->
@@ -2406,6 +2467,7 @@
                             <tr>
                                 <th style="width:42px;">#</th>
                                 <th>No. Registrasi</th>
+                                <th>No. Antrean</th>
                                 <th>Pasien</th>
                                 <th>Poliklinik</th>
                                 <th>Dokter</th>
@@ -2421,6 +2483,13 @@
                                 <td style="color:var(--text-muted);font-size:12px;font-family:'Space Mono',monospace;text-align:center;">{{ $index + 1 }}</td>
                                 <td>
                                     <div style="font-family:'Space Mono',monospace; font-size:12px; font-weight:700; color:var(--blue-deep); background:#EFF6FF; padding:4px 8px; border-radius:6px; display:inline-block;">{{ $admission->registration_number }}</div>
+                                </td>
+                                <td style="text-align:center;">
+                                    @if($admission->queue_number)
+                                        <div style="font-size:18px; font-weight:800; color:#B45309;">{{ $admission->queue_number }}</div>
+                                    @else
+                                        <span style="color:var(--text-muted);">-</span>
+                                    @endif
                                 </td>
                                 <td>
                                     <div class="patient-cell">
@@ -2737,10 +2806,16 @@
                         <h2>Manajemen Keuangan</h2>
                         <p>Kelola data tagihan pasien, pembayaran invoice, dan rekap keuangan.</p>
                     </div>
-                    <button class="button-primary" id="openBuatTagihanModalBtn">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-                        Buat Tagihan
-                    </button>
+                    <div style="display:flex; gap:12px;">
+                        <a href="{{ route('export.finance') }}" class="button-white" style="text-decoration:none; display:flex; align-items:center; gap:8px;">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Export CSV
+                        </a>
+                        <button class="button-primary" id="openBuatTagihanModalBtn">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                            Buat Tagihan
+                        </button>
+                    </div>
                 </div>
 
                 <div class="summary-strip reveal">
@@ -2846,6 +2921,7 @@
                                                 data-total="{{ $invoice->amount }}"
                                                 data-paid="{{ $invoice->paid_amount }}"
                                                 data-status="{{ $invoice->status }}"
+                                                data-payment-method="{{ $invoice->payment_method ?? '-' }}"
                                                 data-date="{{ $invoice->created_at->format('d M Y H:i') }}">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
                                             </button>
@@ -3122,6 +3198,15 @@
                                 </div>
                             </div>
                             <div class="modal-field full-width">
+                                <label>Metode Pembayaran</label>
+                                <select name="payment_method" id="keuangan_payment_method">
+                                    <option value="Tunai">Tunai</option>
+                                    <option value="Transfer Bank">Transfer Bank</option>
+                                    <option value="Asuransi / BPJS">Asuransi / BPJS</option>
+                                    <option value="Kartu Kredit / Debit">Kartu Kredit / Debit</option>
+                                </select>
+                            </div>
+                            <div class="modal-field full-width">
                                 <label>Nominal Pembayaran Baru (Rp)</label>
                                 <input type="number" id="keuangan_new_payment" name="paid_amount" min="1" required placeholder="Masukkan jumlah yang dibayar sekarang" />
                             </div>
@@ -3164,7 +3249,8 @@
                                 <p id="view_inv_type" style="margin:4px 0 0; font-size:13px; color:var(--text-muted);">Rawat Jalan</p>
                             </div>
                             <div style="text-align:right;">
-                                <h4 style="margin:0 0 8px; font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Status:</h4>
+                                <h4 style="margin:0 0 8px; font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Metode & Status:</h4>
+                                <div style="margin-bottom:8px; font-size:13px; font-weight:600; color:var(--blue-deep);" id="view_inv_method">-</div>
                                 <span id="view_inv_status" style="display:inline-block; font-size:13px; font-weight:700; padding:6px 12px; border-radius:20px; background:#F1F5F9; color:var(--text-muted); text-transform:uppercase;">Status</span>
                             </div>
                         </div>
@@ -4941,6 +5027,7 @@
                 document.getElementById('view_inv_patient').textContent = this.dataset.patient || '-';
                 document.getElementById('view_inv_type').textContent = this.dataset.admissionType || '-';
                 document.getElementById('view_inv_status').textContent = this.dataset.status || '-';
+                document.getElementById('view_inv_method').textContent = this.dataset.paymentMethod || '-';
                 
                 const total = parseFloat(this.dataset.total) || 0;
                 const paid = parseFloat(this.dataset.paid) || 0;
@@ -5444,6 +5531,23 @@
             form.method = 'POST'; form.action = '{{ route("logout") }}';
             form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
             document.body.appendChild(form); form.submit();
+        });
+
+        // ─── NOTIFICATION DROPDOWN ─────────────────────
+        document.getElementById('notifBtn')?.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('notifDropdown');
+            if(dropdown) {
+                dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('notifDropdown');
+            const notifBtn = document.getElementById('notifBtn');
+            if(dropdown && notifBtn && !dropdown.contains(e.target) && !notifBtn.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
         });
 
         // ─── CHARTS INITIALIZATION ─────────────────────

@@ -16,6 +16,7 @@ final class InvoiceController extends BaseController
     {
         $validated = $request->validate([
             'paid_amount' => 'required|numeric|min:0',
+            'payment_method' => 'nullable|string',
             'notes' => 'nullable|string',
         ]);
 
@@ -35,6 +36,7 @@ final class InvoiceController extends BaseController
         $invoice->update([
             'paid_amount' => $newPaidAmount,
             'status' => $status,
+            'payment_method' => $validated['payment_method'] ?? $invoice->payment_method,
             'notes' => $validated['notes'] ?? $invoice->notes,
             'paid_date' => $paidDate ?? $invoice->paid_date,
         ]);

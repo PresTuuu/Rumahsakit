@@ -36,6 +36,14 @@ final class AdmissionController extends BaseController
             $validated['registration_number'] = 'ADM-' . strtoupper(\Illuminate\Support\Str::random(8));
         } while (Admission::where('registration_number', $validated['registration_number'])->exists());
 
+        if ($validated['admission_type'] === 'Rawat Jalan' && !empty($validated['poliklinik_id'])) {
+            $lastQueue = Admission::where('admission_type', 'Rawat Jalan')
+                ->where('poliklinik_id', $validated['poliklinik_id'])
+                ->whereDate('admission_date', \Carbon\Carbon::parse($validated['admission_date'])->toDateString())
+                ->max('queue_number');
+            $validated['queue_number'] = ($lastQueue ?? 0) + 1;
+        }
+
         $admission = Admission::create($validated);
 
         // Auto-create medical record if status is selesai
