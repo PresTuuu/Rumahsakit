@@ -9,3 +9,13 @@
 - [x] Step 7: Test & verify
 - [x] Bonus: Jadwal/Kalender section implemented
 
+# TODO — Rekam Medis Section Implementation
+
+- [x] Step 1: Add sidebar item for Rekam Medis
+- [x] Step 2: Add `#medicalRecordsSection` with table, filters, summary chips
+- [x] Step 3: Add view and edit modals for medical records
+- [x] Step 4: Add JavaScript for navigation, CRUD, filtering
+- [x] Step 5: Fix form action route
+- [x] Step 6: Run migration `create_medical_records_table`
+- [x] Step 7: Test & verify
+

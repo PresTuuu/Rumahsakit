@@ -216,73 +216,300 @@
             box-shadow: 0 10px 30px rgba(15,37,87,0.05);
         }
 
-        /* ─── MODAL ───────────────────────────────── */
+        /* ═══════════════════════════════════════════════════════
+           MEDICORE — PREMIUM MODAL STYLES
+        ═══════════════════════════════════════════════════════ */
+
+        /* ─── MODAL OVERLAY ──────────────────────────────────── */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(15,37,87,0.45);
-            backdrop-filter: blur(2px);
+            background: rgba(8, 20, 55, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 90;
+            padding: 20px;
+            animation: overlayIn 0.22s ease both;
         }
 
+        @keyframes overlayIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* ─── MODAL WINDOW ───────────────────────────────────── */
         .modal-window {
-            width: min(820px, calc(100% - 40px));
+            width: min(860px, 100%);
             background: #fff;
             border-radius: 28px;
-            box-shadow: 0 30px 70px rgba(15,37,87,0.25);
-            padding: 28px;
+            box-shadow:
+                0 0 0 1px rgba(15, 37, 87, 0.07),
+                0 8px 24px rgba(15, 37, 87, 0.08),
+                0 32px 80px rgba(15, 37, 87, 0.18);
             position: relative;
-            max-height: calc(100vh - 64px);
+            max-height: calc(100vh - 48px);
             overflow-y: auto;
+            animation: modalIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+            overflow-x: hidden;
         }
 
-        .modal-window h3 { font-size: 22px; margin-bottom: 8px; }
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(24px) scale(0.975); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
 
+        /* ─── MODAL HEADER BAND ──────────────────────────────── */
+        .modal-window::before {
+            content: '';
+            display: block;
+            height: 5px;
+            background: linear-gradient(90deg, #2563EB 0%, #38BDF8 50%, #10B981 100%);
+            border-radius: 28px 28px 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            margin-bottom: 0;
+        }
+
+        /* ─── MODAL INNER PADDING ────────────────────────────── */
+        .modal-window > *:not(:first-child) {
+            padding-left: 32px;
+            padding-right: 32px;
+        }
+
+        .modal-window h3 {
+            font-size: 21px;
+            font-weight: 700;
+            color: #0F2557;
+            letter-spacing: -0.4px;
+            margin-bottom: 4px;
+            padding: 26px 32px 0;
+        }
+
+        .modal-window > p {
+            font-size: 13px;
+            color: #64748B;
+            margin-bottom: 20px;
+            padding: 0 32px;
+        }
+
+        /* ─── MODAL CLOSE ────────────────────────────────────── */
         .modal-close {
-            position: absolute; top: 18px; right: 18px;
-            width: 38px; height: 38px;
-            border: none; border-radius: 12px;
-            background: rgba(15,37,87,0.06);
-            cursor: pointer; display: grid; place-items: center;
+            position: sticky;
+            top: 18px;
+            float: right;
+            margin: 14px 18px 0 0;
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(15, 37, 87, 0.10);
+            border-radius: 10px;
+            background: #F8FAFC;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            font-size: 16px;
+            color: #64748B;
+            transition: background 0.18s, color 0.18s, transform 0.18s;
+            z-index: 3;
+            line-height: 1;
         }
-        .modal-close:hover { background: rgba(15,37,87,0.1); }
+        .modal-close:hover {
+            background: #FEE2E2;
+            color: #B91C1C;
+            border-color: #FCA5A5;
+            transform: rotate(90deg);
+        }
 
+        /* ─── MODAL GRID ──────────────────────────────────────── */
         .modal-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px; margin-top: 18px;
+            gap: 18px;
+            margin: 0 32px 24px;
         }
+
         .modal-grid.full-width { grid-column: 1 / -1; }
 
-        .modal-field { display: flex; flex-direction: column; gap: 8px; }
-        .modal-field label { font-size: 13px; font-weight: 600; color: var(--text-main); }
+        /* ─── MODAL FIELD ────────────────────────────────────── */
+        .modal-field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
 
+        .modal-field label {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        /* ─── MODAL INPUTS ───────────────────────────────────── */
         .modal-field input,
         .modal-field select,
         .modal-field textarea {
-            border: 1px solid rgba(15,37,87,0.12);
-            border-radius: 12px; padding: 12px 14px;
-            font-size: 14px; outline: none; width: 100%;
+            border: 1.5px solid rgba(15, 37, 87, 0.12);
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 14px;
+            font-family: 'Sora', sans-serif;
+            color: #0F2557;
+            background: #FAFCFF;
+            outline: none;
+            width: 100%;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
         }
-        .modal-field textarea { min-height: 110px; resize: vertical; }
 
-        .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; }
+        .modal-field input:focus,
+        .modal-field select:focus,
+        .modal-field textarea:focus {
+            border-color: #2563EB;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.09);
+        }
 
+        .modal-field input[readonly] {
+            background: #F1F5F9;
+            color: #94A3B8;
+            cursor: default;
+            font-family: 'Space Mono', monospace;
+            font-size: 13px;
+        }
+
+        .modal-field input::placeholder,
+        .modal-field textarea::placeholder {
+            color: #CBD5E1;
+        }
+
+        .modal-field textarea {
+            min-height: 110px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .modal-field select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 38px;
+        }
+
+        /* ─── MODAL DIVIDER ──────────────────────────────────── */
+        .modal-section-divider {
+            height: 1px;
+            background: rgba(15, 37, 87, 0.06);
+            margin: 4px 32px 20px;
+        }
+
+        /* ─── MODAL ACTIONS ──────────────────────────────────── */
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            padding: 18px 32px 28px;
+            border-top: 1px solid rgba(15, 37, 87, 0.06);
+            margin-top: 4px;
+            position: sticky;
+            bottom: 0;
+            background: #fff;
+            border-radius: 0 0 28px 28px;
+            z-index: 2;
+        }
+
+        /* ─── MODAL BUTTONS ──────────────────────────────────── */
         .modal-button-secondary {
-            background: #F8FAFC;
-            border: 1px solid rgba(15,37,87,0.12);
-            color: var(--text-main); padding: 12px 20px;
-            border-radius: 14px; cursor: pointer;
+            background: #F1F5F9;
+            border: 1.5px solid rgba(15, 37, 87, 0.10);
+            color: #475569;
+            padding: 11px 22px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 13.5px;
+            font-weight: 600;
+            font-family: 'Sora', sans-serif;
+            transition: all 0.18s;
+        }
+        .modal-button-secondary:hover {
+            background: #E2E8F0;
+            color: #1E293B;
+            border-color: rgba(15, 37, 87, 0.18);
         }
 
-        .modal-error {
-            background: #FEE2E2; color: #991B1B;
-            border-radius: 14px; padding: 14px 16px;
-            margin-bottom: 16px; font-size: 13px;
+        /* Override button-primary inside modals */
+        .modal-actions .button-primary {
+            padding: 11px 24px;
+            border-radius: 12px;
+            font-size: 13.5px;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
         }
+        .modal-actions .button-primary:hover {
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+            transform: translateY(-2px);
+        }
+
+        /* ─── MODAL ERROR ─────────────────────────────────────── */
+        .modal-error {
+            background: #FFF5F5;
+            border: 1.5px solid #FCA5A5;
+            color: #7F1D1D;
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin: 0 32px 18px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .modal-error strong {
+            font-weight: 700;
+            color: #991B1B;
+        }
+
+        .modal-error ul {
+            margin-top: 6px;
+            padding-left: 18px;
+        }
+
+        /* ─── VIEW MODAL (compact, read-only) ────────────────── */
+        .modal-window[style*="max-width:480px"] h3,
+        .modal-window[style*="max-width: 480px"] h3 {
+            padding-bottom: 4px;
+        }
+
+        /* ─── VIEW MODAL FIELD ───────────────────────────────── */
+        .modal-window .modal-field > div {
+            font-size: 14px;
+            color: #0F2557;
+            font-weight: 500;
+            min-height: 22px;
+        }
+
+        /* ─── VIEW MODAL INNER GRID ──────────────────────────── */
+        .modal-window > div[style*="grid-template-columns"] {
+            margin: 0 32px 12px;
+        }
+
+        /* ─── FIELD HIGHLIGHT on VIEW modals ─────────────────── */
+        .modal-window .modal-field {
+            background: #FAFCFF;
+            border: 1px solid rgba(15, 37, 87, 0.07);
+            border-radius: 12px;
+            padding: 12px 14px;
+            gap: 5px;
+        }
+
+        /* ─── SCROLLBAR inside modal ─────────────────────────── */
+        .modal-window::-webkit-scrollbar { width: 5px; }
+        .modal-window::-webkit-scrollbar-track { background: transparent; }
+        .modal-window::-webkit-scrollbar-thumb { background: rgba(37,99,235,0.15); border-radius: 4px; }
+        .modal-window::-webkit-scrollbar-thumb:hover { background: rgba(37,99,235,0.3); }
 
         /* ─── BUTTON PRIMARY ──────────────────────── */
         .button-primary {
@@ -946,6 +1173,12 @@
                 <div class="nav-dot"></div>
             </div>
 
+            <div class="sidebar-item" data-section="medical-records">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                <span>Rekam Medis</span>
+                <div class="nav-dot"></div>
+            </div>
+
             <div class="nav-section-label" style="margin-top:8px;">Admin</div>
 
             <div class="sidebar-item">
@@ -1086,7 +1319,7 @@
                     <div class="table-card">
                         <div class="table-header">
                             <div class="section-title">Rawat Jalan Hari Ini</div>
-                            <a href="#" class="view-all">Lihat semua</a>
+                            <a href="#" class="view-all" id="viewAllOutpatient">Lihat semua</a>
                         </div>
                         <table>
                             <thead><tr><th>#</th><th>Pasien</th><th>Poli</th><th>Status</th></tr></thead>
@@ -1096,7 +1329,15 @@
                                     <td style="color:var(--text-muted);font-size:12px;font-family:'Space Mono',monospace;">{{ $index + 1 }}</td>
                                     <td><div class="td-name">{{ $admission->patient->name }}</div><div class="td-rm">{{ $admission->patient->medical_record_number }}</div></td>
                                     <td style="font-size:13px;">{{ $admission->clinic }}</td>
-                                    <td><span class="badge badge-success">Diperiksa</span></td>
+                                    <td>
+                                        @if($admission->status === 'menunggu')
+                                            <span class="badge badge-warning">Menunggu</span>
+                                        @elseif($admission->status === 'diperiksa')
+                                            <span class="badge badge-info">Diperiksa</span>
+                                        @else
+                                            <span class="badge badge-success">Selesai</span>
+                                        @endif
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -1106,19 +1347,28 @@
                     <div class="table-card">
                         <div class="table-header">
                             <div class="section-title">Rawat Inap Aktif</div>
-                            <a href="#" class="view-all">Lihat semua</a>
+                            <a href="#" class="view-all" id="viewAllInpatient">Lihat semua</a>
                         </div>
                         <table>
-                            <thead><tr><th>Pasien</th><th>Ruangan</th><th>Dokter</th></tr></thead>
+                            <thead><tr><th>Pasien</th><th>Ruangan</th><th>Dokter</th><th>Status</th></tr></thead>
                             <tbody>
                                 @forelse($inpatientAdmissions as $admission)
                                 <tr>
                                     <td><div class="td-name">{{ $admission->patient->name }}</div><div class="td-rm">{{ $admission->patient->medical_record_number }}</div></td>
-                                    <td style="font-size:13px;">{{ $admission->room_number ?? 'N/A' }}</td>
+                                    <td style="font-size:13px;">{{ optional($admission->room)->room_name ?? $admission->room_number ?? 'N/A' }}</td>
                                     <td style="font-size:13px;">{{ $admission->doctor->name ?? 'N/A' }}</td>
+                                    <td>
+                                        @if($admission->status === 'menunggu')
+                                            <span class="badge badge-warning">Menunggu</span>
+                                        @elseif(in_array($admission->status, ['dirawat', 'sedang dirawat']))
+                                            <span class="badge badge-info">Dirawat</span>
+                                        @else
+                                            <span class="badge badge-success">Selesai</span>
+                                        @endif
+                                    </td>
                                 </tr>
                                 @empty
-                                <tr><td colspan="3" style="text-align:center; padding:20px; color:var(--text-muted);">Tidak ada pasien rawat inap aktif.</td></tr>
+                                <tr><td colspan="4" style="text-align:center; padding:20px; color:var(--text-muted);">Tidak ada pasien rawat inap aktif.</td></tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -2295,6 +2545,161 @@
                 </div>
             </div><!-- /scheduleSection -->
 
+            <!-- ════════════════════ MEDICAL RECORDS SECTION ════════════════════ -->
+            <div id="medicalRecordsSection" style="display:none;">
+
+                <div class="section-page-header reveal" style="background: linear-gradient(130deg, #BE185D 0%, #DB2777 60%, #F472B6 100%);">
+                    <div class="section-page-header-text">
+                        <div class="tag">✦ Riwayat Medis</div>
+                        <h2>Rekam Medis</h2>
+                        <p>Kelola rekam medis pasien yang telah menyelesaikan pelayanan rawat jalan dan rawat inap.</p>
+                    </div>
+                </div>
+
+                <div class="summary-strip reveal">
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#FDF2F8;">📋</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Total Rekam Medis</div>
+                            <div class="value">{{ $medicalRecordsCount }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#FFFBEB;">🚶</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Rawat Jalan</div>
+                            <div class="value">{{ $medicalRecordsOutpatient }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#F5F3FF;">🏥</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Rawat Inap</div>
+                            <div class="value">{{ $medicalRecordsInpatient }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#ECFDF5;">📅</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Bulan Ini</div>
+                            <div class="value">{{ $medicalRecords->filter(fn($r) => $r->completed_at && $r->completed_at->format('Y-m') === now()->format('Y-m'))->count() }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-bar-wrapper reveal">
+                    <div class="search-bar-inner">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="medicalRecordSearch" placeholder="Cari nama pasien, nomor rekam medis, diagnosis..." />
+                    </div>
+                    <select class="search-filter-select" id="medicalRecordTypeFilter">
+                        <option value="">Semua Jenis</option>
+                        <option value="rawat jalan">Rawat Jalan</option>
+                        <option value="rawat inap">Rawat Inap</option>
+                    </select>
+                    <input type="date" class="search-filter-select" id="medicalRecordDateFilter" />
+                    <button type="button" class="search-btn" id="medicalRecordSearchBtn">Cari</button>
+                </div>
+
+                <div class="premium-table-wrap reveal">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:42px;">#</th>
+                                <th>No. Rekam Medis</th>
+                                <th>Pasien</th>
+                                <th>Dokter</th>
+                                <th>Jenis</th>
+                                <th>Diagnosis</th>
+                                <th>ICD-10</th>
+                                <th>Tanggal Selesai</th>
+                                <th style="text-align:center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="medicalRecordTableBody">
+                            @forelse($medicalRecords as $index => $record)
+                            <tr data-type="{{ strtolower($record->admission_type) }}" data-date="{{ $record->completed_at ? $record->completed_at->format('Y-m-d') : '' }}">
+                                <td style="color:var(--text-muted);font-size:12px;font-family:'Space Mono',monospace;text-align:center;">{{ $index + 1 }}</td>
+                                <td>
+                                    <div style="font-family:'Space Mono',monospace; font-size:12px; font-weight:700; color:var(--blue-deep); background:#FDF2F8; padding:4px 8px; border-radius:6px; display:inline-block;">{{ $record->record_number }}</div>
+                                </td>
+                                <td>
+                                    <div class="patient-cell">
+                                        <div class="patient-avatar {{ optional($record->patient)->gender === 'M' ? 'male' : (optional($record->patient)->gender === 'F' ? 'female' : 'other') }}">{{ strtoupper(substr(optional($record->patient)->name ?? '?', 0, 1)) }}</div>
+                                        <div>
+                                            <div class="patient-name">{{ optional($record->patient)->name ?? 'Pasien tidak ditemukan' }}</div>
+                                            <div class="td-rm">{{ optional($record->patient)->medical_record_number ?? '-' }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="font-size:13px;">{{ optional($record->doctor)->name ?? '-' }}</td>
+                                <td>
+                                    @if($record->admission_type === 'Rawat Jalan')
+                                        <span style="font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:20px; background:#FEF3C7; color:#92400E;">Rawat Jalan</span>
+                                    @else
+                                        <span style="font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:20px; background:#F5F3FF; color:#6D28D9;">Rawat Inap</span>
+                                    @endif
+                                </td>
+                                <td style="font-size:12px; color:var(--text-muted); max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ $record->diagnosis ?? '-' }}</td>
+                                <td>
+                                    @if($record->icd_code)
+                                        <div style="font-family:'Space Mono',monospace; font-size:12px; font-weight:700; color:var(--blue-deep);">{{ $record->icd_code }}</div>
+                                        <div style="font-size:11px; color:var(--text-muted);">{{ $record->icd_description }}</div>
+                                    @else
+                                        <span style="color:var(--text-muted); font-size:13px;">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div style="font-size:13px; font-weight:500;">{{ $record->completed_at ? $record->completed_at->format('d M Y') : '-' }}</div>
+                                    <div style="font-size:11px; color:var(--text-muted);">{{ $record->completed_at ? $record->completed_at->format('H:i') : '-' }}</div>
+                                </td>
+                                <td>
+                                    <div class="act-wrap" style="justify-content:center;">
+                                        <button type="button" class="act-btn view view-medical-record"
+                                            title="Lihat"
+                                            data-record-number="{{ $record->record_number }}"
+                                            data-patient="{{ optional($record->patient)->name ?? '-' }}"
+                                            data-rm="{{ optional($record->patient)->medical_record_number ?? '-' }}"
+                                            data-doctor="{{ optional($record->doctor)->name ?? '-' }}"
+                                            data-type="{{ $record->admission_type }}"
+                                            data-diagnosis="{{ $record->diagnosis }}"
+                                            data-icd-code="{{ $record->icd_code }}"
+                                            data-icd-description="{{ $record->icd_description }}"
+                                            data-completed-at="{{ $record->completed_at }}"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        </button>
+                                        <button type="button" class="act-btn edit edit-medical-record"
+                                            title="Edit"
+                                            data-id="{{ $record->id }}"
+                                            data-diagnosis="{{ $record->diagnosis }}"
+                                            data-icd-code="{{ $record->icd_code }}"
+                                            data-icd-description="{{ $record->icd_description }}"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                                        </button>
+                                        <button type="button" class="act-btn delete delete-medical-record" title="Hapus" data-id="{{ $record->id }}">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="9">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">📋</div>
+                                        <h4>Belum Ada Rekam Medis</h4>
+                                        <p>Rekam medis akan otomatis muncul ketika pasien rawat jalan atau rawat inap dinyatakan selesai.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- /medicalRecordsSection -->
+
             <!-- Doctor Add/Edit Modal -->
             <div class="modal-overlay" id="doctorModal">
                 <div class="modal-window">
@@ -2878,6 +3283,69 @@
                 </div>
             </div>
 
+            <!-- Medical Record View Modal -->
+            <div class="modal-overlay" id="medicalRecordViewModal">
+                <div class="modal-window" style="max-width:480px;">
+                    <button type="button" class="modal-close" id="closeMedicalRecordViewModalBtn">✕</button>
+                    <h3>Detail Rekam Medis</h3>
+                    <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                        <div class="modal-field"><label>No. Rekam Medis</label><div id="view_mr_record_number" style="font-family:'Space Mono',monospace; font-weight:700; color:var(--blue-deep);">-</div></div>
+                        <div class="modal-field"><label>Pasien</label><div id="view_mr_patient" style="font-weight:600;">-</div></div>
+                        <div class="modal-field"><label>No. RM</label><div id="view_mr_rm" style="font-family:'Space Mono',monospace;">-</div></div>
+                        <div class="modal-field"><label>Dokter</label><div id="view_mr_doctor">-</div></div>
+                        <div class="modal-field"><label>Jenis Pelayanan</label><div id="view_mr_type">-</div></div>
+                        <div class="modal-field"><label>Tanggal Selesai</label><div id="view_mr_completed_at">-</div></div>
+                        <div class="modal-field" style="grid-column:1/-1;"><label>Diagnosis</label><div id="view_mr_diagnosis" style="font-size:13px; color:var(--text-muted);">-</div></div>
+                        <div class="modal-field"><label>Kode ICD-10</label><div id="view_mr_icd_code" style="font-family:'Space Mono',monospace; font-weight:700; color:var(--blue-deep);">-</div></div>
+                        <div class="modal-field" style="grid-column:1/-1;"><label>Deskripsi ICD-10</label><div id="view_mr_icd_description" style="font-size:13px; color:var(--text-muted);">-</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medical Record Edit Modal -->
+            <div class="modal-overlay" id="medicalRecordEditModal">
+                <div class="modal-window">
+                    <button type="button" class="modal-close" id="closeMedicalRecordEditModalBtn">✕</button>
+                    <h3>Edit Rekam Medis</h3>
+                    <p style="font-size:13px; color:var(--text-muted);">Perbarui diagnosis dan kode ICD-10 rekam medis pasien.</p>
+
+                    @if ($errors->any() && old('form_type') === 'medical_record')
+                        <div class="modal-error">
+                            <strong>Perbaiki data berikut:</strong>
+                            <ul style="margin-top:8px; padding-left:18px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ url('/medical-records') }}" id="medicalRecordEditForm">
+                        @csrf
+                        <input type="hidden" name="_method" id="medical_record_method" value="">
+                        <input type="hidden" name="form_type" value="medical_record">
+                        <div class="modal-grid">
+                            <div class="modal-field full-width">
+                                <label for="medical_record_diagnosis">Diagnosis</label>
+                                <textarea id="medical_record_diagnosis" name="diagnosis" placeholder="Masukkan diagnosis pasien...">{{ old('diagnosis') }}</textarea>
+                            </div>
+                            <div class="modal-field">
+                                <label for="medical_record_icd_code">Kode ICD-10</label>
+                                <input id="medical_record_icd_code" name="icd_code" type="text" value="{{ old('icd_code') }}" placeholder="Contoh: J18.9" />
+                            </div>
+                            <div class="modal-field full-width">
+                                <label for="medical_record_icd_description">Deskripsi ICD-10</label>
+                                <input id="medical_record_icd_description" name="icd_description" type="text" value="{{ old('icd_description') }}" placeholder="Contoh: Pneumonia, unspecified organism" />
+                            </div>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="modal-button-secondary" id="cancelMedicalRecordEditModalBtn">Batal</button>
+                            <button type="submit" class="button-primary" id="medicalRecordEditModalSubmitBtn">Simpan Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div><!-- /content-body -->
     </div><!-- /main-content -->
 
@@ -2931,6 +3399,7 @@
                 document.getElementById('outpatientSection').style.display = t === 'outpatient' ? 'block' : 'none';
                 document.getElementById('inpatientSection').style.display = t === 'inpatient' ? 'block' : 'none';
                 document.getElementById('scheduleSection').style.display = t === 'schedule' ? 'block' : 'none';
+                document.getElementById('medicalRecordsSection').style.display = t === 'medical-records' ? 'block' : 'none';
                 localStorage.setItem('activeSection', t);
             });
         });
@@ -2950,6 +3419,45 @@
                 }
             });
         }
+
+        // ── View All links navigation
+        document.getElementById('viewAllOutpatient')?.addEventListener('click', function (e) {
+            e.preventDefault();
+            const sectionItem = document.querySelector('[data-section="outpatient"]');
+            if (sectionItem) {
+                document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+                sectionItem.classList.add('active');
+                document.getElementById('dashboardSection').style.display = 'none';
+                document.getElementById('outpatientSection').style.display = 'block';
+                document.getElementById('patientsSection').style.display = 'none';
+                document.getElementById('roomsSection').style.display = 'none';
+                document.getElementById('doctorsSection').style.display = 'none';
+                document.getElementById('polikliniksSection').style.display = 'none';
+                document.getElementById('medicinesSection').style.display = 'none';
+                document.getElementById('inpatientSection').style.display = 'none';
+                document.getElementById('scheduleSection').style.display = 'none';
+                localStorage.setItem('activeSection', 'outpatient');
+            }
+        });
+
+        document.getElementById('viewAllInpatient')?.addEventListener('click', function (e) {
+            e.preventDefault();
+            const sectionItem = document.querySelector('[data-section="inpatient"]');
+            if (sectionItem) {
+                document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+                sectionItem.classList.add('active');
+                document.getElementById('dashboardSection').style.display = 'none';
+                document.getElementById('inpatientSection').style.display = 'block';
+                document.getElementById('patientsSection').style.display = 'none';
+                document.getElementById('roomsSection').style.display = 'none';
+                document.getElementById('doctorsSection').style.display = 'none';
+                document.getElementById('polikliniksSection').style.display = 'none';
+                document.getElementById('medicinesSection').style.display = 'none';
+                document.getElementById('outpatientSection').style.display = 'none';
+                document.getElementById('scheduleSection').style.display = 'none';
+                localStorage.setItem('activeSection', 'inpatient');
+            }
+        });
 
         // ── Patient Modal
         const patientModal      = document.getElementById('patientModal');
@@ -3353,6 +3861,7 @@
             document.getElementById('outpatientSection').style.display = savedSection === 'outpatient' ? 'block' : 'none';
             document.getElementById('inpatientSection').style.display = savedSection === 'inpatient' ? 'block' : 'none';
             document.getElementById('scheduleSection').style.display = savedSection === 'schedule' ? 'block' : 'none';
+            document.getElementById('medicalRecordsSection').style.display = savedSection === 'medical-records' ? 'block' : 'none';
         }
 
         // ── Old data restore & error handling for patients
@@ -3873,6 +4382,86 @@
 
         // Initial render
         renderCalendar(currentCalendarDate);
+
+        // ── Medical Records Modal
+        const medicalRecordViewModal = document.getElementById('medicalRecordViewModal');
+        const medicalRecordEditModal = document.getElementById('medicalRecordEditModal');
+        const medicalRecordEditForm = document.getElementById('medicalRecordEditForm');
+        const medicalRecordBaseUrl = "{{ url('/medical-records') }}";
+
+        document.getElementById('closeMedicalRecordViewModalBtn')?.addEventListener('click', () => { medicalRecordViewModal.style.display='none'; document.body.style.overflow=''; });
+        medicalRecordViewModal?.addEventListener('click', e => { if (e.target === medicalRecordViewModal) { medicalRecordViewModal.style.display='none'; document.body.style.overflow=''; } });
+
+        document.getElementById('closeMedicalRecordEditModalBtn')?.addEventListener('click', () => { medicalRecordEditModal.style.display='none'; document.body.style.overflow=''; });
+        document.getElementById('cancelMedicalRecordEditModalBtn')?.addEventListener('click', () => { medicalRecordEditModal.style.display='none'; document.body.style.overflow=''; });
+        medicalRecordEditModal?.addEventListener('click', e => { if (e.target === medicalRecordEditModal) { medicalRecordEditModal.style.display='none'; document.body.style.overflow=''; } });
+
+        document.querySelectorAll('.view-medical-record').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.getElementById('view_mr_record_number').textContent = this.dataset.recordNumber || '-';
+                document.getElementById('view_mr_patient').textContent = this.dataset.patient || '-';
+                document.getElementById('view_mr_rm').textContent = this.dataset.rm || '-';
+                document.getElementById('view_mr_doctor').textContent = this.dataset.doctor || '-';
+                document.getElementById('view_mr_type').textContent = this.dataset.type || '-';
+                document.getElementById('view_mr_diagnosis').textContent = this.dataset.diagnosis || '-';
+                document.getElementById('view_mr_icd_code').textContent = this.dataset.icdCode || '-';
+                document.getElementById('view_mr_icd_description').textContent = this.dataset.icdDescription || '-';
+                document.getElementById('view_mr_completed_at').textContent = this.dataset.completedAt ? new Date(this.dataset.completedAt).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'}) : '-';
+                medicalRecordViewModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        document.querySelectorAll('.edit-medical-record').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.dataset.id;
+                medicalRecordEditForm.action = `${medicalRecordBaseUrl}/${id}`;
+                document.getElementById('medical_record_method').value = 'PUT';
+                document.getElementById('medical_record_diagnosis').value = this.dataset.diagnosis || '';
+                document.getElementById('medical_record_icd_code').value = this.dataset.icdCode || '';
+                document.getElementById('medical_record_icd_description').value = this.dataset.icdDescription || '';
+                document.querySelector('#medicalRecordEditModal .modal-window h3').textContent = 'Edit Rekam Medis';
+                document.getElementById('medicalRecordEditModalSubmitBtn').textContent = 'Simpan Perubahan';
+                medicalRecordEditModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        document.querySelectorAll('.delete-medical-record').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (!confirm('Hapus rekam medis ini?')) return;
+                const f = document.createElement('form');
+                f.method = 'POST'; f.action = `${medicalRecordBaseUrl}/${this.dataset.id}`;
+                f.innerHTML = `<input type="hidden" name="_token" value="{{ csrf_token() }}"><input type="hidden" name="_method" value="DELETE">`;
+                document.body.appendChild(f); f.submit();
+            });
+        });
+
+        const filterMedicalRecords = () => {
+            const q = document.getElementById('medicalRecordSearch')?.value.trim().toLowerCase() || '';
+            const type = document.getElementById('medicalRecordTypeFilter')?.value.toLowerCase() || '';
+            const date = document.getElementById('medicalRecordDateFilter')?.value || '';
+            document.querySelectorAll('#medicalRecordTableBody tr').forEach(row => {
+                const text = Array.from(row.cells).map(c => c.textContent.toLowerCase()).join(' ');
+                const rowType = row.dataset.type || '';
+                const rowDate = row.dataset.date || '';
+                const matchQ = !q || text.includes(q);
+                const matchT = !type || rowType.includes(type);
+                const matchD = !date || rowDate === date;
+                row.style.display = (matchQ && matchT && matchD) ? '' : 'none';
+            });
+        };
+        document.getElementById('medicalRecordSearchBtn')?.addEventListener('click', filterMedicalRecords);
+        document.getElementById('medicalRecordSearch')?.addEventListener('keyup', e => { if(e.key==='Enter') filterMedicalRecords(); });
+        document.getElementById('medicalRecordTypeFilter')?.addEventListener('change', filterMedicalRecords);
+        document.getElementById('medicalRecordDateFilter')?.addEventListener('change', filterMedicalRecords);
+
+        // ── Old data restore & error handling for medical records
+        @if (old('form_type') === 'medical_record')
+            document.querySelector('[data-section="medical-records"]').click();
+            medicalRecordEditModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        @endif
 
         // ── Logout
         document.getElementById('logoutBtn').addEventListener('click', () => {

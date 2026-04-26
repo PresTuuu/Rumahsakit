@@ -6,6 +6,7 @@ use App\Http\Controllers\AdmissionController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PoliklinikController;
@@ -114,6 +115,12 @@ Route::middleware(['auth'])->group(function (): void {
 
     Route::delete('/admissions/{admission}', [AdmissionController::class, 'destroy'])
         ->name('admissions.destroy');
+
+    Route::put('/medical-records/{medicalRecord}', [MedicalRecordController::class, 'update'])
+        ->name('medical-records.update');
+
+    Route::delete('/medical-records/{medicalRecord}', [MedicalRecordController::class, 'destroy'])
+        ->name('medical-records.destroy');
 });
 
 

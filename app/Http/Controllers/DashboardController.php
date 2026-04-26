@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Admission;
 use App\Models\Doctor;
 use App\Models\Invoice;
+use App\Models\MedicalRecord;
 use App\Models\Medicine;
 use App\Models\Patient;
 use App\Models\Poliklinik;
@@ -23,10 +24,10 @@ final class DashboardController extends BaseController
         $activeDoctors = Doctor::where('is_active', true)->count();
         $outpatientToday = Admission::where('admission_type', 'Rawat Jalan')
             ->whereDate('admission_date', today())
-            ->whereIn('status', ['active', 'menunggu', 'diperiksa'])
+            ->whereIn('status', ['menunggu', 'diperiksa'])
             ->count();
         $inpatientTotal = Admission::where('admission_type', 'Rawat Inap')
-            ->where('status', 'active')
+            ->whereIn('status', ['menunggu', 'dirawat', 'sedang dirawat'])
             ->count();
         $lowStockMedicines = Medicine::whereColumn('stock', '<', 'minimum_stock')->count();
         $pendingInvoices = Invoice::where('status', 'pending')->count();
@@ -59,14 +60,14 @@ final class DashboardController extends BaseController
         // Tables Data
         $outpatientAdmissions = Admission::with(['patient', 'doctor'])
             ->where('admission_type', 'Rawat Jalan')
-            ->where('status', 'active')
+            ->whereIn('status', ['menunggu', 'diperiksa'])
             ->orderBy('admission_date', 'desc')
             ->take(10)
             ->get();
 
         $inpatientAdmissions = Admission::with(['patient', 'doctor'])
             ->where('admission_type', 'Rawat Inap')
-            ->where('status', 'active')
+            ->whereIn('status', ['menunggu', 'dirawat', 'sedang dirawat'])
             ->orderBy('admission_date', 'desc')
             ->take(10)
             ->get();
@@ -141,6 +142,16 @@ final class DashboardController extends BaseController
                 return \Carbon\Carbon::parse($item->admission_date)->format('Y-m-d');
             });
 
+        // Medical Records data
+        $medicalRecords = MedicalRecord::with(['patient', 'doctor'])
+            ->orderBy('completed_at', 'desc')
+            ->take(100)
+            ->get();
+
+        $medicalRecordsCount = MedicalRecord::count();
+        $medicalRecordsOutpatient = MedicalRecord::where('admission_type', 'Rawat Jalan')->count();
+        $medicalRecordsInpatient = MedicalRecord::where('admission_type', 'Rawat Inap')->count();
+
         // All rooms for dropdowns
         $allRooms = Room::where('status', 'Aktif')->orderBy('room_name')->get();
 
@@ -187,6 +198,10 @@ final class DashboardController extends BaseController
             'inpatientMenunggu' => $inpatientMenunggu,
             'inpatientSelesai' => $inpatientSelesai,
             'scheduleAdmissions' => $scheduleAdmissions,
+            'medicalRecords' => $medicalRecords,
+            'medicalRecordsCount' => $medicalRecordsCount,
+            'medicalRecordsOutpatient' => $medicalRecordsOutpatient,
+            'medicalRecordsInpatient' => $medicalRecordsInpatient,
             'allRooms' => $allRooms,
             'allPatients' => $allPatients,
             'allDoctors' => $allDoctors,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Admission;
+use App\Models\MedicalRecord;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -35,7 +36,12 @@ final class AdmissionController extends BaseController
             $validated['registration_number'] = 'ADM-' . strtoupper(\Illuminate\Support\Str::random(8));
         } while (Admission::where('registration_number', $validated['registration_number'])->exists());
 
-        Admission::create($validated);
+        $admission = Admission::create($validated);
+
+        // Auto-create medical record if status is selesai
+        if ($validated['status'] === 'selesai') {
+            $this->createMedicalRecord($admission);
+        }
 
         $message = $validated['admission_type'] === 'Rawat Inap'
             ? 'Data rawat inap berhasil ditambahkan.'
@@ -63,7 +69,19 @@ final class AdmissionController extends BaseController
             'treatment' => ['nullable', 'string'],
         ]);
 
+        $wasCompleted = $admission->status === 'selesai';
+        $isNowCompleted = $validated['status'] === 'selesai';
         $admission->update($validated);
+
+        // Auto-create medical record when status changed to selesai
+        if ($isNowCompleted && ! $wasCompleted) {
+            $this->createMedicalRecord($admission);
+        }
+
+        // Auto-delete medical record when status changed away from selesai
+        if (! $isNowCompleted && $wasCompleted) {
+            MedicalRecord::where('admission_id', $admission->id)->delete();
+        }
 
         $message = $validated['admission_type'] === 'Rawat Inap'
             ? 'Data rawat inap berhasil diperbarui.'
@@ -75,9 +93,33 @@ final class AdmissionController extends BaseController
 
     public function destroy(Admission $admission): RedirectResponse
     {
+        // Delete associated medical record if exists
+        MedicalRecord::where('admission_id', $admission->id)->delete();
+
         $admission->delete();
 
         return redirect()->route('dashboard')
             ->with('status', 'Data pendaftaran berhasil dihapus.');
+    }
+
+    private function createMedicalRecord(Admission $admission): void
+    {
+        $recordNumber = 'RM-' . now()->format('Ymd') . '-' . strtoupper(Str::random(6));
+
+        while (MedicalRecord::where('record_number', $recordNumber)->exists()) {
+            $recordNumber = 'RM-' . now()->format('Ymd') . '-' . strtoupper(Str::random(6));
+        }
+
+        MedicalRecord::create([
+            'admission_id' => $admission->id,
+            'record_number' => $recordNumber,
+            'patient_id' => $admission->patient_id,
+            'doctor_id' => $admission->doctor_id,
+            'admission_type' => $admission->admission_type,
+            'diagnosis' => $admission->diagnosis,
+            'icd_code' => null,
+            'icd_description' => null,
+            'completed_at' => $admission->updated_at ?? now(),
+        ]);
     }
 }
