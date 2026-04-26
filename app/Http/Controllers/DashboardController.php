@@ -16,9 +16,6 @@ use Illuminate\View\View;
 
 final class DashboardController extends BaseController
 {
-    /**
-     * Show the main dashboard page.
-     */
     public function index(): View
     {
         // Statistics
@@ -26,7 +23,7 @@ final class DashboardController extends BaseController
         $activeDoctors = Doctor::where('is_active', true)->count();
         $outpatientToday = Admission::where('admission_type', 'Rawat Jalan')
             ->whereDate('admission_date', today())
-            ->where('status', 'active')
+            ->whereIn('status', ['active', 'menunggu', 'diperiksa'])
             ->count();
         $inpatientTotal = Admission::where('admission_type', 'Rawat Inap')
             ->where('status', 'active')
@@ -96,6 +93,62 @@ final class DashboardController extends BaseController
             ->take(20)
             ->get();
 
+        // Rawat Jalan data
+        $outpatientAll = Admission::with(['patient', 'doctor', 'poliklinik'])
+            ->where('admission_type', 'Rawat Jalan')
+            ->orderBy('admission_date', 'desc')
+            ->take(50)
+            ->get();
+
+        $outpatientWaiting = Admission::where('admission_type', 'Rawat Jalan')
+            ->where('status', 'menunggu')
+            ->count();
+        $outpatientExamining = Admission::where('admission_type', 'Rawat Jalan')
+            ->where('status', 'diperiksa')
+            ->count();
+        $outpatientCompleted = Admission::where('admission_type', 'Rawat Jalan')
+            ->where('status', 'selesai')
+            ->count();
+        $outpatientCancelled = Admission::where('admission_type', 'Rawat Jalan')
+            ->where('status', 'cancelled')
+            ->count();
+
+        // Rawat Inap data
+        $inpatientAll = Admission::with(['patient', 'doctor', 'room'])
+            ->where('admission_type', 'Rawat Inap')
+            ->orderBy('admission_date', 'desc')
+            ->take(200)
+            ->get();
+
+        $inpatientSedangDirawat = Admission::where('admission_type', 'Rawat Inap')
+            ->where('status', 'sedang dirawat')
+            ->count();
+        $inpatientDirawat = Admission::where('admission_type', 'Rawat Inap')
+            ->where('status', 'dirawat')
+            ->count();
+        $inpatientMenunggu = Admission::where('admission_type', 'Rawat Inap')
+            ->where('status', 'menunggu')
+            ->count();
+        $inpatientSelesai = Admission::where('admission_type', 'Rawat Inap')
+            ->where('status', 'selesai')
+            ->count();
+
+        // Schedule / Calendar data
+        $scheduleAdmissions = Admission::with(['patient', 'doctor'])
+            ->orderBy('admission_date', 'desc')
+            ->get()
+            ->groupBy(function ($item) {
+                return \Carbon\Carbon::parse($item->admission_date)->format('Y-m-d');
+            });
+
+        // All rooms for dropdowns
+        $allRooms = Room::where('status', 'Aktif')->orderBy('room_name')->get();
+
+        // All patients, doctors, polikliniks for dropdowns
+        $allPatients = Patient::orderBy('name')->get();
+        $allDoctors = Doctor::where('is_active', true)->orderBy('name')->get();
+        $allPolikliniks = Poliklinik::where('status', 'Aktif')->orderBy('name')->get();
+
         return view('dashboard', [
             'totalPatients' => $totalPatients,
             'activeDoctors' => $activeDoctors,
@@ -122,6 +175,22 @@ final class DashboardController extends BaseController
             'totalMedicines' => $totalMedicines,
             'activeMedicines' => $activeMedicines,
             'totalMedicineValue' => $totalMedicineValue,
+            'outpatientAll' => $outpatientAll,
+            'outpatientAdmissionsToday' => $outpatientAll,
+            'outpatientWaiting' => $outpatientWaiting,
+            'outpatientExamining' => $outpatientExamining,
+            'outpatientCompleted' => $outpatientCompleted,
+            'outpatientCancelled' => $outpatientCancelled,
+            'inpatientAll' => $inpatientAll,
+            'inpatientSedangDirawat' => $inpatientSedangDirawat,
+            'inpatientDirawat' => $inpatientDirawat,
+            'inpatientMenunggu' => $inpatientMenunggu,
+            'inpatientSelesai' => $inpatientSelesai,
+            'scheduleAdmissions' => $scheduleAdmissions,
+            'allRooms' => $allRooms,
+            'allPatients' => $allPatients,
+            'allDoctors' => $allDoctors,
+            'allPolikliniks' => $allPolikliniks,
         ]);
     }
 }

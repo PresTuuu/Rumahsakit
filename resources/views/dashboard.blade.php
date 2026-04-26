@@ -717,6 +717,161 @@
             from { opacity: 0; transform: translateY(-10px); }
             to   { opacity: 1; transform: translateY(0); }
         }
+
+        /* ═══════════════════════════════════════════
+           CALENDAR STYLES
+        ═══════════════════════════════════════════ */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 10px 4px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            border: 1px solid rgba(15,37,87,0.06);
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 6px 4px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            position: relative;
+            min-height: 64px;
+        }
+
+        .calendar-day:hover {
+            background: #F5F9FF;
+            border-color: rgba(37,99,235,0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(15,37,87,0.06);
+        }
+
+        .calendar-day.other-month {
+            color: #CBD5E1;
+            background: #FAFBFC;
+        }
+
+        .calendar-day.today {
+            border-color: var(--blue-bright);
+            background: #EFF6FF;
+            box-shadow: 0 0 0 1px rgba(37,99,235,0.15);
+        }
+
+        .calendar-day.selected {
+            border-color: var(--blue-bright);
+            background: #DBEAFE;
+        }
+
+        .calendar-day-number {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--blue-deep);
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .calendar-day.today .calendar-day-number {
+            background: var(--blue-bright);
+            color: #fff;
+        }
+
+        .calendar-day-dots {
+            display: flex;
+            gap: 3px;
+            margin-top: 4px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .calendar-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .calendar-dot.outpatient { background: #F59E0B; }
+        .calendar-dot.inpatient { background: #8B5CF6; }
+
+        .calendar-day-count {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .schedule-item {
+            background: #F8FBFF;
+            border: 1px solid rgba(37,99,235,0.08);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.18s;
+        }
+
+        .schedule-item:hover {
+            background: #F0F7FF;
+            border-color: rgba(37,99,235,0.15);
+        }
+
+        .schedule-item-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .schedule-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .schedule-item-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--blue-deep);
+        }
+
+        .schedule-item-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .schedule-item-type {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .schedule-item-type.outpatient { background: #FEF3C7; color: #92400E; }
+        .schedule-item-type.inpatient { background: #F5F3FF; color: #6D28D9; }
     </style>
 </head>
 
@@ -773,7 +928,19 @@
                 <div class="nav-dot"></div>
             </div>
 
-            <div class="sidebar-item">
+            <div class="sidebar-item" data-section="outpatient">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                <span>Rawat Jalan</span>
+                <div class="nav-dot"></div>
+            </div>
+
+            <div class="sidebar-item" data-section="inpatient">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h8M8 18h5"/></svg>
+                <span>Rawat Inap</span>
+                <div class="nav-dot"></div>
+            </div>
+
+            <div class="sidebar-item" data-section="schedule">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
                 <span>Jadwal</span>
                 <div class="nav-dot"></div>
@@ -1738,7 +1905,395 @@
                 </div>
             </div><!-- /medicinesSection -->
 
-            <!-- ════════════════════ MODALS ════════════════════ -->
+            <!-- ════════════════════ OUTPATIENT SECTION ════════════════════ -->
+            <div id="outpatientSection" style="display:none;">
+
+                <div class="section-page-header reveal" style="background: linear-gradient(130deg, #B45309 0%, #D97706 60%, #F59E0B 100%);">
+                    <div class="section-page-header-text">
+                        <div class="tag">✦ Antrian Rawat Jalan</div>
+                        <h2>Pendaftaran Rawat Jalan</h2>
+                        <p>Kelola antrian pasien rawat jalan dengan nomor registrasi otomatis dan status pelayanan.</p>
+                    </div>
+                    <button type="button" class="button-white" id="openOutpatientModalBtn">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Tambah Antrian
+                    </button>
+                </div>
+
+                <div class="summary-strip reveal">
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#FFFBEB;">📋</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Total Hari Ini</div>
+                            <div class="value">{{ $outpatientAdmissionsToday->count() }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#FEF3C7;">⏳</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Menunggu</div>
+                            <div class="value">{{ $outpatientAdmissionsToday->where('status','menunggu')->count() }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#ECFDF5;">🔍</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Diperiksa</div>
+                            <div class="value">{{ $outpatientAdmissionsToday->where('status','diperiksa')->count() }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#F0FDF4;">✅</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Selesai</div>
+                            <div class="value">{{ $outpatientAdmissionsToday->where('status','selesai')->count() }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-bar-wrapper reveal">
+                    <div class="search-bar-inner">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="outpatientSearch" placeholder="Cari nama pasien, nomor registrasi..." />
+                    </div>
+                    <select class="search-filter-select" id="outpatientStatusFilter">
+                        <option value="">Semua Status</option>
+                        <option value="menunggu">Menunggu</option>
+                        <option value="diperiksa">Diperiksa</option>
+                        <option value="selesai">Selesai</option>
+                    </select>
+                    <input type="date" class="search-filter-select" id="outpatientDateFilter" value="{{ date('Y-m-d') }}" />
+                    <button type="button" class="search-btn" id="outpatientSearchBtn">Cari</button>
+                </div>
+
+                <div class="premium-table-wrap reveal">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:42px;">#</th>
+                                <th>No. Registrasi</th>
+                                <th>Pasien</th>
+                                <th>Poliklinik</th>
+                                <th>Dokter</th>
+                                <th>Keluhan</th>
+                                <th>Tanggal</th>
+                                <th>Status</th>
+                                <th style="text-align:center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="outpatientTableBody">
+                            @forelse($outpatientAdmissionsToday as $index => $admission)
+                            <tr data-status="{{ $admission->status }}">
+                                <td style="color:var(--text-muted);font-size:12px;font-family:'Space Mono',monospace;text-align:center;">{{ $index + 1 }}</td>
+                                <td>
+                                    <div style="font-family:'Space Mono',monospace; font-size:12px; font-weight:700; color:var(--blue-deep); background:#EFF6FF; padding:4px 8px; border-radius:6px; display:inline-block;">{{ $admission->registration_number }}</div>
+                                </td>
+                                <td>
+                                    <div class="patient-cell">
+                                        <div class="patient-avatar {{ optional($admission->patient)->gender === 'M' ? 'male' : (optional($admission->patient)->gender === 'F' ? 'female' : 'other') }}">{{ strtoupper(substr(optional($admission->patient)->name ?? '?', 0, 1)) }}</div>
+                                        <div>
+                                            <div class="patient-name">{{ optional($admission->patient)->name ?? 'Pasien tidak ditemukan' }}</div>
+                                            <div class="td-rm">{{ optional($admission->patient)->medical_record_number ?? '-' }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="font-size:13px;">{{ optional($admission->poliklinik)->name ?? $admission->clinic ?? '-' }}</td>
+                                <td style="font-size:13px;">{{ optional($admission->doctor)->name ?? '-' }}</td>
+                                <td style="font-size:12px; color:var(--text-muted); max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ $admission->complaints ?? '-' }}</td>
+                                <td>
+                                    <div style="font-size:13px; font-weight:500;">{{ $admission->admission_date ? \Carbon\Carbon::parse($admission->admission_date)->format('d M Y') : '-' }}</div>
+                                    <div style="font-size:11px; color:var(--text-muted);">{{ $admission->admission_date ? \Carbon\Carbon::parse($admission->admission_date)->format('H:i') : '-' }}</div>
+                                </td>
+                                <td>
+                                    @if($admission->status === 'menunggu')
+                                        <div class="status-cell" style="color:#B45309;"><span class="status-dot" style="background:#F59E0B;"></span>Menunggu</div>
+                                    @elseif($admission->status === 'diperiksa')
+                                        <div class="status-cell" style="color:#0369A1;"><span class="status-dot" style="background:#38BDF8;"></span>Diperiksa</div>
+                                    @else
+                                        <div class="status-cell" style="color:#047857;"><span class="status-dot" style="background:#10B981;"></span>Selesai</div>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="act-wrap" style="justify-content:center;">
+                                        <button type="button" class="act-btn view view-outpatient"
+                                            title="Lihat"
+                                            data-reg="{{ $admission->registration_number }}"
+                                            data-patient="{{ optional($admission->patient)->name ?? '-' }}"
+                                            data-poliklinik="{{ optional($admission->poliklinik)->name ?? $admission->clinic ?? '-' }}"
+                                            data-doctor="{{ optional($admission->doctor)->name ?? '-' }}"
+                                            data-complaints="{{ $admission->complaints }}"
+                                            data-date="{{ $admission->admission_date }}"
+                                            data-status="{{ $admission->status }}"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        </button>
+                                        <button type="button" class="act-btn edit edit-outpatient"
+                                            title="Edit"
+                                            data-id="{{ $admission->id }}"
+                                            data-patient-id="{{ $admission->patient_id }}"
+                                            data-doctor-id="{{ $admission->doctor_id }}"
+                                            data-poliklinik-id="{{ $admission->poliklinik_id }}"
+                                            data-clinic="{{ $admission->clinic }}"
+                                            data-admission-date="{{ $admission->admission_date }}"
+                                            data-complaints="{{ $admission->complaints }}"
+                                            data-status="{{ $admission->status }}"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                                        </button>
+                                        <button type="button" class="act-btn delete delete-outpatient" title="Hapus" data-id="{{ $admission->id }}">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="9">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">📋</div>
+                                        <h4>Belum Ada Antrian Rawat Jalan</h4>
+                                        <p>Tambahkan antrian baru untuk hari ini.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- /outpatientSection -->
+
+            <!-- ════════════════════ INPATIENT SECTION ════════════════════ -->
+            <div id="inpatientSection" style="display:none;">
+
+                <div class="section-page-header reveal" style="background: linear-gradient(130deg, #7C3AED 0%, #8B5CF6 60%, #A78BFA 100%);">
+                    <div class="section-page-header-text">
+                        <div class="tag">✦ Manajemen Rawat Inap</div>
+                        <h2>Data Rawat Inap</h2>
+                        <p>Kelola pasien rawat inap dengan nomor admisi otomatis, ruangan, dokter, dan status perawatan.</p>
+                    </div>
+                    <button type="button" class="button-white" id="openInpatientModalBtn">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Tambah Rawat Inap
+                    </button>
+                </div>
+
+                <div class="summary-strip reveal">
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#F5F3FF;">🏥</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Total Pasien</div>
+                            <div class="value">{{ $inpatientAll->count() }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#FEF3C7;">⏳</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Menunggu</div>
+                            <div class="value">{{ $inpatientMenunggu }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#DBEAFE;">🛏️</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Dirawat</div>
+                            <div class="value">{{ $inpatientDirawat + $inpatientSedangDirawat }}</div>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <div class="summary-chip-icon" style="background:#ECFDF5;">✅</div>
+                        <div class="summary-chip-text">
+                            <div class="label">Selesai</div>
+                            <div class="value">{{ $inpatientSelesai }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-bar-wrapper reveal">
+                    <div class="search-bar-inner">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="inpatientSearch" placeholder="Cari nama pasien, nomor admisi..." />
+                    </div>
+                    <select class="search-filter-select" id="inpatientStatusFilter">
+                        <option value="">Semua Status</option>
+                        <option value="menunggu">Menunggu</option>
+                        <option value="dirawat">Dirawat</option>
+                        <option value="selesai">Selesai</option>
+                    </select>
+                    <input type="date" class="search-filter-select" id="inpatientDateFilter" />
+                    <button type="button" class="search-btn" id="inpatientSearchBtn">Cari</button>
+                </div>
+
+                <div class="premium-table-wrap reveal">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:42px;">#</th>
+                                <th>No. Admisi</th>
+                                <th>Pasien</th>
+                                <th>Dokter</th>
+                                <th>Ruang / Bed</th>
+                                <th>Tgl Masuk</th>
+                                <th>Tgl Keluar</th>
+                                <th>Status</th>
+                                <th style="text-align:center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inpatientTableBody">
+                            @forelse($inpatientAll as $index => $admission)
+                            <tr data-status="{{ $admission->status }}" data-date="{{ $admission->admission_date ? \Carbon\Carbon::parse($admission->admission_date)->format('Y-m-d') : '' }}">
+                                <td style="color:var(--text-muted);font-size:12px;font-family:'Space Mono',monospace;text-align:center;">{{ $index + 1 }}</td>
+                                <td>
+                                    <div style="font-family:'Space Mono',monospace; font-size:12px; font-weight:700; color:var(--blue-deep); background:#EFF6FF; padding:4px 8px; border-radius:6px; display:inline-block;">{{ $admission->registration_number ?? '-' }}</div>
+                                </td>
+                                <td>
+                                    <div class="patient-cell">
+                                        <div class="patient-avatar {{ optional($admission->patient)->gender === 'M' ? 'male' : (optional($admission->patient)->gender === 'F' ? 'female' : 'other') }}">{{ strtoupper(substr(optional($admission->patient)->name ?? '?', 0, 1)) }}</div>
+                                        <div>
+                                            <div class="patient-name">{{ optional($admission->patient)->name ?? 'Pasien tidak ditemukan' }}</div>
+                                            <div class="td-rm">{{ optional($admission->patient)->medical_record_number ?? '-' }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="font-size:13px;">{{ optional($admission->doctor)->name ?? '-' }}</td>
+                                <td>
+                                    @if(optional($admission->room)->room_name)
+                                        <div style="font-size:13px; font-weight:600; color:var(--blue-deep);">{{ $admission->room->room_name }}</div>
+                                        <div style="font-size:11px; color:var(--text-muted);">{{ $admission->room->room_type }}</div>
+                                    @else
+                                        <span style="color:var(--text-muted); font-size:13px;">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div style="font-size:13px; font-weight:500;">{{ $admission->admission_date ? \Carbon\Carbon::parse($admission->admission_date)->format('d M Y') : '-' }}</div>
+                                    <div style="font-size:11px; color:var(--text-muted);">{{ $admission->admission_date ? \Carbon\Carbon::parse($admission->admission_date)->format('H:i') : '-' }}</div>
+                                </td>
+                                <td>
+                                    @if($admission->discharge_date)
+                                        <div style="font-size:13px; font-weight:500;">{{ \Carbon\Carbon::parse($admission->discharge_date)->format('d M Y') }}</div>
+                                        <div style="font-size:11px; color:var(--text-muted);">{{ \Carbon\Carbon::parse($admission->discharge_date)->format('H:i') }}</div>
+                                    @else
+                                        <span style="color:var(--text-muted); font-size:13px;">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($admission->status === 'menunggu')
+                                        <div class="status-cell" style="color:#B45309;"><span class="status-dot" style="background:#F59E0B;"></span>Menunggu</div>
+                                    @elseif(in_array($admission->status, ['dirawat', 'sedang dirawat']))
+                                        <div class="status-cell" style="color:#0369A1;"><span class="status-dot" style="background:#38BDF8;"></span>Dirawat</div>
+                                    @else
+                                        <div class="status-cell" style="color:#047857;"><span class="status-dot" style="background:#10B981;"></span>Selesai</div>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="act-wrap" style="justify-content:center;">
+                                        <button type="button" class="act-btn view view-inpatient"
+                                            title="Lihat"
+                                            data-reg="{{ $admission->registration_number }}"
+                                            data-patient="{{ optional($admission->patient)->name ?? '-' }}"
+                                            data-rm="{{ optional($admission->patient)->medical_record_number ?? '-' }}"
+                                            data-doctor="{{ optional($admission->doctor)->name ?? '-' }}"
+                                            data-room="{{ optional($admission->room)->room_name ?? '-' }}"
+                                            data-room-type="{{ optional($admission->room)->room_type ?? '-' }}"
+                                            data-admission-date="{{ $admission->admission_date }}"
+                                            data-discharge-date="{{ $admission->discharge_date }}"
+                                            data-status="{{ $admission->status }}"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        </button>
+                                        <button type="button" class="act-btn edit edit-inpatient"
+                                            title="Edit"
+                                            data-id="{{ $admission->id }}"
+                                            data-patient-id="{{ $admission->patient_id }}"
+                                            data-doctor-id="{{ $admission->doctor_id }}"
+                                            data-room-id="{{ $admission->room_id }}"
+                                            data-admission-date="{{ $admission->admission_date }}"
+                                            data-discharge-date="{{ $admission->discharge_date }}"
+                                            data-status="{{ $admission->status }}"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                                        </button>
+                                        <button type="button" class="act-btn delete delete-inpatient" title="Hapus" data-id="{{ $admission->id }}">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="9">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">🏥</div>
+                                        <h4>Belum Ada Data Rawat Inap</h4>
+                                        <p>Tambahkan pasien rawat inap baru untuk mengisi tabel ini.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- /inpatientSection -->
+
+            <!-- ════════════════════ SCHEDULE SECTION ════════════════════ -->
+            <div id="scheduleSection" style="display:none;">
+
+                <div class="section-page-header reveal" style="background: linear-gradient(130deg, #0F766E 0%, #14B8A6 60%, #2DD4BF 100%);">
+                    <div class="section-page-header-text">
+                        <div class="tag">✦ Jadwal & Kalender</div>
+                        <h2>Kalender Pasien</h2>
+                        <p>Lihat jadwal masuk pasien rawat jalan dan rawat inap dalam tampilan kalender.</p>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 340px; gap: 20px;" class="reveal">
+                    <!-- Calendar -->
+                    <div class="card-panel" style="padding:24px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                            <h3 id="calendarMonthYear" style="font-size:18px; font-weight:700; color:var(--blue-deep);"></h3>
+                            <div style="display:flex; gap:8px;">
+                                <button type="button" id="prevMonthBtn" class="act-btn" style="width:36px; height:36px; background:#F1F5F9; color:#475569;">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                                </button>
+                                <button type="button" id="todayBtn" style="background:#F1F5F9; border:none; border-radius:10px; padding:8px 16px; font-size:13px; font-weight:600; color:#475569; cursor:pointer; font-family:'Sora',sans-serif;">Hari Ini</button>
+                                <button type="button" id="nextMonthBtn" class="act-btn" style="width:36px; height:36px; background:#F1F5F9; color:#475569;">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="calendar-grid" id="calendarGrid">
+                            <!-- Calendar header -->
+                            <div class="calendar-day-header">Min</div>
+                            <div class="calendar-day-header">Sen</div>
+                            <div class="calendar-day-header">Sel</div>
+                            <div class="calendar-day-header">Rab</div>
+                            <div class="calendar-day-header">Kam</div>
+                            <div class="calendar-day-header">Jum</div>
+                            <div class="calendar-day-header">Sab</div>
+                        </div>
+
+                        <div style="display:flex; gap:20px; margin-top:20px; padding-top:16px; border-top:1px solid var(--border);">
+                            <div style="display:flex; align-items:center; gap:6px;">
+                                <span style="width:8px; height:8px; border-radius:50%; background:#F59E0B;"></span>
+                                <span style="font-size:12px; color:var(--text-muted);">Rawat Jalan</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:6px;">
+                                <span style="width:8px; height:8px; border-radius:50%; background:#8B5CF6;"></span>
+                                <span style="font-size:12px; color:var(--text-muted);">Rawat Inap</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selected Date Detail -->
+                    <div class="card-panel" style="padding:24px; height:fit-content;">
+                        <h3 style="font-size:16px; font-weight:700; color:var(--blue-deep); margin-bottom:16px;">Detail Tanggal</h3>
+                        <div id="selectedDateLabel" style="font-size:14px; font-weight:600; color:var(--text-muted); margin-bottom:16px;">Pilih tanggal di kalender</div>
+                        <div id="selectedDateList" style="display:flex; flex-direction:column; gap:10px;">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /scheduleSection -->
 
             <!-- Doctor Add/Edit Modal -->
             <div class="modal-overlay" id="doctorModal">
@@ -2137,6 +2692,192 @@
                 </div>
             </div>
 
+            <!-- Outpatient Add/Edit Modal -->
+            <div class="modal-overlay" id="outpatientModal">
+                <div class="modal-window">
+                    <button type="button" class="modal-close" id="closeOutpatientModalBtn">✕</button>
+                    <h3>Tambah Antrian Rawat Jalan</h3>
+                    <p style="font-size:13px; color:var(--text-muted);">Daftarkan pasien rawat jalan dengan nomor registrasi otomatis.</p>
+
+                    @if ($errors->any() && old('form_type') === 'outpatient')
+                        <div class="modal-error">
+                            <strong>Perbaiki data berikut:</strong>
+                            <ul style="margin-top:8px; padding-left:18px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('admissions.store') }}" id="outpatientForm">
+                        @csrf
+                        <input type="hidden" name="_method" id="outpatient_method" value="">
+                        <input type="hidden" name="form_type" value="outpatient">
+                        <input type="hidden" name="admission_type" value="Rawat Jalan">
+                        <input type="hidden" name="clinic" id="outpatient_clinic" value="{{ old('clinic') }}">
+                        <input type="hidden" name="admission_date" id="outpatient_admission_date" value="{{ old('admission_date', date('Y-m-d')) }}">
+                        <div class="modal-grid">
+                            <div class="modal-field">
+                                <label for="outpatient_patient_id">Pasien</label>
+                                <select id="outpatient_patient_id" name="patient_id" required>
+                                    <option value="">Pilih Pasien</option>
+                                    @foreach($patients as $patient)
+                                        <option value="{{ $patient->id }}" {{ old('patient_id') == $patient->id ? 'selected' : '' }}>{{ $patient->name }} ({{ $patient->medical_record_number }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label for="outpatient_doctor_id">Dokter</label>
+                                <select id="outpatient_doctor_id" name="doctor_id" required>
+                                    <option value="">Pilih Dokter</option>
+                                    @foreach($doctors as $doctor)
+                                        <option value="{{ $doctor->id }}" {{ old('doctor_id') == $doctor->id ? 'selected' : '' }}>{{ $doctor->name }} — {{ $doctor->specialization }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label for="outpatient_poliklinik_id">Poliklinik</label>
+                                <select id="outpatient_poliklinik_id" name="poliklinik_id" required>
+                                    <option value="">Pilih Poliklinik</option>
+                                    @foreach($polikliniks as $poliklinik)
+                                        <option value="{{ $poliklinik->id }}" {{ old('poliklinik_id') == $poliklinik->id ? 'selected' : '' }}>{{ $poliklinik->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label for="outpatient_status">Status</label>
+                                <select id="outpatient_status" name="status" required>
+                                    <option value="menunggu" {{ old('status') === 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                                    <option value="diperiksa" {{ old('status') === 'diperiksa' ? 'selected' : '' }}>Diperiksa</option>
+                                    <option value="selesai" {{ old('status') === 'selesai' ? 'selected' : '' }}>Selesai</option>
+                                </select>
+                            </div>
+                            <div class="modal-field full-width">
+                                <label for="outpatient_complaints">Keluhan</label>
+                                <textarea id="outpatient_complaints" name="complaints" placeholder="Deskripsikan keluhan pasien...">{{ old('complaints') }}</textarea>
+                            </div>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="modal-button-secondary" id="cancelOutpatientModalBtn">Batal</button>
+                            <button type="submit" class="button-primary" id="outpatientModalSubmitBtn">Simpan Antrian</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Outpatient View Modal -->
+            <div class="modal-overlay" id="outpatientViewModal">
+                <div class="modal-window" style="max-width:480px;">
+                    <button type="button" class="modal-close" id="closeOutpatientViewModalBtn">✕</button>
+                    <h3>Detail Rawat Jalan</h3>
+                    <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                        <div class="modal-field"><label>No. Registrasi</label><div id="view_outpatient_reg" style="font-family:'Space Mono',monospace; font-weight:700; color:var(--blue-deep);">-</div></div>
+                        <div class="modal-field"><label>Pasien</label><div id="view_outpatient_patient" style="font-weight:600;">-</div></div>
+                        <div class="modal-field"><label>Poliklinik</label><div id="view_outpatient_poliklinik">-</div></div>
+                        <div class="modal-field"><label>Dokter</label><div id="view_outpatient_doctor">-</div></div>
+                        <div class="modal-field" style="grid-column:1/-1;"><label>Keluhan</label><div id="view_outpatient_complaints" style="font-size:13px; color:var(--text-muted);">-</div></div>
+                        <div class="modal-field"><label>Tanggal</label><div id="view_outpatient_date">-</div></div>
+                        <div class="modal-field"><label>Status</label><div id="view_outpatient_status">-</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inpatient Add/Edit Modal -->
+            <div class="modal-overlay" id="inpatientModal">
+                <div class="modal-window">
+                    <button type="button" class="modal-close" id="closeInpatientModalBtn">✕</button>
+                    <h3>Tambah Rawat Inap</h3>
+                    <p style="font-size:13px; color:var(--text-muted);">Daftarkan pasien rawat inap dengan nomor admisi otomatis.</p>
+
+                    @if ($errors->any() && old('form_type') === 'inpatient')
+                        <div class="modal-error">
+                            <strong>Perbaiki data berikut:</strong>
+                            <ul style="margin-top:8px; padding-left:18px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('admissions.store') }}" id="inpatientForm">
+                        @csrf
+                        <input type="hidden" name="_method" id="inpatient_method" value="">
+                        <input type="hidden" name="form_type" value="inpatient">
+                        <input type="hidden" name="admission_type" value="Rawat Inap">
+                        <div class="modal-grid">
+                            <div class="modal-field">
+                                <label for="inpatient_patient_id">Pasien</label>
+                                <select id="inpatient_patient_id" name="patient_id" required>
+                                    <option value="">Pilih Pasien</option>
+                                    @foreach($allPatients as $patient)
+                                        <option value="{{ $patient->id }}" {{ old('patient_id') == $patient->id ? 'selected' : '' }}>{{ $patient->name }} ({{ $patient->medical_record_number }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label for="inpatient_doctor_id">Dokter</label>
+                                <select id="inpatient_doctor_id" name="doctor_id" required>
+                                    <option value="">Pilih Dokter</option>
+                                    @foreach($allDoctors as $doctor)
+                                        <option value="{{ $doctor->id }}" {{ old('doctor_id') == $doctor->id ? 'selected' : '' }}>{{ $doctor->name }} — {{ $doctor->specialization }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label for="inpatient_room_id">Ruang / Bed</label>
+                                <select id="inpatient_room_id" name="room_id" required>
+                                    <option value="">Pilih Ruangan</option>
+                                    @foreach($allRooms as $room)
+                                        <option value="{{ $room->id }}" {{ old('room_id') == $room->id ? 'selected' : '' }}>{{ $room->room_name }} — {{ $room->room_type }} (tersedia {{ $room->available }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label for="inpatient_status">Status</label>
+                                <select id="inpatient_status" name="status" required>
+                                    <option value="menunggu" {{ old('status') === 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                                    <option value="dirawat" {{ old('status') === 'dirawat' ? 'selected' : '' }}>Dirawat</option>
+                                    <option value="selesai" {{ old('status') === 'selesai' ? 'selected' : '' }}>Selesai</option>
+                                </select>
+                            </div>
+                            <div class="modal-field">
+                                <label for="inpatient_admission_date">Tanggal Masuk</label>
+                                <input type="datetime-local" id="inpatient_admission_date" name="admission_date" value="{{ old('admission_date', now()->format('Y-m-d\TH:i')) }}" required />
+                            </div>
+                            <div class="modal-field">
+                                <label for="inpatient_discharge_date">Tanggal Keluar <span style="color:var(--text-muted);font-weight:400;">(opsional)</span></label>
+                                <input type="datetime-local" id="inpatient_discharge_date" name="discharge_date" value="{{ old('discharge_date') }}" />
+                            </div>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="modal-button-secondary" id="cancelInpatientModalBtn">Batal</button>
+                            <button type="submit" class="button-primary" id="inpatientModalSubmitBtn">Simpan Rawat Inap</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Inpatient View Modal -->
+            <div class="modal-overlay" id="inpatientViewModal">
+                <div class="modal-window" style="max-width:480px;">
+                    <button type="button" class="modal-close" id="closeInpatientViewModalBtn">✕</button>
+                    <h3>Detail Rawat Inap</h3>
+                    <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                        <div class="modal-field"><label>No. Admisi</label><div id="view_inpatient_reg" style="font-family:'Space Mono',monospace; font-weight:700; color:var(--blue-deep);">-</div></div>
+                        <div class="modal-field"><label>Pasien</label><div id="view_inpatient_patient" style="font-weight:600;">-</div></div>
+                        <div class="modal-field"><label>No. RM</label><div id="view_inpatient_rm" style="font-family:'Space Mono',monospace;">-</div></div>
+                        <div class="modal-field"><label>Dokter</label><div id="view_inpatient_doctor">-</div></div>
+                        <div class="modal-field"><label>Ruang / Bed</label><div id="view_inpatient_room">-</div></div>
+                        <div class="modal-field"><label>Tipe Ruangan</label><div id="view_inpatient_room_type">-</div></div>
+                        <div class="modal-field"><label>Tanggal Masuk</label><div id="view_inpatient_admission_date">-</div></div>
+                        <div class="modal-field"><label>Tanggal Keluar</label><div id="view_inpatient_discharge_date">-</div></div>
+                        <div class="modal-field" style="grid-column:1/-1;"><label>Status</label><div id="view_inpatient_status">-</div></div>
+                    </div>
+                </div>
+            </div>
+
         </div><!-- /content-body -->
     </div><!-- /main-content -->
 
@@ -2187,6 +2928,9 @@
                 document.getElementById('doctorsSection').style.display   = t === 'doctors'   ? 'block' : 'none';
                 document.getElementById('polikliniksSection').style.display = t === 'polikliniks' ? 'block' : 'none';
                 document.getElementById('medicinesSection').style.display = t === 'medicines' ? 'block' : 'none';
+                document.getElementById('outpatientSection').style.display = t === 'outpatient' ? 'block' : 'none';
+                document.getElementById('inpatientSection').style.display = t === 'inpatient' ? 'block' : 'none';
+                document.getElementById('scheduleSection').style.display = t === 'schedule' ? 'block' : 'none';
                 localStorage.setItem('activeSection', t);
             });
         });
@@ -2606,6 +3350,9 @@
             document.getElementById('doctorsSection').style.display   = savedSection === 'doctors'   ? 'block' : 'none';
             document.getElementById('polikliniksSection').style.display = savedSection === 'polikliniks' ? 'block' : 'none';
             document.getElementById('medicinesSection').style.display = savedSection === 'medicines' ? 'block' : 'none';
+            document.getElementById('outpatientSection').style.display = savedSection === 'outpatient' ? 'block' : 'none';
+            document.getElementById('inpatientSection').style.display = savedSection === 'inpatient' ? 'block' : 'none';
+            document.getElementById('scheduleSection').style.display = savedSection === 'schedule' ? 'block' : 'none';
         }
 
         // ── Old data restore & error handling for patients
@@ -2742,6 +3489,390 @@
         document.getElementById('medicineSearchBtn')?.addEventListener('click', filterMedicines);
         document.getElementById('medicineSearch')?.addEventListener('keyup', e => { if(e.key==='Enter') filterMedicines(); });
         document.getElementById('medicineStatusFilter')?.addEventListener('change', filterMedicines);
+
+        // ── Outpatient Modal
+        const outpatientModal      = document.getElementById('outpatientModal');
+        const outpatientForm       = document.getElementById('outpatientForm');
+        const outpatientMethod     = document.getElementById('outpatient_method');
+        const outpatientModalTitle = document.querySelector('#outpatientModal .modal-window h3');
+        const outpatientModalBtn   = document.getElementById('outpatientModalSubmitBtn');
+        const outpatientBaseUrl    = "{{ url('/admissions') }}";
+
+        const setOutpatientFormMode = (mode, outpatient = null) => {
+            if (mode === 'edit' && outpatient) {
+                outpatientModalTitle.textContent = 'Edit Antrian Rawat Jalan';
+                outpatientModalBtn.textContent = 'Perbarui Antrian';
+                outpatientForm.action = `${outpatientBaseUrl}/${outpatient.id}`;
+                outpatientMethod.value = 'PUT';
+                document.getElementById('outpatient_patient_id').value = outpatient.patientId || '';
+                document.getElementById('outpatient_doctor_id').value = outpatient.doctorId || '';
+                document.getElementById('outpatient_poliklinik_id').value = outpatient.poliklinikId || '';
+                document.getElementById('outpatient_clinic').value = outpatient.clinic || '';
+                document.getElementById('outpatient_admission_date').value = outpatient.admissionDate || '';
+                document.getElementById('outpatient_status').value = outpatient.status || 'menunggu';
+                document.getElementById('outpatient_complaints').value = outpatient.complaints || '';
+            } else {
+                outpatientModalTitle.textContent = 'Tambah Antrian Rawat Jalan';
+                outpatientModalBtn.textContent = 'Simpan Antrian';
+                outpatientForm.action = "{{ route('admissions.store') }}";
+                outpatientMethod.value = '';
+                document.getElementById('outpatient_patient_id').value = '';
+                document.getElementById('outpatient_doctor_id').value = '';
+                document.getElementById('outpatient_poliklinik_id').value = '';
+                document.getElementById('outpatient_clinic').value = '';
+                const now = new Date();
+                const pad = n => n.toString().padStart(2, '0');
+                document.getElementById('outpatient_admission_date').value = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+                document.getElementById('outpatient_status').value = 'menunggu';
+                document.getElementById('outpatient_complaints').value = '';
+                outpatientForm.reset();
+            }
+        };
+
+        const openOutpatientModal  = () => { outpatientModal.style.display = 'flex'; document.body.style.overflow = 'hidden'; };
+        const closeOutpatientModal = () => { outpatientModal.style.display = 'none'; document.body.style.overflow = ''; };
+
+        // Sync clinic hidden field with selected poliklinik text
+        const outpatientPoliklinikSelect = document.getElementById('outpatient_poliklinik_id');
+        const outpatientClinicInput = document.getElementById('outpatient_clinic');
+        if (outpatientPoliklinikSelect && outpatientClinicInput) {
+            outpatientPoliklinikSelect.addEventListener('change', function () {
+                const selectedOption = this.options[this.selectedIndex];
+                outpatientClinicInput.value = selectedOption.textContent.trim();
+            });
+        }
+
+        document.getElementById('openOutpatientModalBtn')?.addEventListener('click', () => { setOutpatientFormMode('create'); openOutpatientModal(); });
+        document.getElementById('closeOutpatientModalBtn')?.addEventListener('click', closeOutpatientModal);
+        document.getElementById('cancelOutpatientModalBtn')?.addEventListener('click', closeOutpatientModal);
+        outpatientModal?.addEventListener('click', e => { if (e.target === outpatientModal) closeOutpatientModal(); });
+
+        // ── Outpatient View Modal
+        const outpatientViewModal = document.getElementById('outpatientViewModal');
+        document.getElementById('closeOutpatientViewModalBtn')?.addEventListener('click', () => { outpatientViewModal.style.display='none'; document.body.style.overflow=''; });
+        outpatientViewModal?.addEventListener('click', e => { if (e.target === outpatientViewModal) { outpatientViewModal.style.display='none'; document.body.style.overflow=''; } });
+
+        document.querySelectorAll('.view-outpatient').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.getElementById('view_outpatient_reg').textContent = this.dataset.reg || '-';
+                document.getElementById('view_outpatient_patient').textContent = this.dataset.patient || '-';
+                document.getElementById('view_outpatient_poliklinik').textContent = this.dataset.poliklinik || '-';
+                document.getElementById('view_outpatient_doctor').textContent = this.dataset.doctor || '-';
+                document.getElementById('view_outpatient_complaints').textContent = this.dataset.complaints || '-';
+                document.getElementById('view_outpatient_date').textContent = this.dataset.date ? new Date(this.dataset.date).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}) : '-';
+                const statusMap = { 'menunggu': 'Menunggu', 'diperiksa': 'Diperiksa', 'selesai': 'Selesai' };
+                document.getElementById('view_outpatient_status').textContent = statusMap[this.dataset.status] || this.dataset.status || '-';
+                outpatientViewModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        document.querySelectorAll('.edit-outpatient').forEach(btn => {
+            btn.addEventListener('click', function () {
+                setOutpatientFormMode('edit', {
+                    id: this.dataset.id,
+                    patientId: this.dataset.patientId,
+                    doctorId: this.dataset.doctorId,
+                    poliklinikId: this.dataset.poliklinikId,
+                    clinic: this.dataset.clinic,
+                    admissionDate: this.dataset.admissionDate,
+                    complaints: this.dataset.complaints,
+                    status: this.dataset.status,
+                });
+                openOutpatientModal();
+            });
+        });
+
+        document.querySelectorAll('.delete-outpatient').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (!confirm('Hapus data antrian ini?')) return;
+                const f = document.createElement('form');
+                f.method = 'POST'; f.action = `${outpatientBaseUrl}/${this.dataset.id}`;
+                f.innerHTML = `<input type="hidden" name="_token" value="{{ csrf_token() }}"><input type="hidden" name="_method" value="DELETE">`;
+                document.body.appendChild(f); f.submit();
+            });
+        });
+
+        const filterOutpatients = () => {
+            const q      = document.getElementById('outpatientSearch')?.value.trim().toLowerCase() || '';
+            const status = document.getElementById('outpatientStatusFilter')?.value.toLowerCase() || '';
+            const date   = document.getElementById('outpatientDateFilter')?.value || '';
+            document.querySelectorAll('#outpatientTableBody tr').forEach(row => {
+                const text = Array.from(row.cells).map(c => c.textContent.toLowerCase()).join(' ');
+                const rowStatus = row.dataset.status || '';
+                const matchQ = !q || text.includes(q);
+                const matchS = !status || rowStatus.includes(status);
+                row.style.display = (matchQ && matchS) ? '' : 'none';
+            });
+        };
+        document.getElementById('outpatientSearchBtn')?.addEventListener('click', filterOutpatients);
+        document.getElementById('outpatientSearch')?.addEventListener('keyup', e => { if(e.key==='Enter') filterOutpatients(); });
+        document.getElementById('outpatientStatusFilter')?.addEventListener('change', filterOutpatients);
+        document.getElementById('outpatientDateFilter')?.addEventListener('change', filterOutpatients);
+
+        // ── Inpatient Modal
+        const inpatientModal      = document.getElementById('inpatientModal');
+        const inpatientForm       = document.getElementById('inpatientForm');
+        const inpatientMethod     = document.getElementById('inpatient_method');
+        const inpatientModalTitle = document.querySelector('#inpatientModal .modal-window h3');
+        const inpatientModalBtn   = document.getElementById('inpatientModalSubmitBtn');
+        const inpatientBaseUrl    = "{{ url('/admissions') }}";
+
+        const setInpatientFormMode = (mode, inpatient = null) => {
+            if (mode === 'edit' && inpatient) {
+                inpatientModalTitle.textContent = 'Edit Rawat Inap';
+                inpatientModalBtn.textContent = 'Perbarui Rawat Inap';
+                inpatientForm.action = `${inpatientBaseUrl}/${inpatient.id}`;
+                inpatientMethod.value = 'PUT';
+                document.getElementById('inpatient_patient_id').value = inpatient.patientId || '';
+                document.getElementById('inpatient_doctor_id').value = inpatient.doctorId || '';
+                document.getElementById('inpatient_room_id').value = inpatient.roomId || '';
+                document.getElementById('inpatient_status').value = inpatient.status || 'menunggu';
+                document.getElementById('inpatient_admission_date').value = inpatient.admissionDate || '';
+                document.getElementById('inpatient_discharge_date').value = inpatient.dischargeDate || '';
+            } else {
+                inpatientModalTitle.textContent = 'Tambah Rawat Inap';
+                inpatientModalBtn.textContent = 'Simpan Rawat Inap';
+                inpatientForm.action = "{{ route('admissions.store') }}";
+                inpatientMethod.value = '';
+                document.getElementById('inpatient_patient_id').value = '';
+                document.getElementById('inpatient_doctor_id').value = '';
+                document.getElementById('inpatient_room_id').value = '';
+                document.getElementById('inpatient_status').value = 'menunggu';
+                const now = new Date();
+                const pad = n => n.toString().padStart(2, '0');
+                document.getElementById('inpatient_admission_date').value = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+                document.getElementById('inpatient_discharge_date').value = '';
+                inpatientForm.reset();
+            }
+        };
+
+        const openInpatientModal  = () => { inpatientModal.style.display = 'flex'; document.body.style.overflow = 'hidden'; };
+        const closeInpatientModal = () => { inpatientModal.style.display = 'none'; document.body.style.overflow = ''; };
+
+        document.getElementById('openInpatientModalBtn')?.addEventListener('click', () => { setInpatientFormMode('create'); openInpatientModal(); });
+        document.getElementById('closeInpatientModalBtn')?.addEventListener('click', closeInpatientModal);
+        document.getElementById('cancelInpatientModalBtn')?.addEventListener('click', closeInpatientModal);
+        inpatientModal?.addEventListener('click', e => { if (e.target === inpatientModal) closeInpatientModal(); });
+
+        // ── Inpatient View Modal
+        const inpatientViewModal = document.getElementById('inpatientViewModal');
+        document.getElementById('closeInpatientViewModalBtn')?.addEventListener('click', () => { inpatientViewModal.style.display='none'; document.body.style.overflow=''; });
+        inpatientViewModal?.addEventListener('click', e => { if (e.target === inpatientViewModal) { inpatientViewModal.style.display='none'; document.body.style.overflow=''; } });
+
+        document.querySelectorAll('.view-inpatient').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.getElementById('view_inpatient_reg').textContent = this.dataset.reg || '-';
+                document.getElementById('view_inpatient_patient').textContent = this.dataset.patient || '-';
+                document.getElementById('view_inpatient_rm').textContent = this.dataset.rm || '-';
+                document.getElementById('view_inpatient_doctor').textContent = this.dataset.doctor || '-';
+                document.getElementById('view_inpatient_room').textContent = this.dataset.room || '-';
+                document.getElementById('view_inpatient_room_type').textContent = this.dataset.roomType || '-';
+                document.getElementById('view_inpatient_admission_date').textContent = this.dataset.admissionDate ? new Date(this.dataset.admissionDate).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'}) : '-';
+                document.getElementById('view_inpatient_discharge_date').textContent = this.dataset.dischargeDate ? new Date(this.dataset.dischargeDate).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'}) : '—';
+                const statusMap = { 'menunggu': 'Menunggu', 'dirawat': 'Dirawat', 'sedang dirawat': 'Dirawat', 'selesai': 'Selesai' };
+                document.getElementById('view_inpatient_status').textContent = statusMap[this.dataset.status] || this.dataset.status || '-';
+                inpatientViewModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        document.querySelectorAll('.edit-inpatient').forEach(btn => {
+            btn.addEventListener('click', function () {
+                setInpatientFormMode('edit', {
+                    id: this.dataset.id,
+                    patientId: this.dataset.patientId,
+                    doctorId: this.dataset.doctorId,
+                    roomId: this.dataset.roomId,
+                    admissionDate: this.dataset.admissionDate ? this.dataset.admissionDate.slice(0,16) : '',
+                    dischargeDate: this.dataset.dischargeDate ? this.dataset.dischargeDate.slice(0,16) : '',
+                    status: this.dataset.status,
+                });
+                openInpatientModal();
+            });
+        });
+
+        document.querySelectorAll('.delete-inpatient').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (!confirm('Hapus data rawat inap ini?')) return;
+                const f = document.createElement('form');
+                f.method = 'POST'; f.action = `${inpatientBaseUrl}/${this.dataset.id}`;
+                f.innerHTML = `<input type="hidden" name="_token" value="{{ csrf_token() }}"><input type="hidden" name="_method" value="DELETE">`;
+                document.body.appendChild(f); f.submit();
+            });
+        });
+
+        const filterInpatients = () => {
+            const q      = document.getElementById('inpatientSearch')?.value.trim().toLowerCase() || '';
+            const status = document.getElementById('inpatientStatusFilter')?.value.toLowerCase() || '';
+            const date   = document.getElementById('inpatientDateFilter')?.value || '';
+            document.querySelectorAll('#inpatientTableBody tr').forEach(row => {
+                const text = Array.from(row.cells).map(c => c.textContent.toLowerCase()).join(' ');
+                const rowStatus = row.dataset.status || '';
+                const rowDate = row.dataset.date || '';
+                const matchQ = !q || text.includes(q);
+                const matchS = !status || rowStatus.includes(status) || (status === 'dirawat' && rowStatus === 'sedang dirawat');
+                const matchD = !date || rowDate === date;
+                row.style.display = (matchQ && matchS && matchD) ? '' : 'none';
+            });
+        };
+        document.getElementById('inpatientSearchBtn')?.addEventListener('click', filterInpatients);
+        document.getElementById('inpatientSearch')?.addEventListener('keyup', e => { if(e.key==='Enter') filterInpatients(); });
+        document.getElementById('inpatientStatusFilter')?.addEventListener('change', filterInpatients);
+        document.getElementById('inpatientDateFilter')?.addEventListener('change', filterInpatients);
+
+        // ── Old data restore & error handling for inpatient
+        @if (old('form_type') === 'inpatient')
+            document.querySelector('[data-section="inpatient"]').click();
+            setInpatientFormMode('create');
+            openInpatientModal();
+        @endif
+
+        // ── Calendar / Schedule
+        const scheduleData = @json($scheduleAdmissions);
+        let currentCalendarDate = new Date();
+        let selectedCalendarDate = null;
+
+        const monthNames = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+        function renderCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            document.getElementById('calendarMonthYear').textContent = `${monthNames[month]} ${year}`;
+
+            const grid = document.getElementById('calendarGrid');
+            // Keep headers
+            grid.innerHTML = `
+                <div class="calendar-day-header">Min</div>
+                <div class="calendar-day-header">Sen</div>
+                <div class="calendar-day-header">Sel</div>
+                <div class="calendar-day-header">Rab</div>
+                <div class="calendar-day-header">Kam</div>
+                <div class="calendar-day-header">Jum</div>
+                <div class="calendar-day-header">Sab</div>
+            `;
+
+            // Previous month days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const dayNum = daysInPrevMonth - i;
+                const cell = document.createElement('div');
+                cell.className = 'calendar-day other-month';
+                cell.innerHTML = `<span class="calendar-day-number">${dayNum}</span>`;
+                grid.appendChild(cell);
+            }
+
+            // Current month days
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+                const isSelected = selectedCalendarDate === dateStr;
+
+                const cell = document.createElement('div');
+                cell.className = 'calendar-day' + (isToday ? ' today' : '') + (isSelected ? ' selected' : '');
+                cell.dataset.date = dateStr;
+
+                let dotsHtml = '';
+                let countHtml = '';
+                const admissions = scheduleData[dateStr];
+                if (admissions && admissions.length > 0) {
+                    const outpatientCount = admissions.filter(a => a.admission_type === 'Rawat Jalan').length;
+                    const inpatientCount = admissions.filter(a => a.admission_type === 'Rawat Inap').length;
+                    const dots = [];
+                    if (outpatientCount > 0) dots.push('<span class="calendar-dot outpatient"></span>');
+                    if (inpatientCount > 0) dots.push('<span class="calendar-dot inpatient"></span>');
+                    dotsHtml = `<div class="calendar-day-dots">${dots.join('')}</div>`;
+                    if (admissions.length > 2) {
+                        countHtml = `<span class="calendar-day-count">+${admissions.length}</span>`;
+                    }
+                }
+
+                cell.innerHTML = `<span class="calendar-day-number">${day}</span>${dotsHtml}${countHtml}`;
+                cell.addEventListener('click', () => selectCalendarDate(dateStr));
+                grid.appendChild(cell);
+            }
+
+            // Next month days to fill grid
+            const totalCells = firstDay + daysInMonth;
+            const remaining = (7 - (totalCells % 7)) % 7;
+            for (let day = 1; day <= remaining; day++) {
+                const cell = document.createElement('div');
+                cell.className = 'calendar-day other-month';
+                cell.innerHTML = `<span class="calendar-day-number">${day}</span>`;
+                grid.appendChild(cell);
+            }
+        }
+
+        function selectCalendarDate(dateStr) {
+            selectedCalendarDate = dateStr;
+            renderCalendar(currentCalendarDate);
+
+            const [y, m, d] = dateStr.split('-');
+            const dateObj = new Date(y, m - 1, d);
+            const dayNames = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+            const monthNamesShort = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+            document.getElementById('selectedDateLabel').textContent = `${dayNames[dateObj.getDay()]}, ${d} ${monthNamesShort[m-1]} ${y}`;
+
+            const admissions = scheduleData[dateStr] || [];
+            const list = document.getElementById('selectedDateList');
+
+            if (admissions.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state" style="padding:30px 10px;">
+                        <div class="empty-state-icon" style="width:48px; height:48px; font-size:20px;">📅</div>
+                        <h4 style="font-size:14px;">Tidak Ada Pasien</h4>
+                        <p style="font-size:12px;">Tidak ada pasien masuk pada tanggal ini.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = admissions.map(a => {
+                const isOutpatient = a.admission_type === 'Rawat Jalan';
+                const typeClass = isOutpatient ? 'outpatient' : 'inpatient';
+                const typeLabel = isOutpatient ? 'Rawat Jalan' : 'Rawat Inap';
+                const patientName = a.patient?.name || 'Pasien tidak ditemukan';
+                const doctorName = a.doctor?.name || '-';
+                const time = a.admission_date ? new Date(a.admission_date).toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'}) : '-';
+                const initial = patientName.charAt(0).toUpperCase();
+                const avatarBg = isOutpatient ? '#FEF3C7' : '#F5F3FF';
+                const avatarColor = isOutpatient ? '#92400E' : '#6D28D9';
+
+                return `
+                    <div class="schedule-item">
+                        <div class="schedule-item-avatar" style="background:${avatarBg}; color:${avatarColor};">${initial}</div>
+                        <div class="schedule-item-info">
+                            <div class="schedule-item-name">${patientName}</div>
+                            <div class="schedule-item-meta">${doctorName} &bull; ${time}</div>
+                        </div>
+                        <span class="schedule-item-type ${typeClass}">${typeLabel}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        document.getElementById('prevMonthBtn')?.addEventListener('click', () => {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+            renderCalendar(currentCalendarDate);
+        });
+
+        document.getElementById('nextMonthBtn')?.addEventListener('click', () => {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+            renderCalendar(currentCalendarDate);
+        });
+
+        document.getElementById('todayBtn')?.addEventListener('click', () => {
+            currentCalendarDate = new Date();
+            const todayStr = `${currentCalendarDate.getFullYear()}-${String(currentCalendarDate.getMonth()+1).padStart(2,'0')}-${String(currentCalendarDate.getDate()).padStart(2,'0')}`;
+            selectCalendarDate(todayStr);
+        });
+
+        // Initial render
+        renderCalendar(currentCalendarDate);
 
         // ── Logout
         document.getElementById('logoutBtn').addEventListener('click', () => {

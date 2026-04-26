@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\AdmissionController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorController;
@@ -56,9 +57,6 @@ Route::middleware(['auth'])->group(function (): void {
 
     /**
      * GET /dashboard  →  Hospital system main dashboard.
-     *
-     * This is the landing page after a successful login.
-     * Swap DashboardController for your actual controller.
      */
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
@@ -108,16 +106,14 @@ Route::middleware(['auth'])->group(function (): void {
     Route::delete('/medicines/{medicine}', [MedicineController::class, 'destroy'])
         ->name('medicines.destroy');
 
-    /*
-    |------------------------------------------------------------------
-    | Extend your authenticated routes here, for example:
-    |------------------------------------------------------------------
-    |
-    | Route::resource('patients',  PatientController::class);
-    | Route::resource('doctors',   DoctorController::class);
-    | Route::resource('schedules', ScheduleController::class);
-    |
-    */
+    Route::post('/admissions', [AdmissionController::class, 'store'])
+        ->name('admissions.store');
+
+    Route::put('/admissions/{admission}', [AdmissionController::class, 'update'])
+        ->name('admissions.update');
+
+    Route::delete('/admissions/{admission}', [AdmissionController::class, 'destroy'])
+        ->name('admissions.destroy');
 });
 
 

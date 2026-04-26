@@ -1,10 +1,11 @@
-# TODO: Implementasi Section Obat (Medicine)
+# TODO — Rawat Inap Section Implementation
 
-## Progress
-- [x] 1. Update `app/Models/Medicine.php` — Add `$fillable`
-- [x] 2. Create `app/Http/Controllers/MedicineController.php` — CRUD controller
-- [x] 3. Update `routes/web.php` — Add medicine routes
-- [x] 4. Update `app/Http/Controllers/DashboardController.php` — Pass medicines data
-- [x] 5. Update `resources/views/dashboard.blade.php` — Sidebar, section, modals, JS
-- [x] 6. Update `database/seeders/DatabaseSeeder.php` — Sample data (optional)
-- [x] 7. Run migration & test
+- [x] Step 1: Create migration `add_room_id_to_admissions_table.php`
+- [x] Step 2: Update `app/Models/Admission.php` (add room_id fillable + room() relationship)
+- [x] Step 3: Update `app/Http/Controllers/AdmissionController.php` (validation, unique reg number, room_id)
+- [x] Step 4: Update `app/Http/Controllers/DashboardController.php` (inpatient queries with room, summary counts, schedule data)
+- [x] Step 5: Update `resources/views/dashboard.blade.php` (sidebar, section, table, modals, JS, calendar)
+- [x] Step 6: Run `php artisan migrate`
+- [x] Step 7: Test & verify
+- [x] Bonus: Jadwal/Kalender section implemented
+

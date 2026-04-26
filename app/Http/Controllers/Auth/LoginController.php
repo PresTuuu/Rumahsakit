@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use App\Models\Patient;
+use App\Models\Doctor;
+use App\Models\Admission;
+use App\Models\Room;
 
 /**
  * LoginController
@@ -29,7 +33,25 @@ final class LoginController extends BaseController
             return redirect()->intended(route('dashboard'));
         }
 
-        return view('auth.login');
+        try {
+            $stats = [
+                'total_patients'    => Patient::count(),
+                'active_doctors'    => Doctor::where('is_active', true)->count(),
+                'active_admissions' => Admission::where('status', 'active')->count(),
+                'available_beds'    => Room::sum('available') ?? 0,
+                'total_beds'        => Room::sum('capacity') ?? 0,
+            ];
+        } catch (\Exception $e) {
+            $stats = [
+                'total_patients'    => 0,
+                'active_doctors'    => 0,
+                'active_admissions' => 0,
+                'available_beds'    => 0,
+                'total_beds'        => 0,
+            ];
+        }
+
+        return view('auth.login', compact('stats'));
     }
 
     /**

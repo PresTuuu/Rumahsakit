@@ -269,8 +269,8 @@
         .stat-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 28px;
+            gap: 10px;
+            margin-top: 20px;
         }
 
         .stat-card {
@@ -812,23 +812,31 @@
                 <div class="lp-middle" style="position:relative;z-index:2;">
                     <div class="status-badge">
                         <div class="status-dot"></div>
-                        All systems operational
+                        Sistem Berjalan Normal
                     </div>
                     <div class="stat-grid">
                         <div class="stat-card">
-                            <div class="stat-value">2,400+</div>
-                            <div class="stat-label">Active Patients</div>
+                            <div class="stat-value">{{ number_format($stats['total_patients']) }}</div>
+                            <div class="stat-label">Total Pasien</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">98.7%</div>
-                            <div class="stat-label">Uptime SLA</div>
+                            <div class="stat-value">{{ $stats['active_doctors'] }}</div>
+                            <div class="stat-label">Dokter Aktif</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">{{ $stats['active_admissions'] }}</div>
+                            <div class="stat-label">Rawat Aktif</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">{{ $stats['available_beds'] }}<span style="font-size:0.9rem;opacity:0.6;">/{{ $stats['total_beds'] }}</span></div>
+                            <div class="stat-label">Tempat Tidur Tersedia</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Bottom: Version -->
                 <div class="lp-bottom left-footer" style="position:relative;z-index:2;">
-                    MediCore HMS &bull; v3.2.1 &bull; &copy; {{ date('Y') }}
+                    MediCore HMS &bull; v3.2.1 &bull; &copy; {{ date('Y') }} &bull; Data diperbarui {{ now()->format('H:i') }}
                 </div>
             </div>
             <!-- /LEFT PANEL -->
