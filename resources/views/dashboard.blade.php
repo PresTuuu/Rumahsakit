@@ -1118,7 +1118,7 @@
         </div>
 
         <nav>
-            <div class="nav-section-label">Menu</div>
+            <div class="nav-section-label">Utama</div>
 
             <div class="sidebar-item active" data-section="dashboard">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -1126,15 +1126,11 @@
                 <div class="nav-dot"></div>
             </div>
 
+            <div class="nav-section-label" style="margin-top:8px;">Master Data</div>
+
             <div class="sidebar-item" data-section="patients">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 <span>Pasien</span>
-                <div class="nav-dot"></div>
-            </div>
-
-            <div class="sidebar-item" data-section="rooms">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 7h18"/><path d="M6 7v14h12V7"/><path d="M9 7V4h6v3"/><path d="M6 13h12"/><path d="M6 17h12"/></svg>
-                <span>Ruangan</span>
                 <div class="nav-dot"></div>
             </div>
 
@@ -1150,17 +1146,19 @@
                 <div class="nav-dot"></div>
             </div>
 
+            <div class="sidebar-item" data-section="rooms">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 7h18"/><path d="M6 7v14h12V7"/><path d="M9 7V4h6v3"/><path d="M6 13h12"/><path d="M6 17h12"/></svg>
+                <span>Ruangan</span>
+                <div class="nav-dot"></div>
+            </div>
+
             <div class="sidebar-item" data-section="medicines">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M2 12H4m16 0h2M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41"/><circle cx="12" cy="12" r="3"/></svg>
                 <span>Obat</span>
                 <div class="nav-dot"></div>
             </div>
 
-            <div class="sidebar-item" data-section="farmasi">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8.5 21H4a1 1 0 0 1-1-1v-6.5a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1Z"/><path d="M14.5 21H10a1 1 0 0 1-1-1v-6.5a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1Z"/><path d="M20.5 21H16a1 1 0 0 1-1-1v-6.5a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1Z"/><path d="M12 6.5v-4"/><path d="M12 6.5a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v0a3 3 0 0 1-3 3h-2a3 3 0 0 1-3-3Z"/><path d="M7 9.5a3 3 0 0 0-3-3H2a3 3 0 0 0-3 3v0a3 3 0 0 0 3 3h2a3 3 0 0 0 3-3Z" transform="translate(7, -3)"/></svg>
-                <span>Farmasi</span>
-                <div class="nav-dot"></div>
-            </div>
+            <div class="nav-section-label" style="margin-top:8px;">Pelayanan</div>
 
             <div class="sidebar-item" data-section="outpatient">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
@@ -1174,21 +1172,29 @@
                 <div class="nav-dot"></div>
             </div>
 
-            <div class="sidebar-item" data-section="schedule">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                <span>Jadwal</span>
-                <div class="nav-dot"></div>
-            </div>
-
             <div class="sidebar-item" data-section="medical-records">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                 <span>Rekam Medis</span>
                 <div class="nav-dot"></div>
             </div>
 
+            <div class="sidebar-item" data-section="farmasi">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8.5 21H4a1 1 0 0 1-1-1v-6.5a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1Z"/><path d="M14.5 21H10a1 1 0 0 1-1-1v-6.5a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1Z"/><path d="M20.5 21H16a1 1 0 0 1-1-1v-6.5a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1Z"/><path d="M12 6.5v-4"/><path d="M12 6.5a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v0a3 3 0 0 1-3 3h-2a3 3 0 0 1-3-3Z"/><path d="M7 9.5a3 3 0 0 0-3-3H2a3 3 0 0 0-3 3v0a3 3 0 0 0 3 3h2a3 3 0 0 0 3-3Z" transform="translate(7, -3)"/></svg>
+                <span>Farmasi</span>
+                <div class="nav-dot"></div>
+            </div>
+
+            <div class="nav-section-label" style="margin-top:8px;">Penunjang</div>
+
             <div class="sidebar-item" data-section="keuangan">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h.01M12 12h.01M8 12h.01"/></svg>
                 <span>Keuangan</span>
+                <div class="nav-dot"></div>
+            </div>
+
+            <div class="sidebar-item" data-section="schedule">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                <span>Jadwal</span>
                 <div class="nav-dot"></div>
             </div>
 
