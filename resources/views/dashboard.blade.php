@@ -1100,6 +1100,456 @@
 
         .schedule-item-type.outpatient { background: #FEF3C7; color: #92400E; }
         .schedule-item-type.inpatient { background: #F5F3FF; color: #6D28D9; }
+
+        /* ═══════════════════════════════════════════
+           DASHBOARD PREMIUM REDESIGN
+        ═══════════════════════════════════════════ */
+
+        /* ─── HERO WELCOME BANNER ─────────────────── */
+        .dash-hero {
+            position: relative;
+            background: linear-gradient(135deg, #0F2557 0%, #1A3A8F 40%, #2563EB 100%);
+            border-radius: 24px;
+            padding: 32px 36px;
+            margin-bottom: 28px;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: heroSlideIn 0.6s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        @keyframes heroSlideIn {
+            from { opacity: 0; transform: translateY(-20px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .dash-hero::before {
+            content: '';
+            position: absolute;
+            top: -100px; right: -80px;
+            width: 320px; height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(56,189,248,0.25) 0%, transparent 70%);
+            pointer-events: none;
+            animation: heroOrb1 8s ease-in-out infinite;
+        }
+
+        .dash-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; left: 30%;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%);
+            pointer-events: none;
+            animation: heroOrb2 10s ease-in-out infinite;
+        }
+
+        @keyframes heroOrb1 {
+            0%,100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(-30px,20px) scale(1.1); }
+        }
+        @keyframes heroOrb2 {
+            0%,100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(20px,-15px) scale(1.15); }
+        }
+
+        .dash-hero-left { position: relative; z-index: 2; }
+
+        .dash-hero-tag {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(8px);
+            border-radius: 20px; padding: 5px 14px;
+            font-size: 11px; font-weight: 600;
+            color: #38BDF8; letter-spacing: 0.06em;
+            margin-bottom: 14px;
+        }
+
+        .dash-hero-tag .pulse-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: #10B981;
+            box-shadow: 0 0 8px rgba(16,185,129,0.6);
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.4); }
+        }
+
+        .dash-hero h2 {
+            font-size: 26px; font-weight: 700; color: #fff;
+            letter-spacing: -0.5px; line-height: 1.25;
+            margin-bottom: 6px;
+        }
+
+        .dash-hero h2 span { color: #38BDF8; }
+
+        .dash-hero-sub {
+            font-size: 13.5px; color: rgba(255,255,255,0.5);
+            line-height: 1.5;
+        }
+
+        .dash-hero-right {
+            position: relative; z-index: 2;
+            display: flex; flex-direction: column;
+            align-items: flex-end; gap: 10px;
+        }
+
+        .dash-hero-clock {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            border-radius: 16px; padding: 14px 22px;
+            text-align: right;
+        }
+
+        .dash-hero-clock .clock-time {
+            font-size: 32px; font-weight: 700; color: #fff;
+            font-family: 'Space Mono', monospace;
+            letter-spacing: 1px;
+            line-height: 1.1;
+        }
+
+        .dash-hero-clock .clock-date {
+            font-size: 12px; color: rgba(255,255,255,0.5);
+            margin-top: 4px; font-weight: 500;
+        }
+
+        .dash-hero-actions {
+            display: flex; gap: 8px;
+        }
+
+        .dash-hero-btn {
+            padding: 9px 18px; border-radius: 12px;
+            font-size: 12.5px; font-weight: 600;
+            cursor: pointer; border: none;
+            font-family: 'Sora', sans-serif;
+            display: inline-flex; align-items: center; gap: 6px;
+            transition: all 0.22s ease;
+        }
+
+        .dash-hero-btn.primary {
+            background: #fff; color: var(--blue-deep);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+        .dash-hero-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        }
+
+        .dash-hero-btn.ghost {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .dash-hero-btn.ghost:hover {
+            background: rgba(255,255,255,0.18);
+        }
+
+        /* ─── STAT CARDS PREMIUM ──────────────────── */
+        .dash-stats-row {
+            display: grid; gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .dash-stats-row.quad { grid-template-columns: repeat(4, 1fr); }
+        .dash-stats-row.triple { grid-template-columns: repeat(3, 1fr); }
+        .dash-stats-row.dual { grid-template-columns: repeat(2, 1fr); }
+
+        .dash-stat {
+            background: #fff;
+            border: 1px solid rgba(15,37,87,0.07);
+            border-radius: 20px;
+            padding: 22px 24px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+            opacity: 0;
+            animation: dashCardIn 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+
+        .dash-stat:nth-child(1) { animation-delay: 0.05s; }
+        .dash-stat:nth-child(2) { animation-delay: 0.1s; }
+        .dash-stat:nth-child(3) { animation-delay: 0.15s; }
+        .dash-stat:nth-child(4) { animation-delay: 0.2s; }
+
+        @keyframes dashCardIn {
+            from { opacity: 0; transform: translateY(24px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .dash-stat:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(15,37,87,0.1);
+            border-color: rgba(37,99,235,0.15);
+        }
+
+        .dash-stat::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--stat-accent, var(--blue-bright));
+            border-radius: 20px 20px 0 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .dash-stat:hover::after { opacity: 1; }
+
+        .dash-stat .shimmer-line {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--stat-accent, var(--blue-bright)), transparent);
+            background-size: 200% 100%;
+            opacity: 0;
+            transition: opacity 0.3s;
+            animation: shimmerSlide 2s linear infinite;
+        }
+
+        .dash-stat:hover .shimmer-line { opacity: 0.7; }
+
+        @keyframes shimmerSlide {
+            0% { background-position: -100% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .dash-stat-top {
+            display: flex; align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .dash-stat-icon {
+            width: 48px; height: 48px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .dash-stat-icon::after {
+            content: '';
+            position: absolute; inset: -3px;
+            border-radius: 17px;
+            background: inherit; opacity: 0.2;
+            filter: blur(8px);
+            z-index: -1;
+        }
+
+        .dash-stat-badge {
+            font-size: 10.5px; font-weight: 700;
+            padding: 3px 10px; border-radius: 20px;
+            letter-spacing: 0.04em;
+        }
+
+        .dash-stat-label {
+            font-size: 11.5px; font-weight: 600;
+            letter-spacing: 0.06em; text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .dash-stat-value {
+            font-size: 32px; font-weight: 700;
+            color: var(--blue-deep);
+            font-family: 'Space Mono', monospace;
+            line-height: 1.15;
+            margin-bottom: 4px;
+        }
+
+        .dash-stat-sub {
+            font-size: 12px; color: var(--text-muted);
+            display: flex; align-items: center; gap: 4px;
+        }
+
+        .dash-stat-progress {
+            height: 4px; border-radius: 4px;
+            background: #F1F5F9;
+            margin-top: 14px;
+            overflow: hidden;
+        }
+
+        .dash-stat-progress-fill {
+            height: 100%; border-radius: 4px;
+            background: var(--stat-accent, var(--blue-bright));
+            width: 0%;
+            transition: width 1.4s cubic-bezier(0.4,0,0.2,1) 0.5s;
+        }
+
+        /* ─── HIGHLIGHT CARDS (larger) ────────────── */
+        .dash-stat.highlight {
+            padding: 26px 28px;
+            background: linear-gradient(135deg, #fff 0%, #F8FBFF 100%);
+        }
+
+        .dash-stat.highlight .dash-stat-value {
+            font-size: 36px;
+        }
+
+        /* ─── FINANCIAL CARDS ─────────────────────── */
+        .dash-stat.financial {
+            border-left: 3px solid var(--stat-accent, var(--blue-bright));
+        }
+
+        .dash-stat.financial .dash-stat-value {
+            font-size: 22px;
+            font-family: 'Space Mono', monospace;
+            padding-top: 2px;
+        }
+
+        /* ─── CHART CARD PREMIUM ──────────────────── */
+        .dash-chart-card {
+            background: #fff;
+            border: 1px solid rgba(15,37,87,0.07);
+            border-radius: 20px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.25s ease;
+        }
+
+        .dash-chart-card:hover {
+            box-shadow: 0 12px 36px rgba(15,37,87,0.07);
+        }
+
+        .dash-chart-header {
+            display: flex; justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .dash-chart-title {
+            font-size: 15px; font-weight: 700;
+            color: var(--blue-deep); letter-spacing: -0.2px;
+        }
+
+        .dash-chart-subtitle {
+            font-size: 11.5px; color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .dash-chart-legend {
+            display: flex; align-items: center; gap: 14px;
+        }
+
+        .dash-chart-legend-item {
+            display: flex; align-items: center; gap: 5px;
+            font-size: 11px; font-weight: 600; color: var(--text-muted);
+        }
+
+        .dash-chart-legend-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+        }
+
+        /* ─── TABLE CARD PREMIUM ──────────────────── */
+        .dash-table-card {
+            background: #fff;
+            border: 1px solid rgba(15,37,87,0.07);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.25s ease;
+        }
+
+        .dash-table-card:hover {
+            box-shadow: 0 12px 36px rgba(15,37,87,0.07);
+        }
+
+        .dash-table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(15,37,87,0.06);
+            display: flex; justify-content: space-between;
+            align-items: center;
+        }
+
+        .dash-table-title-group {
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .dash-table-icon {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+        }
+
+        .dash-table-title {
+            font-size: 15px; font-weight: 700;
+            color: var(--blue-deep);
+        }
+
+        .dash-table-count {
+            font-size: 10.5px; font-weight: 700;
+            padding: 2px 9px; border-radius: 20px;
+            background: #EFF6FF; color: var(--blue-bright);
+        }
+
+        .dash-view-all {
+            font-size: 12px; font-weight: 600;
+            color: var(--blue-bright); text-decoration: none;
+            padding: 6px 14px; border-radius: 8px;
+            background: #EFF6FF;
+            transition: all 0.2s;
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+
+        .dash-view-all:hover {
+            background: var(--blue-bright); color: #fff;
+        }
+
+        /* Badge glow effect */
+        .badge-glow {
+            position: relative;
+        }
+
+        .badge-glow::after {
+            content: '';
+            position: absolute; inset: -2px;
+            border-radius: inherit;
+            background: inherit; opacity: 0.3;
+            filter: blur(6px);
+            z-index: -1;
+        }
+
+        /* ─── SECTION LABEL ───────────────────────── */
+        .dash-section-label {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 16px;
+            margin-top: 8px;
+        }
+
+        .dash-section-label h3 {
+            font-size: 14px; font-weight: 700;
+            color: var(--blue-deep); letter-spacing: -0.2px;
+        }
+
+        .dash-section-label .line {
+            flex: 1; height: 1px;
+            background: linear-gradient(90deg, var(--border), transparent);
+        }
+
+        /* ─── RESPONSIVE DASHBOARD ────────────────── */
+        @media (max-width: 1100px) {
+            .dash-stats-row.quad { grid-template-columns: repeat(2, 1fr); }
+            .dash-stats-row.triple { grid-template-columns: repeat(2, 1fr); }
+            .dash-hero { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .dash-hero-right { align-items: flex-start; }
+        }
+
+        @media (max-width: 700px) {
+            .dash-stats-row.quad,
+            .dash-stats-row.triple,
+            .dash-stats-row.dual { grid-template-columns: 1fr; }
+            .dash-hero { padding: 24px; }
+            .dash-hero h2 { font-size: 20px; }
+            .dash-hero-actions { flex-direction: column; }
+        }
     </style>
 </head>
 
@@ -1292,115 +1742,206 @@
 
             <!-- ════════════════════ DASHBOARD SECTION ════════════════════ -->
             <div id="dashboardSection">
-                <div class="date-banner">
-                    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                    <span id="liveDateLabel"></span>
+
+                <!-- ─── HERO WELCOME BANNER ─────────────────── -->
+                <div class="dash-hero">
+                    <div class="dash-hero-left">
+                        <div class="dash-hero-tag">
+                            <div class="pulse-dot"></div>
+                            Sistem Aktif — Semua Modul Berjalan
+                        </div>
+                        <h2>Selamat Datang, <span>{{ Auth::user()->name }}</span> 👋</h2>
+                        <div class="dash-hero-sub">Berikut ringkasan operasional rumah sakit hari ini. Pantau semua aktivitas dalam satu tampilan.</div>
+                    </div>
+                    <div class="dash-hero-right">
+                        <div class="dash-hero-clock">
+                            <div class="clock-time" id="heroClockTime">--:--:--</div>
+                            <div class="clock-date" id="heroClockDate"><span id="liveDateLabel"></span></div>
+                        </div>
+                        <div class="dash-hero-actions">
+                            <button class="dash-hero-btn primary" onclick="document.querySelector('[data-section=\'patients\']')?.click(); setTimeout(()=>document.getElementById('openPatientModalBtn')?.click(),300)">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Pasien Baru
+                            </button>
+                            <button class="dash-hero-btn ghost" onclick="document.querySelector('[data-section=\'outpatient\']')?.click()">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                Rawat Jalan
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 @if(session('status'))
-                    <div class="card-panel reveal" style="margin-top:16px; border-left:4px solid var(--accent);">
+                    <div class="card-panel reveal" style="margin-bottom:20px; border-left:4px solid var(--accent);">
                         <div style="font-size:14px;color:var(--blue-deep);">{{ session('status') }}</div>
                     </div>
                 @endif
 
-                <div class="stats-grid">
-                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'patients\']')?.click()">
-                        <div class="stat-icon" style="background:#EFF6FF;">👥</div>
-                        <div class="stat-label">Total Pasien</div>
-                        <div class="stat-value" data-count="{{ $totalPatients }}">0</div>
-                        <div class="stat-sub">Pasien terdaftar</div>
-                        <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--blue-bright);width:78%"></div></div>
-                        <div class="pulse-line"></div>
+                <!-- ─── ROW 1: PRIMARY STATS (4 columns) ─── -->
+                <div class="dash-section-label"><h3>📊 Ringkasan Utama</h3><div class="line"></div></div>
+                <div class="dash-stats-row quad">
+                    <div class="dash-stat" style="--stat-accent:#2563EB;" onclick="document.querySelector('[data-section=\'patients\']')?.click()">
+                        <div class="dash-stat-top">
+                            <div class="dash-stat-icon" style="background:linear-gradient(135deg,#DBEAFE,#BFDBFE);">👥</div>
+                            <span class="dash-stat-badge" style="background:#EFF6FF;color:#2563EB;">Terdaftar</span>
+                        </div>
+                        <div class="dash-stat-label">Total Pasien</div>
+                        <div class="dash-stat-value" data-count="{{ $totalPatients }}">0</div>
+                        <div class="dash-stat-sub">Pasien aktif di sistem</div>
+                        <div class="dash-stat-progress"><div class="dash-stat-progress-fill" style="width:78%"></div></div>
+                        <div class="shimmer-line"></div>
                     </div>
-                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'rooms\']')?.click()">
-                        <div class="stat-icon" style="background:#FEF3C7;">🏥</div>
-                        <div class="stat-label">Total Ruangan</div>
-                        <div class="stat-value" data-count="{{ $totalRooms ?? 0 }}">0</div>
-                        <div class="stat-sub">Ruangan tersedia</div>
-                        <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--accent-amber);width:72%"></div></div>
-                        <div class="pulse-line"></div>
+                    <div class="dash-stat" style="--stat-accent:#F59E0B;" onclick="document.querySelector('[data-section=\'rooms\']')?.click()">
+                        <div class="dash-stat-top">
+                            <div class="dash-stat-icon" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);">🏥</div>
+                            <span class="dash-stat-badge" style="background:#FFFBEB;color:#B45309;">{{ $availableBeds }} tersedia</span>
+                        </div>
+                        <div class="dash-stat-label">Total Ruangan</div>
+                        <div class="dash-stat-value" data-count="{{ $totalRooms ?? 0 }}">0</div>
+                        <div class="dash-stat-sub">Ruangan terdaftar</div>
+                        <div class="dash-stat-progress"><div class="dash-stat-progress-fill" style="width:72%;background:#F59E0B;"></div></div>
+                        <div class="shimmer-line"></div>
                     </div>
-                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'doctors\']')?.click()">
-                        <div class="stat-icon" style="background:#ECFDF5;">⚕️</div>
-                        <div class="stat-label">Dokter Aktif</div>
-                        <div class="stat-value" data-count="{{ $activeDoctors }}">0</div>
-                        <div class="stat-sub">Dokter praktik</div>
-                        <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--accent-green);width:92%"></div></div>
-                        <div class="pulse-line"></div>
+                    <div class="dash-stat" style="--stat-accent:#10B981;" onclick="document.querySelector('[data-section=\'doctors\']')?.click()">
+                        <div class="dash-stat-top">
+                            <div class="dash-stat-icon" style="background:linear-gradient(135deg,#D1FAE5,#A7F3D0);">⚕️</div>
+                            <span class="dash-stat-badge" style="background:#ECFDF5;color:#047857;">Aktif</span>
+                        </div>
+                        <div class="dash-stat-label">Dokter Aktif</div>
+                        <div class="dash-stat-value" data-count="{{ $activeDoctors }}">0</div>
+                        <div class="dash-stat-sub">Dokter praktik hari ini</div>
+                        <div class="dash-stat-progress"><div class="dash-stat-progress-fill" style="width:92%;background:#10B981;"></div></div>
+                        <div class="shimmer-line"></div>
                     </div>
-                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'outpatient\']')?.click()">
-                        <div class="stat-icon" style="background:#FFFBEB;">📋</div>
-                        <div class="stat-label">Rawat Jalan Hari Ini</div>
-                        <div class="stat-value" data-count="{{ $outpatientToday }}">0</div>
-                        <div class="stat-sub">Kunjungan hari ini</div>
-                        <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--accent-amber);width:55%"></div></div>
-                        <div class="pulse-line"></div>
-                    </div>
-                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'inpatient\']')?.click()">
-                        <div class="stat-icon" style="background:#F5F3FF;">🏥</div>
-                        <div class="stat-label">Rawat Inap</div>
-                        <div class="stat-value" data-count="{{ $inpatientTotal }}">0</div>
-                        <div class="stat-sub">{{ $usedBeds }} / {{ $totalBeds }} bed terpakai</div>
-                        <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--accent-purple);width:{{ $totalBeds > 0 ? round(($usedBeds / $totalBeds) * 100) : 0 }}%"></div></div>
-                        <div class="pulse-line"></div>
-                    </div>
-                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'farmasi\']')?.click()">
-                        <div class="stat-icon" style="background:#FEF2F2;">⚠️</div>
-                        <div class="stat-label">Stok Obat Rendah</div>
-                        <div class="stat-value" style="color:var(--accent-red);" data-count="{{ $lowStockMedicines }}">0</div>
-                        <div class="stat-sub" style="color:var(--accent-red);">Perlu restock segera</div>
-                        <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--accent-red);width:30%"></div></div>
-                        <div class="pulse-line"></div>
-                    </div>
-                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'keuangan\']')?.click()">
-                        <div class="stat-icon" style="background:#FFF7ED;">📄</div>
-                        <div class="stat-label">Tagihan Pending</div>
-                        <div class="stat-value" style="color:#EA580C;" data-count="{{ $pendingInvoices }}">0</div>
-                        <div class="stat-sub">Belum dibayar</div>
-                        <div class="stat-bar"><div class="stat-bar-fill" style="background:#F97316;width:45%"></div></div>
-                        <div class="pulse-line"></div>
-                    </div>
-                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'keuangan\']')?.click()">
-                        <div class="stat-icon" style="background:#F0FDF4;">💰</div>
-                        <div class="stat-label">Pendapatan Hari Ini</div>
-                        <div class="stat-value" style="font-size:20px;padding-top:2px;">Rp {{ number_format($todayRevenue, 0, ',', '.') }}</div>
-                        <div class="stat-sub">Dari pembayaran</div>
-                        <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--accent-green);width:60%"></div></div>
-                        <div class="pulse-line"></div>
-                    </div>
-                    <div class="stat-card hover-effect" onclick="document.querySelector('[data-section=\'keuangan\']')?.click()">
-                        <div class="stat-icon" style="background:#EEF2FF;">📊</div>
-                        <div class="stat-label">Pendapatan Bulan Ini</div>
-                        <div class="stat-value" style="font-size:20px;padding-top:2px;">Rp {{ number_format($monthRevenue, 0, ',', '.') }}</div>
-                        <div class="stat-sub">Total bulan berjalan</div>
-                        <div class="stat-bar"><div class="stat-bar-fill" style="background:var(--accent-purple);width:72%"></div></div>
-                        <div class="pulse-line"></div>
+                    <div class="dash-stat" style="--stat-accent:#F59E0B;" onclick="document.querySelector('[data-section=\'outpatient\']')?.click()">
+                        <div class="dash-stat-top">
+                            <div class="dash-stat-icon" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);">📋</div>
+                            <span class="dash-stat-badge" style="background:#FFFBEB;color:#92400E;">Hari Ini</span>
+                        </div>
+                        <div class="dash-stat-label">Rawat Jalan</div>
+                        <div class="dash-stat-value" data-count="{{ $outpatientToday }}">0</div>
+                        <div class="dash-stat-sub">Kunjungan hari ini</div>
+                        <div class="dash-stat-progress"><div class="dash-stat-progress-fill" style="width:55%;background:#F59E0B;"></div></div>
+                        <div class="shimmer-line"></div>
                     </div>
                 </div>
 
-                <div class="section-divider reveal"></div>
+                <!-- ─── ROW 2: HIGHLIGHT CARDS (2 columns) ─── -->
+                <div class="dash-stats-row dual">
+                    <div class="dash-stat highlight" style="--stat-accent:#8B5CF6;" onclick="document.querySelector('[data-section=\'inpatient\']')?.click()">
+                        <div class="dash-stat-top">
+                            <div class="dash-stat-icon" style="background:linear-gradient(135deg,#EDE9FE,#DDD6FE);">🛏️</div>
+                            <span class="dash-stat-badge" style="background:#F5F3FF;color:#6D28D9;">{{ $usedBeds }}/{{ $totalBeds }} bed</span>
+                        </div>
+                        <div class="dash-stat-label">Rawat Inap Aktif</div>
+                        <div class="dash-stat-value" data-count="{{ $inpatientTotal }}">0</div>
+                        <div class="dash-stat-sub">Pasien sedang dirawat</div>
+                        <div class="dash-stat-progress"><div class="dash-stat-progress-fill" style="width:{{ $totalBeds > 0 ? round(($usedBeds / $totalBeds) * 100) : 0 }}%;background:#8B5CF6;"></div></div>
+                        <div class="shimmer-line"></div>
+                    </div>
+                    <div class="dash-stat highlight" style="--stat-accent:#EF4444;" onclick="document.querySelector('[data-section=\'farmasi\']')?.click()">
+                        <div class="dash-stat-top">
+                            <div class="dash-stat-icon" style="background:linear-gradient(135deg,#FEE2E2,#FECACA);">⚠️</div>
+                            <span class="dash-stat-badge" style="background:#FEF2F2;color:#B91C1C;">Perhatian</span>
+                        </div>
+                        <div class="dash-stat-label">Stok Obat Rendah</div>
+                        <div class="dash-stat-value" style="color:var(--accent-red);" data-count="{{ $lowStockMedicines }}">0</div>
+                        <div class="dash-stat-sub" style="color:var(--accent-red);">Perlu restock segera</div>
+                        <div class="dash-stat-progress"><div class="dash-stat-progress-fill" style="width:30%;background:#EF4444;"></div></div>
+                        <div class="shimmer-line"></div>
+                    </div>
+                </div>
 
-                <!-- ════════════════════ CHARTS ════════════════════ -->
+                <!-- ─── ROW 3: FINANCIAL CARDS (3 columns) ─── -->
+                <div class="dash-section-label"><h3>💰 Keuangan</h3><div class="line"></div></div>
+                <div class="dash-stats-row triple">
+                    <div class="dash-stat financial" style="--stat-accent:#F97316;" onclick="document.querySelector('[data-section=\'keuangan\']')?.click()">
+                        <div class="dash-stat-top">
+                            <div class="dash-stat-icon" style="background:linear-gradient(135deg,#FFF7ED,#FFEDD5);">📄</div>
+                        </div>
+                        <div class="dash-stat-label">Tagihan Pending</div>
+                        <div class="dash-stat-value" style="color:#EA580C;" data-count="{{ $pendingInvoices }}">0</div>
+                        <div class="dash-stat-sub">Belum dibayar</div>
+                        <div class="dash-stat-progress"><div class="dash-stat-progress-fill" style="width:45%;background:#F97316;"></div></div>
+                        <div class="shimmer-line"></div>
+                    </div>
+                    <div class="dash-stat financial" style="--stat-accent:#10B981;" onclick="document.querySelector('[data-section=\'keuangan\']')?.click()">
+                        <div class="dash-stat-top">
+                            <div class="dash-stat-icon" style="background:linear-gradient(135deg,#D1FAE5,#A7F3D0);">💰</div>
+                        </div>
+                        <div class="dash-stat-label">Pendapatan Hari Ini</div>
+                        <div class="dash-stat-value" style="font-size:22px;">Rp {{ number_format($todayRevenue, 0, ',', '.') }}</div>
+                        <div class="dash-stat-sub">Dari pembayaran hari ini</div>
+                        <div class="dash-stat-progress"><div class="dash-stat-progress-fill" style="width:60%;background:#10B981;"></div></div>
+                        <div class="shimmer-line"></div>
+                    </div>
+                    <div class="dash-stat financial" style="--stat-accent:#8B5CF6;" onclick="document.querySelector('[data-section=\'keuangan\']')?.click()">
+                        <div class="dash-stat-top">
+                            <div class="dash-stat-icon" style="background:linear-gradient(135deg,#EDE9FE,#DDD6FE);">📊</div>
+                        </div>
+                        <div class="dash-stat-label">Pendapatan Bulan Ini</div>
+                        <div class="dash-stat-value" style="font-size:22px;">Rp {{ number_format($monthRevenue, 0, ',', '.') }}</div>
+                        <div class="dash-stat-sub">Total bulan berjalan</div>
+                        <div class="dash-stat-progress"><div class="dash-stat-progress-fill" style="width:72%;background:#8B5CF6;"></div></div>
+                        <div class="shimmer-line"></div>
+                    </div>
+                </div>
+
+                <!-- ─── CHARTS ──────────────────────────────── -->
+                <div class="dash-section-label" style="margin-top:28px;"><h3>📈 Tren & Analitik</h3><div class="line"></div></div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px;" class="reveal">
-                    <div class="table-card" style="padding:20px;">
-                        <div class="section-title" style="margin-bottom:16px;">Tren Pendapatan (7 Hari)</div>
+                    <div class="dash-chart-card">
+                        <div class="dash-chart-header">
+                            <div>
+                                <div class="dash-chart-title">Tren Pendapatan</div>
+                                <div class="dash-chart-subtitle">Data 7 hari terakhir</div>
+                            </div>
+                            <div class="dash-chart-legend">
+                                <div class="dash-chart-legend-item">
+                                    <div class="dash-chart-legend-dot" style="background:#2563EB;"></div>
+                                    Pendapatan
+                                </div>
+                            </div>
+                        </div>
                         <div style="position:relative; height:240px; width:100%;">
                             <canvas id="revenueChart"></canvas>
                         </div>
                     </div>
-                    <div class="table-card" style="padding:20px;">
-                        <div class="section-title" style="margin-bottom:16px;">Tren Pasien (7 Hari)</div>
+                    <div class="dash-chart-card">
+                        <div class="dash-chart-header">
+                            <div>
+                                <div class="dash-chart-title">Tren Kunjungan Pasien</div>
+                                <div class="dash-chart-subtitle">Data 7 hari terakhir</div>
+                            </div>
+                            <div class="dash-chart-legend">
+                                <div class="dash-chart-legend-item">
+                                    <div class="dash-chart-legend-dot" style="background:#10B981;"></div>
+                                    Kunjungan
+                                </div>
+                            </div>
+                        </div>
                         <div style="position:relative; height:240px; width:100%;">
                             <canvas id="patientChart"></canvas>
                         </div>
                     </div>
                 </div>
 
+                <!-- ─── TABLES ──────────────────────────────── -->
+                <div class="dash-section-label"><h3>🩺 Aktivitas Hari Ini</h3><div class="line"></div></div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" class="reveal">
-                    <div class="table-card">
-                        <div class="table-header">
-                            <div class="section-title">Rawat Jalan Hari Ini</div>
-                            <a href="#" class="view-all" id="viewAllOutpatient">Lihat semua</a>
+                    <div class="dash-table-card">
+                        <div class="dash-table-header">
+                            <div class="dash-table-title-group">
+                                <div class="dash-table-icon" style="background:#FFFBEB;">📋</div>
+                                <div>
+                                    <div class="dash-table-title">Rawat Jalan Hari Ini</div>
+                                </div>
+                                <span class="dash-table-count">{{ $outpatientAdmissions->count() }}</span>
+                            </div>
+                            <a href="#" class="dash-view-all" id="viewAllOutpatient">
+                                Lihat semua
+                                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                            </a>
                         </div>
                         <table>
                             <thead><tr><th>#</th><th>Pasien</th><th>Poli</th><th>Status</th></tr></thead>
@@ -1421,14 +1962,26 @@
                                     </td>
                                 </tr>
                                 @endforeach
+                                @if($outpatientAdmissions->isEmpty())
+                                <tr><td colspan="4"><div class="empty-state" style="padding:40px 20px;"><div class="empty-state-icon">📋</div><h4>Belum Ada Kunjungan</h4><p>Tidak ada rawat jalan hari ini.</p></div></td></tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
 
-                    <div class="table-card">
-                        <div class="table-header">
-                            <div class="section-title">Rawat Inap Aktif</div>
-                            <a href="#" class="view-all" id="viewAllInpatient">Lihat semua</a>
+                    <div class="dash-table-card">
+                        <div class="dash-table-header">
+                            <div class="dash-table-title-group">
+                                <div class="dash-table-icon" style="background:#F5F3FF;">🛏️</div>
+                                <div>
+                                    <div class="dash-table-title">Rawat Inap Aktif</div>
+                                </div>
+                                <span class="dash-table-count">{{ $inpatientAdmissions->count() }}</span>
+                            </div>
+                            <a href="#" class="dash-view-all" id="viewAllInpatient">
+                                Lihat semua
+                                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                            </a>
                         </div>
                         <table>
                             <thead><tr><th>Pasien</th><th>Ruangan</th><th>Dokter</th><th>Status</th></tr></thead>
@@ -1449,7 +2002,7 @@
                                     </td>
                                 </tr>
                                 @empty
-                                <tr><td colspan="4" style="text-align:center; padding:20px; color:var(--text-muted);">Tidak ada pasien rawat inap aktif.</td></tr>
+                                <tr><td colspan="4"><div class="empty-state" style="padding:40px 20px;"><div class="empty-state-icon">🛏️</div><h4>Tidak Ada Rawat Inap</h4><p>Tidak ada pasien rawat inap aktif.</p></div></td></tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -4048,12 +4601,18 @@
             localStorage.setItem('activeSection', "{{ session('activeSection') }}");
         @endif
 
-        // ── Live date label
+        // ── Live date label + clock
         const dateEl = document.getElementById('liveDateLabel');
+        const clockEl = document.getElementById('heroClockTime');
         const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
         const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-        const now = new Date();
-        dateEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+        function updateClock() {
+            const now = new Date();
+            if (dateEl) dateEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            if (clockEl) clockEl.textContent = now.toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
 
         // ── Count-up animation
         function animateCount(el, target, duration = 1200) {
@@ -4081,6 +4640,13 @@
             });
         }, { threshold: 0.05 });
         reveals.forEach(r => observer.observe(r));
+
+        // ── Animate dash-stat-progress-fill bars
+        document.querySelectorAll('.dash-stat-progress-fill').forEach(bar => {
+            const targetW = bar.style.width;
+            bar.style.width = '0%';
+            setTimeout(() => { bar.style.width = targetW; }, 400);
+        });
 
         // ── Restore active section from localStorage
         (function restoreActiveSection() {
@@ -5557,6 +6123,9 @@
 
         const revCtx = document.getElementById('revenueChart');
         if(revCtx) {
+            const revGrad = revCtx.getContext('2d').createLinearGradient(0, 0, 0, 240);
+            revGrad.addColorStop(0, 'rgba(37,99,235,0.22)');
+            revGrad.addColorStop(1, 'rgba(37,99,235,0)');
             new Chart(revCtx, {
                 type: 'line',
                 data: {
@@ -5565,30 +6134,52 @@
                         label: 'Pendapatan (Rp)',
                         data: revenueData,
                         borderColor: '#2563EB',
-                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                        borderWidth: 3,
-                        tension: 0.4,
+                        backgroundColor: revGrad,
+                        borderWidth: 2.5,
+                        tension: 0.45,
                         fill: true,
                         pointBackgroundColor: '#2563EB',
                         pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
                         pointRadius: 4,
-                        pointHoverRadius: 6
+                        pointHoverRadius: 7,
+                        pointHoverBackgroundColor: '#2563EB',
+                        pointHoverBorderColor: '#fff',
+                        pointHoverBorderWidth: 2,
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#0F2557',
+                            titleColor: '#93C5FD',
+                            bodyColor: '#fff',
+                            padding: 12,
+                            cornerRadius: 10,
+                            callbacks: {
+                                label: ctx => ' Rp ' + Number(ctx.raw).toLocaleString('id-ID')
+                            }
+                        }
+                    },
                     scales: {
-                        y: { 
-                            beginAtZero: true, 
-                            ticks: { 
-                                callback: function(value) { return 'Rp ' + (value/1000).toLocaleString('id-ID') + 'k'; },
-                                font: { family: "'Space Mono', monospace", size: 10 }
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: v => 'Rp ' + (v/1000).toLocaleString('id-ID') + 'k',
+                                font: { family: "'Space Mono', monospace", size: 10 },
+                                color: '#94A3B8'
                             },
-                            grid: { color: 'rgba(0,0,0,0.05)' }
+                            grid: { color: 'rgba(15,37,87,0.05)' },
+                            border: { display: false }
                         },
-                        x: { grid: { display: false }, ticks: { font: { family: "'Space Mono', monospace", size: 10 } } }
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: "'Space Mono', monospace", size: 10 }, color: '#94A3B8' },
+                            border: { display: false }
+                        }
                     }
                 }
             });
@@ -5596,6 +6187,10 @@
 
         const patCtx = document.getElementById('patientChart');
         if(patCtx) {
+            const barColors = (patientData || []).map((_, i) => {
+                const alpha = 0.55 + (i / Math.max(patientData.length - 1, 1)) * 0.45;
+                return `rgba(16,185,129,${alpha})`;
+            });
             new Chart(patCtx, {
                 type: 'bar',
                 data: {
@@ -5603,22 +6198,40 @@
                     datasets: [{
                         label: 'Kunjungan Pasien',
                         data: patientData,
-                        backgroundColor: '#10B981',
-                        borderRadius: 6,
+                        backgroundColor: barColors,
+                        borderRadius: 8,
+                        borderSkipped: false,
                         barPercentage: 0.6
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#064E3B',
+                            titleColor: '#6EE7B7',
+                            bodyColor: '#fff',
+                            padding: 12,
+                            cornerRadius: 10,
+                            callbacks: {
+                                label: ctx => ' ' + ctx.raw + ' kunjungan'
+                            }
+                        }
+                    },
                     scales: {
-                        y: { 
-                            beginAtZero: true, 
-                            ticks: { font: { family: "'Space Mono', monospace", size: 10 }, stepSize: 1 },
-                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        y: {
+                            beginAtZero: true,
+                            ticks: { font: { family: "'Space Mono', monospace", size: 10 }, stepSize: 1, color: '#94A3B8' },
+                            grid: { color: 'rgba(15,37,87,0.05)' },
+                            border: { display: false }
                         },
-                        x: { grid: { display: false }, ticks: { font: { family: "'Space Mono', monospace", size: 10 } } }
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: "'Space Mono', monospace", size: 10 }, color: '#94A3B8' },
+                            border: { display: false }
+                        }
                     }
                 }
             });
