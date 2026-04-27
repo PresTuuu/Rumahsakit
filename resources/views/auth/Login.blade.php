@@ -8,46 +8,36 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'display': ['Playfair Display', 'Georgia', 'serif'],
-                        'body': ['Outfit', 'system-ui', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --blue-deep: #0F2D6B;
-            --blue-mid:  #1A4DB8;
+            --blue-deep: #0F2557;
+            --blue-mid:  #1A3A8F;
             --blue-vivid:#2563EB;
-            --blue-light:#DBEAFE;
+            --blue-light:#60A5FA;
             --blue-pale: #EFF6FF;
+            --accent:    #38BDF8;
+            --accent-green:#10B981;
             --white:     #FFFFFF;
-            --slate-800: #1E293B;
-            --slate-600: #475569;
+            --slate-800: #0F2557;
+            --slate-600: #64748B;
             --slate-400: #94A3B8;
             --slate-200: #E2E8F0;
             --emerald:   #10B981;
             --red-soft:  #FEF2F2;
             --red-border:#FECACA;
             --red-text:  #B91C1C;
+            --surface:   #F0F7FF;
+            --border:    rgba(37,99,235,0.10);
         }
 
         html, body {
             min-height: 100vh;
-            font-family: 'Outfit', system-ui, sans-serif;
-            background: #EBF4FF;
+            font-family: 'Sora', system-ui, sans-serif;
+            background: var(--surface);
             overflow-x: hidden;
         }
 
@@ -81,7 +71,7 @@
 
         .orb-1 {
             width: 700px; height: 700px;
-            background: radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 65%);
+            background: radial-gradient(circle, rgba(56,189,248,0.3) 0%, transparent 65%);
             top: -200px; left: -180px;
             animation: orb-drift-1 18s ease-in-out infinite;
         }
@@ -149,20 +139,31 @@
 
         .card-shell {
             width: 100%;
-            max-width: 1020px;
+            max-width: 1060px;
             display: flex;
             border-radius: 28px;
             overflow: hidden;
+            position: relative;
             box-shadow:
-                0 0 0 1px rgba(255,255,255,0.6),
-                0 32px 80px rgba(15,45,107,0.22),
-                0 8px 24px rgba(15,45,107,0.1);
+                0 0 0 1px rgba(15,37,87,0.07),
+                0 8px 24px rgba(15,37,87,0.08),
+                0 32px 80px rgba(15,37,87,0.18);
             animation: card-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
         @keyframes card-enter {
             0% { opacity: 0; transform: translateY(40px) scale(0.97); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .card-shell::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2563EB 0%, #38BDF8 50%, #10B981 100%);
+            z-index: 5;
+            border-radius: 28px 28px 0 0;
         }
 
         /* ═══════════════════════════════════════
@@ -172,9 +173,9 @@
             display: none;
             flex-direction: column;
             justify-content: space-between;
-            width: 42%;
-            padding: 52px 44px;
-            background: linear-gradient(145deg, #0F2D6B 0%, #1A4DB8 50%, #1D4ED8 100%);
+            width: 44%;
+            padding: 48px 40px;
+            background: linear-gradient(160deg, #0F2557 0%, #1A3A8F 60%, #1e40af 100%);
             position: relative;
             overflow: hidden;
         }
@@ -218,14 +219,13 @@
 
         /* Medical cross icon */
         .med-icon {
-            width: 48px; height: 48px;
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.25);
-            border-radius: 14px;
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--blue-vivid) 100%);
+            border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
             position: relative;
-            backdrop-filter: blur(8px);
-            animation: icon-pulse 4s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(56,189,248,0.35);
+            animation: icon-pulse 3s ease-in-out infinite;
         }
         .med-icon::before, .med-icon::after {
             content: '';
@@ -237,32 +237,33 @@
         .med-icon::after  { width: 22px; height: 4px; }
 
         @keyframes icon-pulse {
-            0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.2); }
-            50%      { box-shadow: 0 0 0 8px rgba(255,255,255,0); }
+            0%,100% { box-shadow: 0 0 20px rgba(56,189,248,0.35); }
+            50%      { box-shadow: 0 0 34px rgba(56,189,248,0.6); }
         }
 
         /* Left panel heading */
         .left-heading {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.4rem;
-            font-weight: 400;
+            font-family: 'Sora', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
             color: #fff;
             line-height: 1.25;
             margin-top: 2rem;
+            letter-spacing: -0.5px;
         }
         .left-heading em {
-            font-style: italic;
-            color: rgba(186,230,253,0.95);
+            font-style: normal;
+            color: var(--accent);
         }
 
         .left-sub {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.87rem;
-            color: rgba(186,230,253,0.85);
+            font-family: 'Sora', sans-serif;
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.55);
             line-height: 1.7;
-            font-weight: 300;
+            font-weight: 400;
             margin-top: 1rem;
-            max-width: 260px;
+            max-width: 280px;
         }
 
         /* Stat cards */
@@ -274,11 +275,11 @@
         }
 
         .stat-card {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.14);
-            border-radius: 16px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
             padding: 16px;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(6px);
             position: relative;
             overflow: hidden;
             transition: background 0.3s ease;
@@ -301,18 +302,19 @@
         }
 
         .stat-value {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.6rem;
-            font-weight: 600;
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
             color: #fff;
             line-height: 1;
         }
         .stat-label {
-            font-size: 0.72rem;
-            color: rgba(186,230,253,0.75);
+            font-size: 0.68rem;
+            color: rgba(255,255,255,0.5);
             margin-top: 6px;
-            letter-spacing: 0.03em;
+            letter-spacing: 0.07em;
             text-transform: uppercase;
+            font-weight: 600;
         }
 
         /* Status badge */
@@ -342,21 +344,21 @@
         }
 
         /* Version text */
-        .left-footer { font-size: 0.72rem; color: rgba(147,197,253,0.5); }
+        .left-footer { font-size: 0.68rem; color: rgba(255,255,255,0.3); letter-spacing: 0.03em; }
 
         /* ═══════════════════════════════════════
            RIGHT PANEL
         ═══════════════════════════════════════ */
         .right-panel {
             flex: 1;
-            background: rgba(255,255,255,0.92);
+            background: #fff;
             backdrop-filter: blur(30px) saturate(180%);
             -webkit-backdrop-filter: blur(30px) saturate(180%);
             padding: 52px 48px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            border-left: 1px solid rgba(255,255,255,0.7);
+            border-left: 1px solid var(--border);
             position: relative;
             overflow: hidden;
         }
@@ -376,29 +378,40 @@
            FORM HEADER
         ═══════════════════════════════════════ */
         .form-eyebrow {
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
             text-transform: uppercase;
-            color: var(--blue-vivid);
-            margin-bottom: 10px;
+            color: var(--accent);
+            background: linear-gradient(90deg, #EFF6FF, #F0F9FF);
+            border: 1px solid rgba(37,99,235,0.15);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            margin-bottom: 14px;
             opacity: 0;
             animation: rise-in 0.6s 0.2s cubic-bezier(0.22,1,0.36,1) forwards;
         }
 
         .form-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.6rem;
-            font-weight: 400;
+            font-family: 'Sora', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
             color: var(--slate-800);
-            line-height: 1.15;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
             margin-bottom: 32px;
             opacity: 0;
             animation: rise-in 0.6s 0.35s cubic-bezier(0.22,1,0.36,1) forwards;
         }
         .form-title span {
-            font-style: italic;
-            color: var(--blue-vivid);
+            font-style: normal;
+            background: linear-gradient(135deg, var(--blue-vivid), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         @keyframes rise-in {
@@ -444,9 +457,9 @@
 
         .field-label {
             display: block;
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
             color: var(--slate-600);
             margin-bottom: 8px;
@@ -469,19 +482,18 @@
         .field-input {
             width: 100%;
             padding: 14px 16px 14px 46px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.9rem;
+            font-family: 'Sora', sans-serif;
+            font-size: 0.85rem;
             font-weight: 400;
             color: var(--slate-800);
-            background: rgba(248,250,252,0.8);
-            border: 1.5px solid var(--slate-200);
-            border-radius: 14px;
+            background: #FAFCFF;
+            border: 1.5px solid rgba(15,37,87,0.12);
+            border-radius: 12px;
             outline: none;
             transition:
-                border-color 0.3s ease,
-                background 0.3s ease,
-                box-shadow 0.3s ease,
-                transform 0.2s ease;
+                border-color 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease;
         }
         .field-input::placeholder { color: var(--slate-400); font-weight: 300; }
 
@@ -493,10 +505,7 @@
         .field-input:focus {
             border-color: var(--blue-vivid);
             background: #fff;
-            box-shadow:
-                0 0 0 4px rgba(37,99,235,0.1),
-                0 2px 12px rgba(37,99,235,0.08);
-            transform: translateY(-1px);
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.09);
         }
 
         .input-wrap:focus-within .input-icon {
@@ -586,30 +595,29 @@
 
         .btn-submit {
             width: 100%;
-            padding: 15px 24px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 0.04em;
+            padding: 14px 24px;
+            font-family: 'Sora', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
             color: #fff;
-            background: linear-gradient(130deg, #1A4DB8 0%, #2563EB 50%, #1D4ED8 100%);
-            background-size: 200% 100%;
+            background: var(--blue-vivid);
             border: none;
             border-radius: 14px;
             cursor: pointer;
             position: relative;
             overflow: hidden;
             transition:
-                transform 0.25s cubic-bezier(0.22,1,0.36,1),
+                transform 0.2s ease,
                 box-shadow 0.3s ease,
-                background-position 0.4s ease;
-            box-shadow: 0 5px 20px rgba(37,99,235,0.38), 0 1px 4px rgba(37,99,235,0.2);
+                background 0.2s ease;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.25);
         }
 
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 32px rgba(37,99,235,0.46), 0 2px 8px rgba(37,99,235,0.25);
-            background-position: 100% 0;
+            box-shadow: 0 6px 20px rgba(37,99,235,0.35);
+            background: #1d4ed8;
         }
 
         .btn-submit:active {
@@ -713,11 +721,12 @@
         @media (min-width: 1024px) { .mobile-logo { display: none; } }
 
         .mobile-logo-icon {
-            width: 36px; height: 36px;
-            background: linear-gradient(135deg, var(--blue-mid), var(--blue-vivid));
-            border-radius: 10px;
+            width: 38px; height: 38px;
+            background: linear-gradient(135deg, var(--accent), var(--blue-vivid));
+            border-radius: 12px;
             position: relative;
             display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 20px rgba(56,189,248,0.35);
         }
         .mobile-logo-icon::before, .mobile-logo-icon::after {
             content: '';
@@ -793,8 +802,8 @@
                     <div style="display:flex;align-items:center;gap:14px;margin-bottom:36px;">
                         <div class="med-icon"></div>
                         <div>
-                            <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:500;color:#fff;letter-spacing:0.02em;">MediCore</div>
-                            <div style="font-size:0.68rem;color:rgba(186,230,253,0.7);letter-spacing:0.18em;text-transform:uppercase;margin-top:2px;">Hospital System</div>
+                            <div style="font-family:'Sora',sans-serif;font-size:1.2rem;font-weight:700;color:#fff;letter-spacing:-0.3px;">MediCore</div>
+                            <div style="font-size:0.65rem;color:rgba(255,255,255,0.45);letter-spacing:0.06em;margin-top:2px;">Hospital System</div>
                         </div>
                     </div>
 
@@ -847,11 +856,11 @@
                 <!-- Mobile Logo -->
                 <div class="mobile-logo">
                     <div class="mobile-logo-icon"></div>
-                    <span style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500;color:var(--blue-deep);">MediCore</span>
+                    <span style="font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;color:var(--blue-deep);letter-spacing:-0.3px;">MediCore</span>
                 </div>
 
                 <!-- Header -->
-                <p class="form-eyebrow">Welcome back</p>
+                <p class="form-eyebrow">👋 Welcome back</p>
                 <h1 class="form-title">
                     Sign in to your<br>
                     <span>workspace</span>
