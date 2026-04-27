@@ -272,9 +272,5 @@ Proyek ini menggunakan lisensi [MIT License](LICENSE).
 ---
 
 <div align="center">
-
-**Dibuat dengan ❤️ oleh Angger Restu Prayogo**
-
-*MediCore Hospital System — v1.0*
-
+<b>Dibuat oleh Angger Restu Prayogo</b>
 </div>
